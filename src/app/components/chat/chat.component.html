@@ -1,23 +1,23 @@
 <div>
 
-  <div>
-    <input [disabled]="isConnected" type="text" placeholder="Choose a nickname" [(ngModel)]="nickname"/>
-  </div>
-  <br />
-  <div>
-    <button [disabled]="isConnected" (click)="connect();">Connect</button>
-    <button [disabled]="!isConnected" (click)="disconnect();">
-      Disconnect
-    </button>
-  </div>
-  <br />
-  <div [style.display]="isConnected ? 'block' : 'none'">
-    <input type="text" placeholder="Write a message..." [(ngModel)]="newMessageText"/>
-    <button (click)="sendMessage();">Send</button>
-  </div>
-  <div>
-    <div *ngFor="let message of messages" style="margin-bottom: 5px; word-wrap: break-word">
-      <strong>{{message.from}}: </strong> {{message.text}}
+    <div>
+        <input [disabled]="isConnected" type="text" placeholder="Choose a nickname" [(ngModel)]="nickname"/>
     </div>
-  </div>
+    <br/>
+    <div>
+        <button [disabled]="isConnected" (click)="connect();">Connect</button>
+        <button [disabled]="!isConnected" (click)="disconnect();">
+            Disconnect
+        </button>
+    </div>
+    <br/>
+    <div [style.display]="isConnected ? 'block' : 'none'">
+        <input type="text" placeholder="Write a message..." [(ngModel)]="newMessageText"/>
+        <button (click)="sendMessage();">Send</button>
+    </div>
+    <div>
+        <div *ngFor="let message of messages" style="margin-bottom: 5px; word-wrap: break-word">
+            <strong>{{message.from}}: </strong> {{message.text}}
+        </div>
+    </div>
 </div>

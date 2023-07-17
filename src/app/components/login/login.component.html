@@ -1,0 +1,19 @@
+<div class="login-container">
+    <p>LOGIN HERE</p>
+
+    <div class="separator"></div>
+
+    <form [formGroup]="loginForm" (submit)="login()">
+        <div class="form-control">
+            <input class="w-100" [formControlName]="'username'" id="username" type="text" pInputText required
+                   placeholder="Username">
+            <i class="pi pi-user"></i>
+        </div>
+        <div class="form-control">
+            <input class="w-100" [formControlName]="'password'" id="password" type="password" pInputText required placeholder="Password">
+            <i class="pi pi-key"></i>
+        </div>
+        <button>login</button>
+    </form>
+
+</div>
