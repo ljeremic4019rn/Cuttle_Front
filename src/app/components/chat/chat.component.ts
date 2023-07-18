@@ -26,8 +26,7 @@ export class ChatComponent implements OnInit {
     }
 
     connect() {
-        const jwt = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyMSIsImV4cCI6MTY4OTYzMDk5NSwiaWF0IjoxNjg5NTk0OTk1fQ.1XYMLTPMcqR_ntIhAKppeqdT1aNqeHfyBMtXQdp81SH_jjf_Ga-8qLk_Xa5mxyTfRRV-o5h1kpiIqcZxlikFww';
-        const socket = new SockJS(`${environment.cuttleEngineServer}/ws?jwt=${jwt}`);
+        const socket = new SockJS(`${environment.cuttleEngineServer}/ws?jwt=${sessionStorage.getItem('token')}`);
         this.stompClient = Stomp.over(socket);
         this.stompClient.connect({}, this.onConnect.bind(this));
     }

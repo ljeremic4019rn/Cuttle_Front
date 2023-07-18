@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
 
 
     login() {
-        console.log("kruac")
         console.log(this.loginForm.get('username')?.value)
         console.log(this.loginForm.get('password')?.value)
 
