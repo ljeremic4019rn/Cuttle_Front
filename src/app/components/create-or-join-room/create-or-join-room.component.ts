@@ -38,6 +38,8 @@ export class CreateOrJoinRoomComponent implements OnInit {
             next: value => {
                 console.log(value.roomKey)
                 this.createRoomKey = value.roomKey
+                this.router.navigate(["room/" + this.createRoomKey]);
+
             },
             error: err => {
                 console.log(err)
