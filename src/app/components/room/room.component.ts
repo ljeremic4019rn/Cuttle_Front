@@ -1,5 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import {RoomService} from "../../services/room.service";
+import {GameAction} from "../../Models/room.model";
+import * as SockJS from "sockjs-client";
+import {environment} from "../../../environments/environment";
+import {CompatClient, Stomp} from "@stomp/stompjs";
 
 @Component({
     selector: 'app-room',
@@ -8,23 +13,70 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class RoomComponent implements OnInit {
 
+    // @ts-ignore
+    stompClient: CompatClient;
+    isConnected: boolean = false;
+
     roomKey: string
     testInputAction: string
+    gameAction: GameAction
 
-    constructor(private router: Router, private route: ActivatedRoute) {
+
+    constructor(private router: Router, private route: ActivatedRoute, private roomService: RoomService) {
         this.roomKey = ''
         this.testInputAction = ''
+        this.gameAction = new class implements GameAction {
+            action = "def input"
+        }
     }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             this.roomKey = params.get('key')!;
         });
+
+        this.connect()
     }
 
+    connect() {
+        const socket = new SockJS(`${environment.cuttleEngineServer}/ws?jwt=${sessionStorage.getItem('token')}`);
+        this.stompClient = Stomp.over(socket);
+        this.stompClient.connect({}, this.onConnect.bind(this));
+    }
 
-    testAction(){
+    onConnect(frame: any) {
+        console.log("room key")
+        console.log(this.roomKey)
 
+        this.stompClient.subscribe(`/cuttle/update/` + this.roomKey, this.updateGameState.bind(this));
+        this.isConnected = true;
+        console.log('Connected: ' + frame);
+    }
+
+    updateGameState(newState: any) {
+        console.log("OVO JE PRIMLJENO")
+        console.log(JSON.parse(newState.body))
+    }
+
+    disconnect() {
+        if (this.stompClient != null) {
+            this.stompClient.disconnect();
+        }
+        this.isConnected = false;
+        console.log("Disconnected");
+    }
+
+    sendAction() {
+        console.log("sending to this room key")
+        console.log(this.roomKey)
+
+        this.stompClient.send(`/app/playAction`, {},
+            JSON.stringify({
+                'roomKey': this.roomKey,
+                'from': "kurac",
+                'cartPlayed': "a6",
+                'onToCardPlayed': "a69"
+            }));
     }
 
 }

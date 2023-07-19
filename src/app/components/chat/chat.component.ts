@@ -34,7 +34,7 @@ export class ChatComponent implements OnInit {
     onConnect(frame: any) {
         console.log("this")
         console.log(this)
-        this.stompClient.subscribe('/topic/messages', this.addNewMessage.bind(this));
+        this.stompClient.subscribe('/cuttle/messages', this.addNewMessage.bind(this));
         this.isConnected = true;
         console.log('Connected: ' + frame);
     }

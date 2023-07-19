@@ -51,10 +51,4 @@ export class RoomService {
             , {headers: this.headers, responseType: 'text' as 'json'})
     }
 
-    playAction(roomKey: string, gameAction: GameAction): Observable<any> {
-        return this.httpClient.post<any>(`${environment.cuttleEngineServer}/room/createRoom/${roomKey}`
-            ,{action: gameAction.action}
-            , {headers: this.headers, responseType: 'text' as 'json'})
-    }
-
 }
