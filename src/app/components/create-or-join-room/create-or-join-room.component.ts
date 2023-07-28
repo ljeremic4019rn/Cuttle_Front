@@ -25,8 +25,8 @@ export class CreateOrJoinRoomComponent implements OnInit {
     joinRoom() {
         this.roomService.joinRoom(this.joinRoomKey).subscribe({
             next: value => {
+                console.log(value)
                 this.router.navigate(["room/" + this.joinRoomKey]);
-
             },
             error: err => {
                 console.log(err.error)

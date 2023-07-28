@@ -17,24 +17,28 @@ export class RoomComponent implements OnInit {
     stompClient: CompatClient;
     isConnected: boolean = false;
 
-    roomKey: string
     testInputAction: string
     gameAction: GameAction
 
 
     constructor(private router: Router, private route: ActivatedRoute, private roomService: RoomService) {
-        this.roomKey = ''
+        // this.roomKey = ''
         this.testInputAction = ''
-        this.gameAction = new class implements GameAction {
-            action = "def input"
+        this.gameAction = {
+            roomKey: "",
+            actionType: "",
+            fromPlayer: -1,
+            cardPlayed: "",
+            ontoPlayer: -1,
+            ontoCardPlayed: "",
+            helperCardList: []
         }
     }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
-            this.roomKey = params.get('key')!;
+            this.gameAction.roomKey = params.get('key')!;
         });
-
         this.connect()
     }
 
@@ -46,9 +50,9 @@ export class RoomComponent implements OnInit {
 
     onConnect(frame: any) {
         console.log("room key")
-        console.log(this.roomKey)
+        console.log(this.gameAction.roomKey)
 
-        this.stompClient.subscribe(`/cuttle/update/` + this.roomKey, this.updateGameState.bind(this));
+        this.stompClient.subscribe(`/cuttle/update/` + this.gameAction.roomKey, this.updateGameState.bind(this));
         this.isConnected = true;
         console.log('Connected: ' + frame);
     }
@@ -68,15 +72,13 @@ export class RoomComponent implements OnInit {
 
     sendAction() {
         console.log("sending to this room key")
-        console.log(this.roomKey)
+        console.log(this.gameAction.roomKey)
 
-        this.stompClient.send(`/app/playAction`, {},
-            JSON.stringify({
-                'roomKey': this.roomKey,
-                'from': "kurac",
-                'cartPlayed': "a6",
-                'onToCardPlayed': "a69"
-            }));
+        this.stompClient.send(
+            `/app/playAction`,
+            {},
+            JSON.stringify(this.gameAction)
+        );
     }
 
 }

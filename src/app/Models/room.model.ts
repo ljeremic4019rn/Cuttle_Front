@@ -3,6 +3,22 @@ export interface Room {
 }
 
 export interface GameAction {
-    action: string
+    roomKey: string
+    actionType: string //POWER, NUMBER, SCUTTLE, COUNTER, DISCARD_CARD, DRAW
+    fromPlayer: number
+    cardPlayed: string
+    ontoPlayer: number
+    ontoCardPlayed: string
+    helperCardList: []
+}
+
+export interface GameResponse{
+    gameResponseType: string
+    currentPlayersTurn: number
+    graveyard: []
+    playerHands: Map<number, []>
+    playerTables: Map<number, []>
+    playerScore: []
+    playerWhoWon: number
 }
 

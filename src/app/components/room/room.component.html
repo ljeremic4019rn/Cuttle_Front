@@ -1,11 +1,23 @@
 <div>
-    <p>THIS IS A ROOM {{roomKey}}</p>
+    <p>THIS IS A ROOM {{gameAction.roomKey}}</p>
 
     <div class="separator"></div>
 
     <div class="form-check">
-        <input [(ngModel)]="testInputAction" class="form-check-input" type="text" id="testInputAction">
-        <label class="form-check-label" for="testInputAction">input kurac</label>
+        <input [(ngModel)]="gameAction.actionType" class="form-check-input" type="text" id="actionType">
+        <label class="form-check-label" for="actionType">actionType</label>
+        <br>
+        <input [(ngModel)]="gameAction.fromPlayer" class="form-check-input" type="text" id="fromPlayer">
+        <label class="form-check-label" for="fromPlayer">fromPlayer</label>
+        <br>
+        <input [(ngModel)]="gameAction.cardPlayed" class="form-check-input" type="text" id="cardPlayed">
+        <label class="form-check-label" for="cardPlayed">cardPlayed</label>
+        <br>
+        <input [(ngModel)]="gameAction.ontoPlayer" class="form-check-input" type="number" id="ontoPlayer">
+        <label class="form-check-label" for="ontoPlayer">ontoPlayer</label>
+        <br>
+        <input [(ngModel)]="gameAction.ontoCardPlayed" class="form-check-input" type="text" id="ontoCardPlayed">
+        <label class="form-check-label" for="ontoCardPlayed">ontoCardPlayed</label>
     </div>
     <button type="submit" class="btn btn-outline-primary" (click)="sendAction()">Test Action</button>
 
