@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from './components/login/login.component';
 import {CreateOrJoinRoomComponent} from './components/create-or-join-room/create-or-join-room.component';
 import {RoomComponent} from './components/room/room.component';
+import { CardRowComponent } from './components/play-area/card-row/card-row.component';
 
 @NgModule({
     declarations: [
@@ -17,6 +18,7 @@ import {RoomComponent} from './components/room/room.component';
         LoginComponent,
         CreateOrJoinRoomComponent,
         RoomComponent,
+        CardRowComponent,
     ],
     imports: [
         HttpClientModule,
