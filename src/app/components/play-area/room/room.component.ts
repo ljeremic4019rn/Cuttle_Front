@@ -5,6 +5,8 @@ import {GameAction} from "../../../Models/room.model";
 import * as SockJS from "sockjs-client";
 import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
+import {GameEngineService} from "../../../services/game-engine.service";
+import {LoginComponent} from "../../login/login.component";
 
 @Component({
     selector: 'app-room',
@@ -21,7 +23,7 @@ export class RoomComponent implements OnInit {
     gameAction: GameAction
 
 
-    constructor(private router: Router, private route: ActivatedRoute, private roomService: RoomService) {
+    constructor(private router: Router, private route: ActivatedRoute, private gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
         this.testInputAction = ''
         this.gameAction = {
@@ -58,12 +60,11 @@ export class RoomComponent implements OnInit {
     }
 
     updateGameState(newState: any) {
-        console.log("OVO JE PRIMLJENO")
-        console.log(JSON.parse(newState.body))
+        this.gameEngineService.updateGameState((JSON.parse(newState.body)))
     }
 
     disconnect() {
-        if (this.stompClient != null) {
+        if (this.stompClient != null) {//todo if players == 0 close room and disconnect
             this.stompClient.disconnect();
         }
         this.isConnected = false;
@@ -79,6 +80,20 @@ export class RoomComponent implements OnInit {
             {},
             JSON.stringify(this.gameAction)
         );
+    }
+
+    startRoom() {
+        console.log("SAD CE KURACCCC")
+
+        this.roomService.startRoom(this.gameAction.roomKey).subscribe({
+            next: response => {
+                console.log("we got a response")
+                this.gameEngineService.setUpGame(response)
+            },
+            error: err => {
+                alert(err.error)
+            }
+        })
     }
 
 }

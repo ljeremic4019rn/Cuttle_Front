@@ -26,6 +26,10 @@ export class CreateOrJoinRoomComponent implements OnInit {
         this.roomService.joinRoom(this.joinRoomKey).subscribe({
             next: value => {
                 console.log(value)
+                let wordsArray = value.split(" ")
+                console.log("You are player: " + wordsArray[7])
+                sessionStorage.setItem("myPlayerNumber", wordsArray[7].toString())//todo trenutno se broj igraca cuva u session storage, ako se nadje nesto bolje promeni
+
                 this.router.navigate(["room/" + this.joinRoomKey]);
             },
             error: err => {

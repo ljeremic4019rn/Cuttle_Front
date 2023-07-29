@@ -42,7 +42,8 @@ export class RoomService {
     startRoom(roomKey: string): Observable<any> {
         return this.httpClient.post<any>(`${environment.cuttleEngineServer}/room/startRoom/${roomKey}`
             ,{}
-            , {headers: this.headers , responseType: 'text' as 'json'})
+            , {headers: this.headers , responseType: 'text' as 'json'}
+        )
     }
 
     stopRoom(roomKey: string): Observable<any> {

@@ -15,6 +15,7 @@ export interface GameAction {
 export interface GameResponse{
     gameResponseType: string
     currentPlayersTurn: number
+    deck: []
     graveyard: []
     playerHands: Map<number, []>
     playerTables: Map<number, []>
