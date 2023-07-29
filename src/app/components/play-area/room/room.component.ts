@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {RoomService} from "../../services/room.service";
-import {GameAction} from "../../Models/room.model";
+import {RoomService} from "../../../services/room.service";
+import {GameAction} from "../../../Models/room.model";
 import * as SockJS from "sockjs-client";
-import {environment} from "../../../environments/environment";
+import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 
 @Component({

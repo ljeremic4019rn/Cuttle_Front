@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Card} from "../../../Models/card.model";
 
 @Component({
   selector: 'app-card-row',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CardRowComponent implements OnInit {
 
-  constructor() { }
+    cards: Card[]
+
+  constructor() {
+        this.cards = []
+  }
 
   ngOnInit(): void {
   }
+
+
+
 
 }

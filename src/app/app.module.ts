@@ -8,8 +8,10 @@ import {ChatComponent} from './components/chat/chat.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from './components/login/login.component';
 import {CreateOrJoinRoomComponent} from './components/create-or-join-room/create-or-join-room.component';
-import {RoomComponent} from './components/room/room.component';
+import {RoomComponent} from './components/play-area/room/room.component';
 import { CardRowComponent } from './components/play-area/card-row/card-row.component';
+import {MatCardModule} from "@angular/material/card";
+import {CardComponent} from "./components/play-area/card/card.component";
 
 @NgModule({
     declarations: [
@@ -19,13 +21,15 @@ import { CardRowComponent } from './components/play-area/card-row/card-row.compo
         CreateOrJoinRoomComponent,
         RoomComponent,
         CardRowComponent,
+        CardComponent,
     ],
     imports: [
         HttpClientModule,
         BrowserModule,
         AppRoutingModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatCardModule
     ],
     providers: [],
     bootstrap: [AppComponent]
