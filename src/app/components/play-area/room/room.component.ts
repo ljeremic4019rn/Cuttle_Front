@@ -83,8 +83,6 @@ export class RoomComponent implements OnInit {
     }
 
     startRoom() {
-        console.log("SAD CE KURACCCC")
-
         this.roomService.startRoom(this.gameAction.roomKey).subscribe({
             next: response => {
                 console.log("we got a response")

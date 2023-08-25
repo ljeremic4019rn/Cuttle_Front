@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Card} from "../../../Models/card.model";
 
 @Component({
@@ -6,11 +6,33 @@ import {Card} from "../../../Models/card.model";
     templateUrl: './card.component.html',
     styleUrls: ['./card.component.css']
 })
-export class CardComponent {
+export class CardComponent  implements OnInit{
 
     @Input()
-    public card: Card | any;
+    public card: string = ""
 
-    constructor() { }
+    @Input()
+    public covered: boolean = true
+
+    suit: string = ""
+    value: string = ""
+    color: string = ""
+
+    ngOnInit(): void {
+        const cardSplit = this.card.split('_');
+        this.value = cardSplit[0];
+        this.suit = cardSplit[1];
+
+        if(this.suit == "H" || this.suit == "D"){
+            this.color = "red"
+        } else this.color = "black"
+    }
+
+    constructor() {
+    }
+
+    click(){
+        console.log("KLIKNUTO NA " +this.value + "_" + this.suit)
+    }
 
 }

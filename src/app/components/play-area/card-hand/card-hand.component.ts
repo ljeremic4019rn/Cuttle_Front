@@ -4,9 +4,9 @@ import {animate, keyframes, query, stagger, style, transition, trigger} from "@a
 import {GameEngineService} from "../../../services/game-engine.service";
 
 @Component({
-    selector: 'app-card-row',
-    templateUrl: './card-row.component.html',
-    styleUrls: ['./card-row.component.css'],
+    selector: 'app-card-hand',
+    templateUrl: './card-hand.component.html',
+    styleUrls: ['./card-hand.component.css'],
     animations: [
         trigger('cardAnimation', [
             transition('* => *', [
@@ -27,7 +27,7 @@ import {GameEngineService} from "../../../services/game-engine.service";
 })
 
 
-export class CardRowComponent implements OnInit {
+export class CardHandComponent implements OnInit {
     @Input()
     rowPlayerNumber: number = -1
     // rowPlayerNum: number = -1

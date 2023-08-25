@@ -1,0 +1,22 @@
+.mat-card {
+    margin: 20px;
+}
+
+.hand{
+    margin: 2px;
+}
+
+
+.card-layout {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Align cards to the bottom */
+    /*height: 300px; !* Adjust the height as needed *!*/
+}
+
+.hand {
+    transform-origin: bottom center;
+    margin: 0 -17px; /* Adjust margins for spacing */
+    height: 170px;
+    width: 50px;
+}

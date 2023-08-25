@@ -12,6 +12,8 @@ import {RoomComponent} from './components/play-area/room/room.component';
 import { CardRowComponent } from './components/play-area/card-row/card-row.component';
 import {MatCardModule} from "@angular/material/card";
 import {CardComponent} from "./components/play-area/card/card.component";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {CardHandComponent} from "./components/play-area/card-hand/card-hand.component";
 
 @NgModule({
     declarations: [
@@ -22,6 +24,7 @@ import {CardComponent} from "./components/play-area/card/card.component";
         RoomComponent,
         CardRowComponent,
         CardComponent,
+        CardHandComponent
     ],
     imports: [
         HttpClientModule,
@@ -29,7 +32,8 @@ import {CardComponent} from "./components/play-area/card/card.component";
         AppRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        MatCardModule
+        MatCardModule,
+        BrowserAnimationsModule
     ],
     providers: [],
     bootstrap: [AppComponent]
