@@ -14,7 +14,7 @@ export class GameEngineService {
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
 
-    public cardsTest: string[] = ["1_D", "2_C", "2_C", "2_C", "2_C", ]
+    public cardsTest: string[] = ["1_D", "2_C", "1_D", "2_C", "1_D", "2_C","1_D", "2_C", "1_D", "2_C", "1_D", "2_C" ]
 
 
     constructor(private roomService: RoomService) {

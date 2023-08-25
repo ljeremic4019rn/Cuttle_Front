@@ -1,21 +1,31 @@
-<div>
-    <p>CREATE OR JOIN A ROOM</p>
-
-    <div class="separator"></div>
-
-    <div class="form-check">
-        <input [(ngModel)]="joinRoomKey" class="form-check-input" type="text" id="joinRoomKey">
-        <label class="form-check-label" for="joinRoomKey">Input room key to join</label>
+<div class="container mt-5">
+    <div class="text-center">
+        <h3>CREATE OR JOIN A ROOM</h3>
     </div>
-    <button type="submit" class="btn btn-outline-primary" (click)="joinRoom()">Join</button>
 
-    <p></p>
+    <div class="separator my-4"></div>
 
-
-    <div class="form-check">
-        <input [(ngModel)]="createRoomKey" disabled="true" class="form-check-input" type="text" id="createRoomKey">
-        <label class="form-check-label" for="createRoomKey">Your room key</label>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="joinRoomKey">Input room key to join</label>
+                <input [(ngModel)]="joinRoomKey" class="form-control" type="text" id="joinRoomKey">
+            </div>
+            <button type="button" class="btn btn-primary btn-block" (click)="joinRoom()">Join</button>
+        </div>
     </div>
-    <button type="submit" class="btn btn-outline-primary" (click)="createRoom()">Generate</button>
 
+    <div class="text-center my-3">
+        <p>OR</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="createRoomKey">Your room key</label>
+                <input [(ngModel)]="createRoomKey" disabled="true" class="form-control" type="text" id="createRoomKey">
+            </div>
+            <button type="button" class="btn btn-primary btn-block" (click)="createRoom()">Generate</button>
+        </div>
+    </div>
 </div>

@@ -1,22 +1,25 @@
-.table{
-    background-color: #38a44c;
-    height: 95vh;
-}
 
-.border{
-    border: 20px solid darkgreen;
-    border-bottom: 29px solid darkgreen;
-    margin: -10px -8px;
+.full-border {
+    position: fixed;
+    background-color: #38a44c;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*border: 20px solid darkgreen;*/
+    /*box-sizing: border-box;*/
+    z-index: -1;
 }
 
 .center-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    /*height: 95vh;*/
 }
 
+
 /*hand*/
+
 .bottom-player-hand{
     position: absolute;
     bottom: 0;
@@ -44,6 +47,7 @@
 
 
 /*table cards*/
+
 .bottom-player-cards{
     position: absolute;
     bottom: 20%;

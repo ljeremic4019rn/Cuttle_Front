@@ -16,7 +16,7 @@
 
 .hand {
     transform-origin: bottom center;
-    margin: 0 -17px; /* Adjust margins for spacing */
+    margin: 0 -18px;
     height: 170px;
     width: 50px;
 }
