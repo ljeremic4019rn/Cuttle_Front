@@ -1,34 +1,44 @@
+.table{
+    background-color: #38a44c;
+    height: 95vh;
+}
+
+.border{
+    border: 20px solid darkgreen;
+    border-bottom: 29px solid darkgreen;
+    margin: -10px -8px;
+}
 
 .center-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    /*height: 95vh;*/
 }
 
 /*hand*/
 .bottom-player-hand{
     position: absolute;
-    bottom: -5%;
+    bottom: 0;
 }
 
 .top-player-hand{
     position: absolute;
-    top: -5%;
+    top: 0;
     transform: rotate(180deg);
 }
 
 .left-player-hand{
     position: absolute;
     bottom: 35%;
-    left: 2%;
+    left: 3%;
     transform: rotate(90deg);
 }
 
 .right-player-hand{
     position: absolute;
     bottom: 35%;
-    right: 2%;
+    right: 3%;
     transform: rotate(-90deg);
 }
 
@@ -59,4 +69,6 @@
     transform: rotate(-90deg);
     width: 70px;
 }
+
+
 
