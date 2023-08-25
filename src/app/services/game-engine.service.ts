@@ -24,51 +24,28 @@ export class GameEngineService {
         const gameResponse = JSON.parse(newState);
         console.log(gameResponse);
 
-        console.log("tmp clear")//todo skloni kasnije
+        //just in case we clear the lists
+        this.deck = []
+        this.graveyard = []
         this.playerHands.clear()
         this.playerTables.clear()
         this.playerScore.clear()
 
+        this.numberOfPlayers = this.getMapSize(gameResponse.playerHands)
         this.deck = gameResponse.deck
         this.graveyard = gameResponse.graveyard
-        this.numberOfPlayers = this.getMapSize(gameResponse.playerHands)
-
-        console.log("kurac")
-        console.log(gameResponse.playerScore)
-
         for (let i = 0; i < this.numberOfPlayers; i++) {
-            console.log("uradjeno za " + i)
-            console.log("ruka")
             this.playerHands.set(i, gameResponse.playerHands[i])
-            console.log("tabla")
             this.playerTables.set(i, gameResponse.playerTables[i])
-            console.log("score")
             this.playerScore.set(i, gameResponse.playerScore[i])
         }
 
-        // this.playerHands.set(0,gameResponse.playerHands[0])
-        // this.playerTables.set(0,gameResponse.playerTables[0])
-        // this.playerScores.set(0,gameResponse.playerScores[0])
-
-        console.log("nakon settovanja")
+        console.log("nakon settovanja")//todo skloni ovo
         console.log(this.deck)
         console.log(this.graveyard)
         console.log(this.playerHands)
         console.log(this.playerTables)
         console.log(this.playerScore)
-
-        // console.log("uzmianje jednog kuraca")
-        // const cardsForPlayer0 = this.playerHands.get(0);
-        // console.log(cardsForPlayer0)
-
-
-        // for (var k in gameResponse.playerScores) {
-        //     // @ts-ignore
-        //     this.playerScores[k] = gameResponse.playerScores[k];//todo pogledaj ovoga posle
-        // }
-        // console.log("kriminalac")
-        // console.log(this.playerScores)
-
 
         // //todo ovo ce vrv da se promeni kasnije, biris nepotrebne
         // if (gameResponse.gameResponseType == "REGULAR_GO_NEXT") {
@@ -83,6 +60,21 @@ export class GameEngineService {
     updateGameState(newState: any) {
         console.log("new state received from the server: ")
         console.log(newState)
+
+        this.deck = newState.deck
+        this.graveyard = newState.graveyard
+        for (let i = 0; i < this.numberOfPlayers; i++) {
+            this.playerHands.set(i, newState.playerHands[i])
+            this.playerTables.set(i, newState.playerTables[i])
+            this.playerScore.set(i, newState.playerScore[i])
+        }
+
+        console.log("nakon UPDATE")//todo skloni ovo
+        console.log(this.deck)
+        console.log(this.graveyard)
+        console.log(this.playerHands)
+        console.log(this.playerTables)
+        console.log(this.playerScore)
 
     }
 
