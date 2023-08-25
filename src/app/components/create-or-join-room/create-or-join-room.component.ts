@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {Router} from "@angular/router";
 import {RoomService} from "../../services/room.service";
+import {GameEngineService} from "../../services/game-engine.service";
 
 @Component({
     selector: 'app-create-or-join-room',
@@ -27,6 +28,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
             next: value => {
                 console.log(value)
                 let wordsArray = value.split(" ")
+
                 console.log("You are player: " + wordsArray[7])
                 sessionStorage.setItem("myPlayerNumber", wordsArray[7].toString())//todo trenutno se broj igraca cuva u session storage, ako se nadje nesto bolje promeni
 
@@ -42,6 +44,10 @@ export class CreateOrJoinRoomComponent implements OnInit {
             next: value => {
                 console.log(value.roomKey)
                 this.createRoomKey = value.roomKey
+
+                console.log("You are player: " + 0)
+                sessionStorage.setItem("myPlayerNumber", "0")//todo trenutno se broj igraca cuva u session storage, ako se nadje nesto bolje promeni
+
                 this.router.navigate(["room/" + this.createRoomKey]);
 
             },

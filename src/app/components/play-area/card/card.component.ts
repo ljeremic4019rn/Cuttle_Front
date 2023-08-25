@@ -4,7 +4,7 @@ import {Card} from "../../../Models/card.model";
 @Component({
     selector: 'doc-card',
     templateUrl: './card.component.html',
-    styleUrls: ['./card.component.scss']
+    styleUrls: ['./card.component.css']
 })
 export class CardComponent {
 

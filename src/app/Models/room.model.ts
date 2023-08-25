@@ -19,7 +19,7 @@ export interface GameResponse{
     graveyard: []
     playerHands: Map<number, []>
     playerTables: Map<number, []>
-    playerScore: []
+    playerScore: Map<number, number>
     playerWhoWon: number
 }
 

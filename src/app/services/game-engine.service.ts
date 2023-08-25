@@ -7,49 +7,60 @@ import {RoomService} from "./room.service";
 })
 export class GameEngineService {
 
+    public numberOfPlayers: number = 0;
     public deck: Card[] = []
     public graveyard: Card[] = []
-    public playerHands: Map<number, Card[]> = new Map<number, Card[]>()
-    public playerTables: Map<number, Card[]> = new Map<number, Card[]>()
-    public playerScores: Map<number, number> = new Map<number, number>()
+    public playerHands: Map<number, string[]> = new Map<number, string[]>()
+    public playerTables: Map<number, string[]> = new Map<number, string[]>()
+    public playerScore: Map<number, number> = new Map<number, number>()
 
     public cardsTest: Card[] = []
 
 
     constructor(private roomService: RoomService) {
-        this.playerHands.set(0, [])
-        this.playerHands.set(1, [])
-        this.playerHands.set(2, [])
-        this.playerTables.set(0, [])
-        this.playerTables.set(1, [])
-        this.playerTables.set(2, [])
     }
 
     setUpGame(newState: any) {
-        console.log("SAD CE JEBANJE")
         const gameResponse = JSON.parse(newState);
         console.log(gameResponse);
 
+        console.log("tmp clear")//todo skloni kasnije
+        this.playerHands.clear()
+        this.playerTables.clear()
+        this.playerScore.clear()
+
         this.deck = gameResponse.deck
         this.graveyard = gameResponse.graveyard
+        this.numberOfPlayers = this.getMapSize(gameResponse.playerHands)
 
-        console.log("JEBANJE 2.0")
+        console.log("kurac")
+        console.log(gameResponse.playerScore)
 
-        for (var i in gameResponse.playerHands) {
-            // @ts-ignore
-            this.playerHands[i] = gameResponse.playerHands[i];
-            // @ts-ignore
-            this.playerTables[i] = gameResponse.playerTables[i];
+        for (let i = 0; i < this.numberOfPlayers; i++) {
+            console.log("uradjeno za " + i)
+            console.log("ruka")
+            this.playerHands.set(i, gameResponse.playerHands[i])
+            console.log("tabla")
+            this.playerTables.set(i, gameResponse.playerTables[i])
+            console.log("score")
+            this.playerScore.set(i, gameResponse.playerScore[i])
         }
 
-        // @ts-ignore
-        this.cardsTest = this.playerHands.get(0)
+        // this.playerHands.set(0,gameResponse.playerHands[0])
+        // this.playerTables.set(0,gameResponse.playerTables[0])
+        // this.playerScores.set(0,gameResponse.playerScores[0])
 
+        console.log("nakon settovanja")
+        console.log(this.deck)
+        console.log(this.graveyard)
         console.log(this.playerHands)
         console.log(this.playerTables)
+        console.log(this.playerScore)
 
-        // for (var j in gameResponse.playerTables) {
-        // }
+        // console.log("uzmianje jednog kuraca")
+        // const cardsForPlayer0 = this.playerHands.get(0);
+        // console.log(cardsForPlayer0)
+
 
         // for (var k in gameResponse.playerScores) {
         //     // @ts-ignore
@@ -57,9 +68,6 @@ export class GameEngineService {
         // }
         // console.log("kriminalac")
         // console.log(this.playerScores)
-
-
-
 
 
         // //todo ovo ce vrv da se promeni kasnije, biris nepotrebne
@@ -78,5 +86,12 @@ export class GameEngineService {
 
     }
 
+    getMapSize(map: Map<number, string[]>): number{
+        let size = 0;
+        for (const i in map){
+            size++
+        }
+        return size
+    }
 
 }
