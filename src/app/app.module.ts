@@ -7,7 +7,7 @@ import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {LoginComponent} from './components/login/login.component';
 import {CreateOrJoinRoomComponent} from './components/create-or-join-room/create-or-join-room.component';
-import {RoomComponent} from './components/play-area/room/room.component';
+import {TableComponent} from './components/play-area/table/table.component';
 import { CardRowComponent } from './components/play-area/card-row/card-row.component';
 import {MatCardModule} from "@angular/material/card";
 import {CardComponent} from "./components/play-area/card/card.component";
@@ -19,7 +19,7 @@ import {CardHandComponent} from "./components/play-area/card-hand/card-hand.comp
         AppComponent,
         LoginComponent,
         CreateOrJoinRoomComponent,
-        RoomComponent,
+        TableComponent,
         CardRowComponent,
         CardComponent,
         CardHandComponent

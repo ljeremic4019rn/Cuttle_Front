@@ -10,10 +10,10 @@ import {LoginComponent} from "../../login/login.component";
 
 @Component({
     selector: 'app-room',
-    templateUrl: './room.component.html',
-    styleUrls: ['./room.component.css']
+    templateUrl: './table.component.html',
+    styleUrls: ['./table.component.css']
 })
-export class RoomComponent implements OnInit {
+export class TableComponent implements OnInit {
 
     // @ts-ignore
     stompClient: CompatClient;
