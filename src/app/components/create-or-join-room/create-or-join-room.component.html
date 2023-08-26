@@ -1,31 +1,81 @@
-<div class="container mt-5">
-    <div class="text-center">
-        <h3>CREATE OR JOIN A ROOM</h3>
+<!--<div class="container mt-5">-->
+<!--    <div class="text-center">-->
+<!--        <h3>CREATE OR JOIN A ROOM</h3>-->
+<!--    </div>-->
+
+<!--    <div class="separator my-4"></div>-->
+
+<!--    <div class="row justify-content-center">-->
+<!--        <div class="col-md-6">-->
+<!--            <div class="form-group">-->
+<!--                <label for="joinRoomKey">Input room key to join</label>-->
+<!--                <input [(ngModel)]="joinRoomKey" class="form-control" type="text" id="joinRoomKey">-->
+<!--            </div>-->
+<!--            <button type="button" class="btn btn-primary btn-block" (click)="joinRoom()">Join</button>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="text-center my-3">-->
+<!--        <p>OR</p>-->
+<!--    </div>-->
+
+<!--    <div class="row justify-content-center">-->
+<!--        <div class="col-md-6">-->
+<!--            <div class="form-group">-->
+<!--                <label for="createRoomKey">Your room key</label>-->
+<!--                <input [(ngModel)]="createRoomKey" disabled="true" class="form-control" type="text" id="createRoomKey">-->
+<!--            </div>-->
+<!--            <button type="button" class="btn btn-primary btn-block" (click)="createRoom()">Generate</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Room setup</title>
+
+</head>
+<body id="all-body" style="margin: 0">
+<div class="main">
+    <input type="checkbox" id="chk" aria-hidden="true">
+
+    <div>
+        <form>
+            <label class="custom-label" for="chk" aria-hidden="true">Join room</label>
+            <input [(ngModel)]="joinRoomKey" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">
+            <button class="start-gen-btn" (click)="joinRoom()">Join</button>
+        </form>
     </div>
 
-    <div class="separator my-4"></div>
+    <div class="divider"></div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="joinRoomKey">Input room key to join</label>
-                <input [(ngModel)]="joinRoomKey" class="form-control" type="text" id="joinRoomKey">
+    <div>
+        <form >
+            <label class="custom-label" for="chk" aria-hidden="true">Create room</label>
+            <input  [(ngModel)]="createRoomKey" style="font-weight: bold" readonly="readonly" id="genKey" type="text" name="txt" placeholder="Your room key" required>
+
+            <div  style="display: flex; justify-content: center; align-items: center;">
+                <div class="player-slots-div">
+                    <label class="player-slots-label" for="player-slots" aria-hidden="true">Players in room</label>
+                    <div id="player-slots" class="player-pill-container">
+                        <button class="btn player-pills">{{playersInRoom[0]}}</button>
+                        <button class="btn player-pills">{{playersInRoom[1]}}</button>
+                        <button class="btn player-pills">{{playersInRoom[2]}}</button>
+                        <button class="btn player-pills">{{playersInRoom[3]}}</button>
+                    </div>
+                </div>
             </div>
-            <button type="button" class="btn btn-primary btn-block" (click)="joinRoom()">Join</button>
-        </div>
-    </div>
-
-    <div class="text-center my-3">
-        <p>OR</p>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="createRoomKey">Your room key</label>
-                <input [(ngModel)]="createRoomKey" disabled="true" class="form-control" type="text" id="createRoomKey">
+            <div class="player-pill-container">
+                <button class="start-gen-btn" style="margin-right: 50px" (click)="createRoom()">Create room</button>
+                <button class="start-gen-btn" style="margin-left: 50px">Start room</button>
             </div>
-            <button type="button" class="btn btn-primary btn-block" (click)="createRoom()">Generate</button>
-        </div>
+        </form>
     </div>
+
 </div>
+</body>
+</html>
+
+

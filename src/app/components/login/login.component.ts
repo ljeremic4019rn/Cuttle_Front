@@ -33,9 +33,6 @@ export class LoginComponent implements OnInit {
 
 
     login() {
-        console.log(this.loginForm.get('username')?.value)
-        console.log(this.loginForm.get('password')?.value)
-
         this.authService.login(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value).subscribe({
             next: response => {
 
@@ -52,6 +49,10 @@ export class LoginComponent implements OnInit {
                 alert(err.error)
             }
         })
+    }
+
+    signup(){//todo
+        console.log("signing up")
     }
 
 
