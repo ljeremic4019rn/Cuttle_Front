@@ -82,16 +82,4 @@ export class TableComponent implements OnInit {
         );
     }
 
-    startRoom() {
-        this.roomService.startRoom(this.gameAction.roomKey).subscribe({
-            next: response => {
-                console.log("we got a response")
-                this.gameEngineService.setUpGame(response)
-            },
-            error: err => {
-                alert(err.error)
-            }
-        })
-    }
-
 }

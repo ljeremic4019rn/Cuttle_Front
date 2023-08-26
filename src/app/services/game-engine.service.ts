@@ -7,21 +7,22 @@ import {RoomService} from "./room.service";
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 4; //todo vrati na 0
+    public numberOfPlayers: number = 0; //todo vrati na 0
     public deck: Card[] = []
     public graveyard: Card[] = []
     public playerHands: Map<number, string[]> = new Map<number, string[]>()
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
 
-    public cardsTest: string[] = ["1_D", "2_C", "1_D", "2_C", "1_D", "2_C","1_D", "2_C", "1_D", "2_C", "1_D", "2_C" ]
+    // public cardsTest: string[] = ["1_D", "2_C", "1_D", "2_C", "1_D", "2_C","1_D", "2_C", "1_D", "2_C", "1_D", "2_C" ]
 
 
     constructor(private roomService: RoomService) {
     }
 
-    setUpGame(newState: any) {
-        const gameResponse = JSON.parse(newState);
+    setUpGame(gameResponse: any) {
+        // const gameResponse = JSON.parse(newState);
+        // const gameResponse = newState
         console.log(gameResponse);
 
         //just in case we clear the lists

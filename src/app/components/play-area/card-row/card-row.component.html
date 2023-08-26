@@ -7,13 +7,13 @@
 <!--    </mat-card-header>-->
 
     <mat-card-content>
-        <div style="display: flex;"  fxLayout='row wrap' fxLayoutGap="20px" class='card-layout' [@cardAnimation]="gameEngineService.cardsTest.length">
-            <div  *ngFor="let card of gameEngineService.cardsTest" fxFlex="90px">
+        <div style="display: flex;"  fxLayout='row wrap' fxLayoutGap="20px" class='card-layout' [@cardAnimation]="this.gameEngineService.playerTables.get(this.rowPlayerNumber)!.length">
+            <div  *ngFor="let card of this.gameEngineService.playerTables.get(this.rowPlayerNumber)" fxFlex="90px">
                 <doc-card class="hand" [card]='card' [covered]="covered"></doc-card>
             </div>
         </div>
     </mat-card-content>
 
-<!-- todo stavi ovo umesto testa  gameEngineService.playerHands.get(rowPlayerNumber)  -->
+<!-- todo stavi ovo umesto testa  gameEngineService.playerTables.get(rowPlayerNumber)  -->
 
 </mat-card>

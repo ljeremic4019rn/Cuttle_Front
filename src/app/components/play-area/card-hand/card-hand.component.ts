@@ -30,7 +30,6 @@ import {GameEngineService} from "../../../services/game-engine.service";
 export class CardHandComponent implements OnInit {
     @Input()
     rowPlayerNumber: number = -1
-    // rowPlayerNum: number = -1
     myPlayerNumber: number = -1
     visible: boolean = true
     covered: boolean = false
@@ -41,7 +40,7 @@ export class CardHandComponent implements OnInit {
     ngOnInit(): void {
         // @ts-ignore
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber"))
-        console.log("this is my player num " + this.myPlayerNumber)
+        // console.log("this is my player num " + this.myPlayerNumber)
 
         if (this.gameEngineService.numberOfPlayers < this.rowPlayerNumber + 1){
             this.visible = false
@@ -65,7 +64,7 @@ export class CardHandComponent implements OnInit {
 
     calculateRotation(index: number): string {
         const angleStep = 20; // Adjust the angle between cards
-        const initialAngle = -angleStep * (this.gameEngineService.cardsTest.length ) / 2;
+        const initialAngle = -angleStep * (this.gameEngineService.playerHands.get(this.myPlayerNumber)!.length) / 2;
         const rotationAngle = initialAngle + angleStep * index;
         return `rotate(${rotationAngle}deg)`;
     }

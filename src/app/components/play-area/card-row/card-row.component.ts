@@ -38,10 +38,12 @@ export class CardRowComponent implements OnInit {
     constructor(public gameEngineService: GameEngineService) {
     }
 
+    //todo stavi table na sto umesto ruke
+
     ngOnInit(): void {
         // @ts-ignore
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber"))
-        console.log("this is my player num " + this.myPlayerNumber)
+        // console.log("this is my player num " + this.myPlayerNumber)
 
         if (this.gameEngineService.numberOfPlayers < this.rowPlayerNumber + 1){
             this.visible = false
@@ -56,11 +58,5 @@ export class CardRowComponent implements OnInit {
         this.covered = !this.covered
     }
 
-    calculateRotation(index: number): string {
-        const angleStep = 20; // Adjust the angle between cards
-        const initialAngle = -angleStep * (this.gameEngineService.cardsTest.length - 1) / 2;
-        const rotationAngle = initialAngle + angleStep * index;
-        return `rotate(${rotationAngle}deg)`;
-    }
 
 }

@@ -8,7 +8,7 @@
 
     <mat-card-content>
         <div class='card-layout' style="display: flex"  fxLayout='row wrap' fxLayoutGap="20px">
-            <div  *ngFor="let card of gameEngineService.cardsTest; let i = index"  fxFlex="90px">
+            <div  *ngFor="let card of gameEngineService.playerHands.get(this.rowPlayerNumber); let i = index"  fxFlex="90px">
                 <doc-card class="hand" [card]='card' [covered]="covered" [style.transform]="calculateRotation(i)"></doc-card>
             </div>
         </div>

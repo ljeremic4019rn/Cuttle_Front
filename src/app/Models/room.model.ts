@@ -23,3 +23,9 @@ export interface GameResponse{
     playerWhoWon: number
 }
 
+export interface RoomUpdateResponse{
+    roomUpdateType: string
+    currentPlayersInRoom: string[]
+    gameResponse: GameResponse
+}
+
