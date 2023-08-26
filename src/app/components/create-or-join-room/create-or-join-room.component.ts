@@ -44,36 +44,37 @@ export class CreateOrJoinRoomComponent implements OnInit {
     //todo stavi da dugmici nesto rade, mozda inv, mozda kick, mozda oba
 
     joinRoom() {
+        if (this.joinRoomKey == ""){
+            alert("You must input a join key first")
+            return
+        }
+
         this.roomService.joinRoom(this.joinRoomKey).subscribe({
             next: value => {
                 console.log(value)
-
                 let joinRoomResponse: JoinRoomResponse = JSON.parse(value);
 
                 sessionStorage.setItem("username", joinRoomResponse.playerUsername)
                 sessionStorage.setItem("myPlayerNumber", joinRoomResponse.playerNumber.toString())
+                this.updatePlayersInRoom(joinRoomResponse.currentPlayersInRoom)
 
-                for (let i = 0; i < joinRoomResponse.currentPlayersInRoom.length; i++) {
-                    if (joinRoomResponse.currentPlayersInRoom[i] != ""){
-                        this.playersInRoom[i] = joinRoomResponse.currentPlayersInRoom[i]
-                    }
-                }
-
-                // this.connect()
+                this.connect()
             },
             error: err => {
                 console.log(err.error)
+                alert(err.error)
             }
-        })    }
+        })
+    }
+
+
 
     createRoom() {
         this.roomService.createRoom().subscribe({
             next: value => {
                 console.log(value.roomKey)
                 this.createRoomKey = value.roomKey
-
-                console.log("You are player: " + 0)
-                sessionStorage.setItem("myPlayerNumber", "0")//todo trenutno se broj igraca cuva u session storage, ako se nadje nesto bolje promeni
+                sessionStorage.setItem("myPlayerNumber", "0")
                 this.playersInRoom[0] = sessionStorage.getItem("username")!
 
                 this.connect()
@@ -100,14 +101,21 @@ export class CreateOrJoinRoomComponent implements OnInit {
     }
 
     onConnect(frame: any) {
-        this.stompClient.subscribe(`/cuttle/room/` + this.createRoomKey, this.updateRoom.bind(this));
+        this.stompClient.subscribe(`/cuttle/updateRoom/` + this.createRoomKey, this.updateRoom.bind(this));
         this.isConnected = true;
         console.log('Connected: ' + frame);
     }
 
     updateRoom(newState: any) {
-        console.log("kurac")
-        // this.gameEngineService.updateGameState((JSON.parse(newState.body)))
+        this.updatePlayersInRoom(JSON.parse(newState.body))
+    }
+
+    updatePlayersInRoom(newPlayerList: string[]){
+        for (let i = 0; i < newPlayerList.length; i++) {
+            if (newPlayerList[i] != ""){
+                this.playersInRoom[i] = newPlayerList[i]
+            }
+        }
     }
 
     disconnect() {
@@ -117,5 +125,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
         this.isConnected = false;
         console.log("Disconnected");
     }
+
+
 
 }
