@@ -46,7 +46,7 @@ export class CardHandComponent implements OnInit {
             this.visible = false
         }
         if (this.myPlayerNumber == this.rowPlayerNumber){
-            this.covered = false
+            this.covered = false//todo igraj se sa ovim
         }
 
     }

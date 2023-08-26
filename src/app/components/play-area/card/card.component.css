@@ -77,7 +77,6 @@ body {
 }
 
 .covered{
-    /*background-image: url("src/assets/red_backgournd.svg");*/
-    background-image: url("src/assets/test.png");
+    background-image: url("src/assets/red_backgournd.svg");
 }
 

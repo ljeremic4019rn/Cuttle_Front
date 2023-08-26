@@ -12,7 +12,7 @@ export class CardComponent  implements OnInit{
     public card: string = ""
 
     @Input()
-    public covered: boolean = true
+    public covered: boolean = true//todo stavi da je sve osim moje pokriveno
 
     suit: string = ""
     value: string = ""
