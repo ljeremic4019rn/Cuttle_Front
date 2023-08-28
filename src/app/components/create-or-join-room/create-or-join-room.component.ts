@@ -50,6 +50,9 @@ export class CreateOrJoinRoomComponent implements OnInit {
         this.roomService.joinRoom(this.joinRoomKey).subscribe({
             next: value => {
                 console.log(value)
+
+                this.disconnect()
+                this.clearOldPlayerSlots()
                 let joinRoomResponse: JoinRoomResponse = JSON.parse(value);
 
                 sessionStorage.setItem("username", joinRoomResponse.playerUsername)
@@ -71,10 +74,15 @@ export class CreateOrJoinRoomComponent implements OnInit {
             next: value => {
                 console.log(value.roomKey)
 
+                this.disconnect()
+                this.clearOldPlayerSlots()
+
                 this.createRoomKey = value.roomKey
                 this.actualRoomKey =  value.roomKey
                 sessionStorage.setItem("myPlayerNumber", "0")
-                this.playersInRoom[0] = sessionStorage.getItem("username")!
+
+                console.log(sessionStorage.getItem("username")!)
+                this.playersInRoom[0] = sessionStorage.getItem("username")!//todo ovo je vrv redundant i smece jer se iz login uzima username
 
                 this.connect()
             },
@@ -131,6 +139,13 @@ export class CreateOrJoinRoomComponent implements OnInit {
                 this.playersInRoom[i] = newPlayerList[i]
             }
         }
+    }
+
+    clearOldPlayerSlots(){
+        this.playersInRoom[0] = "+"
+        this.playersInRoom[1] = "+"
+        this.playersInRoom[2] = "+"
+        this.playersInRoom[3] = "+"
     }
 
     disconnect() {

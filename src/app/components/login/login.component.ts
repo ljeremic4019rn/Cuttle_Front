@@ -39,6 +39,8 @@ export class LoginComponent implements OnInit {
                 if (response.body.jwt != null) {
                     console.log(response.body.jwt)//todo skloni print
                     sessionStorage.setItem("token", response.body.jwt)
+                    sessionStorage.setItem("username", this.loginForm.get('username')?.value)
+
                     this.router.navigate(["setUpRoom"]);
                 } else {
                     alert("Los login")
