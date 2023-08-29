@@ -6,8 +6,7 @@ import * as SockJS from "sockjs-client";
 import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
-import {LoginComponent} from "../../login/login.component";
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from "@angular/cdk/drag-drop";
+import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-room',
@@ -24,7 +23,7 @@ export class TableComponent implements OnInit {
     gameAction: GameAction
 
     myPlayerNumber: number = -1
-    cardsPositionsOnScreen: number [] = []
+    cardPositionOnScreen: string [] = []
 
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
@@ -40,32 +39,19 @@ export class TableComponent implements OnInit {
             helperCardList: []
         }
 
+        this.cardPositionOnScreen[0] = "bottom"
+        this.cardPositionOnScreen[1] = "left"
+        this.cardPositionOnScreen[2] = "top"
+        this.cardPositionOnScreen[3] = "right"
     }
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             this.gameAction.roomKey = params.get('key')!;
         });
-
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
-
-        this.cardsPositionsOnScreen[0] = 0
-        this.cardsPositionsOnScreen[1] = 1
-        this.cardsPositionsOnScreen[2] = 2
-        this.cardsPositionsOnScreen[3] = 3
-
-        console.log("this is my player number " + this.myPlayerNumber)
-
-        //we are rotating all hands and table cards so the player has their cards at the bottom
-        for (let i = 0; i < 4; i++) {
-            this.cardsPositionsOnScreen[i] = this.cardsPositionsOnScreen[i] - this.myPlayerNumber
-            if (this.cardsPositionsOnScreen[i] < 0) this.cardsPositionsOnScreen[i] = 3
-
-            console.log("for i = " + i + " number is " + this.cardsPositionsOnScreen[i])
-        }
-
+        this.setPlayerPositions()
         this.connect()
-
     }
 
     //game engine
@@ -96,7 +82,6 @@ export class TableComponent implements OnInit {
     }
 
 
-
     //connectivity
 
     connect() {
@@ -124,6 +109,68 @@ export class TableComponent implements OnInit {
         }
         this.isConnected = false;
         console.log("Disconnected");
+    }
+
+    setPlayerPositions() {
+        if (this.gameEngineService.numberOfPlayers == 2) {
+            switch (this.myPlayerNumber) {
+                case 0:
+                    this.cardPositionOnScreen[0] = "bottom"
+                    this.cardPositionOnScreen[1] = "top"
+                    break
+                case 1:
+                    this.cardPositionOnScreen[0] = "top"
+                    this.cardPositionOnScreen[1] = "bottom"
+                    break
+            }
+        }
+        else if (this.gameEngineService.numberOfPlayers == 3) {
+            switch (this.myPlayerNumber) {
+                case 0:
+                    this.cardPositionOnScreen[0] = "bottom"
+                    this.cardPositionOnScreen[1] = "left"
+                    this.cardPositionOnScreen[2] = "top"
+                    break
+                case 1:
+                    this.cardPositionOnScreen[0] = "top"
+                    this.cardPositionOnScreen[1] = "bottom"
+                    this.cardPositionOnScreen[2] = "left"
+                    break
+                case 2:
+                    this.cardPositionOnScreen[0] = "left"
+                    this.cardPositionOnScreen[1] = "top"
+                    this.cardPositionOnScreen[2] = "bottom"
+                    break
+            }
+        }
+        else if (this.gameEngineService.numberOfPlayers == 4) {
+            switch (this.myPlayerNumber) {
+                case 0:
+                    this.cardPositionOnScreen[0] = "bottom"
+                    this.cardPositionOnScreen[1] = "left"
+                    this.cardPositionOnScreen[2] = "top"
+                    this.cardPositionOnScreen[3] = "right"
+                    break
+                case 1:
+                    this.cardPositionOnScreen[0] = "right"
+                    this.cardPositionOnScreen[1] = "bottom"
+                    this.cardPositionOnScreen[2] = "left"
+                    this.cardPositionOnScreen[3] = "top"
+                    break
+                case 2:
+                    this.cardPositionOnScreen[0] = "top"
+                    this.cardPositionOnScreen[1] = "right"
+                    this.cardPositionOnScreen[2] = "bottom"
+                    this.cardPositionOnScreen[3] = "left"
+                    break
+                case 3:
+                    this.cardPositionOnScreen[0] = "left"
+                    this.cardPositionOnScreen[1] = "1op"
+                    this.cardPositionOnScreen[2] = "right"
+                    this.cardPositionOnScreen[3] = "bottom"
+                    break
+            }
+        }
     }
 
 }
