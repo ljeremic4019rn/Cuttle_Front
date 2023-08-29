@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Card} from "../../../Models/card.model";
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
+import {CdkDragDrop, CdkDropList, CdkDrag, CdkDragMove, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+
 
 @Component({
     selector: 'app-card-row',
@@ -38,24 +39,52 @@ export class CardRowComponent implements OnInit {
     constructor(public gameEngineService: GameEngineService) {
     }
 
-    //todo stavi table na sto umesto ruke
-
     ngOnInit(): void {
-        // @ts-ignore
-        this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber"))
+        this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         // console.log("this is my player num " + this.myPlayerNumber)
 
         if (this.gameEngineService.numberOfPlayers < this.rowPlayerNumber + 1){
             this.visible = false
         }
         if (this.myPlayerNumber == this.rowPlayerNumber){
-            this.covered = false//todo igraj se sa ovim
+            this.covered = false//todo stavi ovo na true
         }
-
     }
 
-    change (){//todo remove
-        this.covered = !this.covered
+    drop(event: CdkDragDrop<string[]>) {
+        console.log("triggered")
+        moveItemInArray(this.gameEngineService.cardsTestTable, event.previousIndex, event.currentIndex);
+    }
+
+    onDragStarted(item: any) {
+        // Initialize dragging state
+        item.dragging = true;
+    }
+
+    onDragEnded(item: any) {
+        // Reset dragging state
+        item.dragging = false;
+    }
+
+    onDragMoved(event: CdkDragMove, draggedItem: any) {
+        // console.log("moving")
+        // console.log(event)
+        // console.log(draggedItem)
+
+
+        // for (const targetItem of this.gameEngineService.cardsTestTable) {
+        //     if (draggedItem !== targetItem && targetItem.dragging !== true) {
+        //         if (
+        //             event.pointerPosition.x > targetItem.position.x &&
+        //             event.pointerPosition.x < targetItem.position.x + 100 && // Assuming width is 100px
+        //             event.pointerPosition.y > targetItem.position.y &&
+        //             event.pointerPosition.y < targetItem.position.y + 50 // Assuming height is 50px
+        //         ) {
+        //             // Collision detected, update styles or perform actions
+        //             console.log('Collision detected between', draggedItem.name, 'and', targetItem.name);
+        //         }
+        //     }
+        // }
     }
 
 

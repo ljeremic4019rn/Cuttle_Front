@@ -45,26 +45,16 @@ export class CardHandComponent implements OnInit {
         if (this.gameEngineService.numberOfPlayers < this.rowPlayerNumber + 1){
             this.visible = false
         }
-        if (this.myPlayerNumber == this.rowPlayerNumber){
-            this.covered = false//todo igraj se sa ovim
+        if (this.myPlayerNumber != this.rowPlayerNumber){
+            this.covered = false//todo stavi ovo na true
         }
-
     }
 
-    change (){//todo remove
-        this.covered = !this.covered
-    }
-
-
-    // calculateRot(index: number): string {
-    //     const step = 140 / this.gameEngineService.cardsTest.length
-    //     const angle = 20 + (index + 1) * step
-    //     return `rotate(${angle}deg)`;
-    // }
 
     calculateRotation(index: number): string {
         const angleStep = 20; // Adjust the angle between cards
-        const initialAngle = -angleStep * (this.gameEngineService.playerHands.get(this.myPlayerNumber)!.length) / 2;
+        // const initialAngle = -angleStep * (this.gameEngineService.playerHands.get(this.myPlayerNumber)!.length) / 2;
+        const initialAngle = -angleStep * (this.gameEngineService.cardsTestHand.length) / 2;
         const rotationAngle = initialAngle + angleStep * index;
         return `rotate(${rotationAngle}deg)`;
     }

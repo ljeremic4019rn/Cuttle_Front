@@ -1,9 +1,3 @@
-<!--<mat-card class="card" >-->
-<!--    <div class="suit-image top-left" [ngClass]='suit'></div>-->
-<!--    <div class="card-name {{color}}">{{value}}</div>-->
-<!--    <div class="suit-image bottom-right" [ngClass]='suit'></div>-->
-<!--</mat-card>-->
-
 <mat-card class="card" (click)="click()">
     <ng-container *ngIf="!covered; else elseBlock">
         <!-- Display this content if condition is true -->

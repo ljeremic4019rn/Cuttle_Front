@@ -1,10 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Card} from "../../../Models/card.model";
+
+
 
 @Component({
     selector: 'doc-card',
     templateUrl: './card.component.html',
-    styleUrls: ['./card.component.css']
+    styleUrls: ['./card.component.css'],
 })
 export class CardComponent  implements OnInit{
 

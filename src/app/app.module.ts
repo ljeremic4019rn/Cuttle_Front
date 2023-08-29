@@ -13,6 +13,7 @@ import {MatCardModule} from "@angular/material/card";
 import {CardComponent} from "./components/play-area/card/card.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CardHandComponent} from "./components/play-area/card-hand/card-hand.component";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
     declarations: [
@@ -31,7 +32,9 @@ import {CardHandComponent} from "./components/play-area/card-hand/card-hand.comp
         FormsModule,
         ReactiveFormsModule,
         MatCardModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        DragDropModule,
+
     ],
     providers: [],
     bootstrap: [AppComponent]

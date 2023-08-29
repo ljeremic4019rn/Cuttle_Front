@@ -1,23 +1,39 @@
 <!--<p>THIS IS A ROOM {{gameAction.roomKey}}</p>-->
 
 <div class="full-border">
-    <div class="center-container">
+    <div class="center-container" cdkDropListGroup>
 
-<!--        todo stavi for loop sa mod tako da se uvek myNumber stavi na dno-->
+        <!--        todo stavi for loop sa mod tako da se uvek myNumber stavi na dno-->
 
-        <!--        <div class="center-container">-->
-        <app-card-row class="bottom-player-cards" [rowPlayerNumber]=0></app-card-row>
-        <app-card-row class="top-player-cards" [rowPlayerNumber]=1></app-card-row>
-        <app-card-row class="left-player-cards" [rowPlayerNumber]=2></app-card-row>
-        <app-card-row class="right-player-cards" [rowPlayerNumber]=3></app-card-row>
-        <!--    </div>-->
-        <!--    <div class="center-container">-->
-        <app-card-hand class="bottom-player-hand" [rowPlayerNumber]=0></app-card-hand>
-        <app-card-hand class="top-player-hand" [rowPlayerNumber]=1></app-card-hand>
-        <app-card-hand class="left-player-hand" [rowPlayerNumber]=2></app-card-hand>
-        <app-card-hand class="right-player-hand" [rowPlayerNumber]=3></app-card-hand>
-        <!--        </div>-->
+<!--        <app-card-row-->
+<!--            id="table_0"-->
+<!--            cdkDropList-->
+<!--            #test1="cdkDropList"-->
+<!--            [cdkDropListData]="this.gameEngineService.cardsTestTable"-->
+<!--            [cdkDropListConnectedTo]="[test2]"-->
+<!--            (cdkDropListDropped)="dropTest($event)"-->
+<!--            class="table-cards-position-{{this.cardsPositionsOnScreen[0]}}" [rowPlayerNumber]=0></app-card-row>-->
+
+        <app-card-row id="table_0" class="table-cards-position-{{this.cardsPositionsOnScreen[0]}}" [rowPlayerNumber]=0></app-card-row>
+        <app-card-row id="table_1" class="table-cards-position-{{this.cardsPositionsOnScreen[1]}}" [rowPlayerNumber]=1></app-card-row>
+        <app-card-row id="table_2" class="table-cards-position-{{this.cardsPositionsOnScreen[2]}}" [rowPlayerNumber]=2></app-card-row>
+        <app-card-row id="table_3" class="table-cards-position-{{this.cardsPositionsOnScreen[3]}}" [rowPlayerNumber]=3></app-card-row>
+
+<!--        <app-card-hand-->
+<!--            id="hand_0"-->
+<!--            cdkDropList-->
+<!--            #test2="cdkDropList"-->
+<!--            [cdkDropListData]="this.gameEngineService.cardsTestHand"-->
+<!--            [cdkDropListConnectedTo]="[test1]"-->
+<!--            (cdkDropListDropped)="dropTest($event)"-->
+<!--            class="player-hand-position-{{this.cardsPositionsOnScreen[0]}}" [rowPlayerNumber]=0></app-card-hand>-->
+
+        <app-card-hand id="hand_0" class="player-hand-position-{{this.cardsPositionsOnScreen[0]}}" [rowPlayerNumber]=0></app-card-hand>
+        <app-card-hand id="hand_1" class="player-hand-position-{{this.cardsPositionsOnScreen[1]}}" [rowPlayerNumber]=1></app-card-hand>
+        <app-card-hand id="hand_2" class="player-hand-position-{{this.cardsPositionsOnScreen[2]}}" [rowPlayerNumber]=2></app-card-hand>
+        <app-card-hand id="hand_3" class="player-hand-position-{{this.cardsPositionsOnScreen[3]}}" [rowPlayerNumber]=3></app-card-hand>
     </div>
+
 
 </div>
 
