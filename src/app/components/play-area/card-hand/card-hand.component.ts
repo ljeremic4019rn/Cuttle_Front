@@ -57,8 +57,6 @@ export class CardHandComponent implements OnInit {
     }
 
 
-
-
     calculateRotation(index: number): string {
         const angleStep = 20; // Adjust the angle between cards
         // const initialAngle = -angleStep * (this.gameEngineService.playerHands.get(this.myPlayerNumber)!.length) / 2;

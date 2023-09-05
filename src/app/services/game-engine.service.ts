@@ -7,9 +7,9 @@ import {RoomService} from "./room.service";
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 2; //todo vrati na 0
-    public deck: Card[] = []
-    public graveyard: Card[] = []
+    public numberOfPlayers: number = 4; //todo vrati na 0
+    public deck: string[] = []
+    public graveyard: string[] = []
     public playerHands: Map<number, string[]> = new Map<number, string[]>()
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()

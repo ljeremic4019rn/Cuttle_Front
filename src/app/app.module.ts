@@ -23,7 +23,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
         TableComponent,
         CardRowComponent,
         CardComponent,
-        CardHandComponent
+        CardHandComponent,
     ],
     imports: [
         HttpClientModule,

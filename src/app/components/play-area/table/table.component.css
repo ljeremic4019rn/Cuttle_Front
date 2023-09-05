@@ -48,9 +48,9 @@
 
 /*table cards*/
 
-.dropAreaBorder{
-    border: 5px dashed rgba(169, 169, 169, 0.7);
-}
+/*.dropAreaBorder{*/
+/*    border: 5px dashed rgba(169, 169, 169, 0.7);*/
+/*}*/
 
 .table-cards-bottom{
     position: absolute;
@@ -64,19 +64,56 @@
 
 .table-cards-left{
     position: absolute;
-    bottom: 60%;
+    bottom: 30%;
     left: 20%;
-    transform: rotate(90deg);
-    width: 70px;
+    transform: translate(-50%, -50%) rotate(90deg);
 }
 
 .table-cards-right{
     position: absolute;
-    top: 60%;
+    bottom: 30%;
     right: 20%;
-    transform: rotate(-90deg);
-    width: 70px;
+    transform: translate(50%, -50%) rotate(-90deg);
 }
 
+/*deck*/
 
+.deck-card1{
+    position: absolute;
+    left: 38%;
+    top: 49.5%;
+    transform: translate(-50%, -50%);
+}
+.deck-card2{
+    position: absolute;
+    left: 38.3%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.deck-card3{
+    position: absolute;
+    left: 38.7%;
+    top: 50.5%;
+    transform: translate(-50%, -50%);
+}
 
+.deck-card{
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+    width: 72px;
+    height: 100px;
+    padding: 0;
+    border: 1px solid lightgray;
+
+    background-image: url("src/assets/red_backgournd.svg");
+    background-position: center center;
+    background-size: 100%;
+}
+
+.graveyard-card{
+    position: absolute;
+    top: 50%;
+    right: 35%;
+    transform: translate(-50%, -50%);
+}

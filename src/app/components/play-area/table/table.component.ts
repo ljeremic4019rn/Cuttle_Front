@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {RoomService} from "../../../services/room.service";
 import {GameAction} from "../../../Models/room.model";
@@ -26,8 +26,20 @@ export class TableComponent implements OnInit {
     cardPositionOnScreen: string [] = []
 
     visible: boolean[] = []
-    borderActive : boolean = false
+    borderActive: boolean = false
 
+
+    thirtyPercentOfDeckSize = 15
+    sixtyPercentOfDeckSize = 10
+
+    visible1: boolean = true
+    visible2: boolean = true
+    visible3: boolean = true
+
+    dropAreaBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+
+    left: number = 45
+    top: number = 60
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -54,6 +66,10 @@ export class TableComponent implements OnInit {
     }
 
 
+    // testDeck: string[] = ["1_D",  "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D"]
+    testDeck: string[] = ["1_D","1_D"]
+
+
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             this.gameAction.roomKey = params.get('key')!;
@@ -69,7 +85,30 @@ export class TableComponent implements OnInit {
         }
     }
 
+
+
     //game engine
+
+
+    testCardPosition(): object{
+        this.left = this.left - 0.1
+        this.top = this.top - 0.1
+
+        return {
+            'left': this.left + '%',
+            'top': this.top + '%'
+        }
+    }
+
+    draw(){
+        //todo send draw action
+        this.changeDeckVisuals()
+    }
+
+    playCards(){
+
+    }
+
     sendAction() {
         console.log("sending to this room key")
         console.log(this.gameAction.roomKey)
@@ -82,46 +121,37 @@ export class TableComponent implements OnInit {
     }
 
 
-    changeBorderColor() {
-        this.borderActive = !this.borderActive;
+
+    changeBorder() {
+        if (this.borderActive) {
+            this.borderActive = false;
+            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+        }
+        else {
+            this.borderActive = true;
+            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+        }
     }
 
-
-    // cards = document.querySelectorAll(".card")
-    //
-    // observer = new IntersectionObserver(entries => {
-    //     console.log("detektovalo se")
-    //     entries.forEach(entrie => {
-    //         entrie.target.classList.toggle("testRed", entrie.isIntersecting)
-    //     })
-    // },{
-    //     threshold: 1
-    //     }
-    // )
-    // dropTest(event: CdkDragDrop<string[]>) {
-    //     // console.log(event)
-    //     console.log("CARD HAS BEEN DROPPED")
-        // this.cards = document.querySelectorAll(".card")
-        // console.log(this.cards.length)
-        //
-        // this.cards.forEach(card =>{
-        //     console.log("prosli smo za " + card)
-        //     this.observer.observe(card)
-        // })
-        // if (event.previousContainer != event.container) {
-        //     transferArrayItem(
-        //         event.previousContainer.data,
-        //         event.container.data,
-        //         event.previousIndex,
-        //         event.container.data.length,
-        //     );
-        // }
-        // else {
-        //     console.log("its the same place")
-        // }
-    // }
+    changeDeckVisuals(){
+        const deckSize = this.gameEngineService.deck.length
 
 
+        if (deckSize == 0){
+            this.visible1 = false
+        }
+        else if (deckSize < this.thirtyPercentOfDeckSize) {
+            this.visible2 = false
+        }
+        else if (deckSize < this.sixtyPercentOfDeckSize) {
+            this.visible3 = false
+        }
+        else {
+            this.visible1 = true
+            this.visible2 = true
+            this.visible3 = true
+        }
+    }
 
 
     //connectivity
