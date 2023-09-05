@@ -81,6 +81,10 @@ export class TableComponent implements OnInit {
         for (let i = 0; i < this.gameEngineService.numberOfPlayers; i++) {
             this.visible[i] = true
         }
+
+        window.onbeforeunload = function (e) {
+            return "Are you sure you want to leave this page?";
+        };
     }
 
 
