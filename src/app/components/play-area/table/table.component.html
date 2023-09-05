@@ -59,7 +59,7 @@
     </div>
 
     <div class="deck">
-        <div *ngFor="let card of this.testDeck; let i = index" >
+        <div *ngFor="let card of this.gameEngineService.deck; let i = index" >
             <mat-card class="deck-card" [ngStyle]="testCardPosition(i)" (click)="draw()"></mat-card>
         </div>
     </div>
