@@ -25,12 +25,11 @@ export class TableComponent implements OnInit {
     myPlayerNumber: number = -1
     cardPositionOnScreen: string [] = []
 
+    visible: boolean[] = []
+    borderActive : boolean = false
 
-    originalPosition = { x: 651, y: 0 };
 
-
-    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService,
-    private el: ElementRef, private renderer: Renderer2) {
+    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
         this.testInputAction = ''
         this.gameAction = {
@@ -47,7 +46,13 @@ export class TableComponent implements OnInit {
         this.cardPositionOnScreen[1] = "left"
         this.cardPositionOnScreen[2] = "top"
         this.cardPositionOnScreen[3] = "right"
+
+        this.visible[0] = false
+        this.visible[1] = false
+        this.visible[2] = false
+        this.visible[3] = false
     }
+
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
@@ -57,16 +62,11 @@ export class TableComponent implements OnInit {
         this.setPlayerPositions()
         this.connect()
 
+        this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
 
-        //todo skloni ovo
-
-        // const element = this.renderer.selectRootElement('#table_0');
-        // if (element) {
-        //     const boundingRect = element.getBoundingClientRect();
-        //
-        //     // Now 'boundingRect' contains the position and dimensions of the element.
-        //     console.log('Bounding Rectangle:', boundingRect);
-        // }
+        for (let i = 0; i < this.gameEngineService.numberOfPlayers; i++) {
+            this.visible[i] = true
+        }
     }
 
     //game engine
@@ -81,21 +81,47 @@ export class TableComponent implements OnInit {
         );
     }
 
-    dropTest(event: CdkDragDrop<string[]>) {
-        console.log(event)
 
-        if (event.previousContainer != event.container) {
-            transferArrayItem(
-                event.previousContainer.data,
-                event.container.data,
-                event.previousIndex,
-                event.container.data.length,
-            );
-        }
-        else {
-            console.log("its the same place")
-        }
+    changeBorderColor() {
+        this.borderActive = !this.borderActive;
     }
+
+
+    // cards = document.querySelectorAll(".card")
+    //
+    // observer = new IntersectionObserver(entries => {
+    //     console.log("detektovalo se")
+    //     entries.forEach(entrie => {
+    //         entrie.target.classList.toggle("testRed", entrie.isIntersecting)
+    //     })
+    // },{
+    //     threshold: 1
+    //     }
+    // )
+    // dropTest(event: CdkDragDrop<string[]>) {
+    //     // console.log(event)
+    //     console.log("CARD HAS BEEN DROPPED")
+        // this.cards = document.querySelectorAll(".card")
+        // console.log(this.cards.length)
+        //
+        // this.cards.forEach(card =>{
+        //     console.log("prosli smo za " + card)
+        //     this.observer.observe(card)
+        // })
+        // if (event.previousContainer != event.container) {
+        //     transferArrayItem(
+        //         event.previousContainer.data,
+        //         event.container.data,
+        //         event.previousIndex,
+        //         event.container.data.length,
+        //     );
+        // }
+        // else {
+        //     console.log("its the same place")
+        // }
+    // }
+
+
 
 
     //connectivity

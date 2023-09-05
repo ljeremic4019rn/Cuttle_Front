@@ -9,6 +9,7 @@
     line-height: 150px;
     padding: 0;
     background-color: #efefef;
+    border: 1px solid lightgray;
 }
 
 .card-name {

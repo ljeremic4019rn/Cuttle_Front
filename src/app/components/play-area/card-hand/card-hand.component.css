@@ -2,10 +2,6 @@
     margin: 20px;
 }
 
-.hand{
-    margin: 2px;
-}
-
 
 .card-layout {
     display: flex;
@@ -14,9 +10,12 @@
     /*height: 300px; !* Adjust the height as needed *!*/
 }
 
-.hand {
+.card {
     transform-origin: bottom center;
     margin: 0 -18px;
     height: 170px;
-    width: 100px;
+    width: 50px;
 }
+
+/*todo poslednji width se koristi za hand karte*/
+

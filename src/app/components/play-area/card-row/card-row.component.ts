@@ -30,27 +30,30 @@ import {CdkDragDrop, CdkDragEnd, CdkDropList, CdkDrag, CdkDragMove, moveItemInAr
 
 
 export class CardRowComponent implements OnInit {
-    @Input()
-    rowPlayerNumber: number = -1
-    // rowPlayerNum: number = -1
+
     myPlayerNumber: number = -1
     visible: boolean = true
     covered: boolean = false
 
+
+    /* todo
+    card = null
+    onDragStart this.draggedCard = dragged card
+    <div *ngIf this == this.draggedCard invisible>
+     */
+
+
+    dropTest(event: CdkDragEnd) {
+        console.log("EVENT")
+        // console.log(event)
+        //event.dropPoint.x/y
+    }
 
     constructor(public gameEngineService: GameEngineService) {
     }
 
     ngOnInit(): void {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
-        // console.log("this is my player num " + this.myPlayerNumber)
-
-        if (this.gameEngineService.numberOfPlayers < this.rowPlayerNumber + 1){
-            this.visible = false
-        }
-        if (this.myPlayerNumber == this.rowPlayerNumber){
-            this.covered = false//todo stavi ovo na true
-        }
     }
 
 

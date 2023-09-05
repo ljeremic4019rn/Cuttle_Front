@@ -35,11 +35,11 @@ export class CardComponent  implements OnInit{
 
     click(){
         console.log("KLIKNUTO NA " +this.value + "_" + this.suit)
-        console.log(this.elementRef.nativeElement.getBoundingClientRect())
+        // console.log(this.elementRef.nativeElement.getBoundingClientRect())
 
 
-        this.card = "new card"
-        console.log(this.gameEngineService.cardsTestTable)
+        // this.card = "new card"
+        // console.log(this.gameEngineService.cardsTestTable)
     }
 
 }

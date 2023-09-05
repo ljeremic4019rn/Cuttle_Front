@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2} from '@angular/core';
 import {Card} from "../../../Models/card.model";
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
+import {CdkDrag, CdkDragEnd, CdkDragStart, CdkDragMove, CdkDragDrop} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-card-hand',
@@ -28,27 +29,34 @@ import {GameEngineService} from "../../../services/game-engine.service";
 
 
 export class CardHandComponent implements OnInit {
-    @Input()
-    rowPlayerNumber: number = -1
+
     myPlayerNumber: number = -1
-    visible: boolean = true
     covered: boolean = false
 
-    constructor(public gameEngineService: GameEngineService) {
+
+    @Output()
+    changeParentBorder = new EventEmitter<void>();
+
+    constructor(public gameEngineService: GameEngineService, private renderer: Renderer2,  private el: ElementRef) {
     }
 
     ngOnInit(): void {
-        // @ts-ignore
-        this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber"))
-        // console.log("this is my player num " + this.myPlayerNumber)
-
-        if (this.gameEngineService.numberOfPlayers < this.rowPlayerNumber + 1){
-            this.visible = false
-        }
-        if (this.myPlayerNumber != this.rowPlayerNumber){
-            this.covered = false//todo stavi ovo na true
-        }
+        this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
     }
+
+    showDropArea(event: CdkDragStart){
+        this.changeParentBorder.emit();
+    }
+
+    positionDetection(event: CdkDragEnd, card: string) {
+        console.log("EVENT")
+        this.changeParentBorder.emit();
+        // console.log(event)
+
+        //event.dropPoint.x/y
+    }
+
+
 
 
     calculateRotation(index: number): string {

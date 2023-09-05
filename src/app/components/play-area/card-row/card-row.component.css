@@ -1,8 +1,12 @@
 .mat-card {
-    margin: 20px;
+    margin: 10px;
     scale: 90%;
 }
 
-.hand{
+.testRed{
+    border: 5px solid red;
+}
+
+.card{
     margin: 2px;
 }
