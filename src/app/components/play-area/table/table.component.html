@@ -58,9 +58,9 @@
         </app-card-hand>
     </div>
 
-    <div style="display: flex;" fxLayout='row wrap' class='card-layout'>
-        <div *ngFor="let card of this.testDeck" >
-            <mat-card class="deck-card" [ngStyle]="testCardPosition()" (click)="draw()"></mat-card>
+    <div class="deck">
+        <div *ngFor="let card of this.testDeck; let i = index" >
+            <mat-card class="deck-card gradient-border" [ngStyle]="testCardPosition(i)" (click)="draw()"></mat-card>
         </div>
     </div>
 

@@ -78,23 +78,10 @@
 
 /*deck*/
 
-.deck-card1{
+.deck{
     position: absolute;
     left: 38%;
-    top: 49.5%;
-    transform: translate(-50%, -50%);
-}
-.deck-card2{
-    position: absolute;
-    left: 38.3%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-.deck-card3{
-    position: absolute;
-    left: 38.7%;
-    top: 50.5%;
-    transform: translate(-50%, -50%);
+    bottom: 55%;
 }
 
 .deck-card{
@@ -110,6 +97,7 @@
     background-position: center center;
     background-size: 100%;
 }
+
 
 .graveyard-card{
     position: absolute;

@@ -38,8 +38,6 @@ export class TableComponent implements OnInit {
 
     dropAreaBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
 
-    left: number = 45
-    top: number = 60
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -66,8 +64,8 @@ export class TableComponent implements OnInit {
     }
 
 
-    // testDeck: string[] = ["1_D",  "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D"]
-    testDeck: string[] = ["1_D","1_D"]
+    testDeck: string[] = ["1_D",  "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D",]
+    // testDeck: string[] = ["1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D"]
 
 
     ngOnInit(): void {
@@ -90,13 +88,11 @@ export class TableComponent implements OnInit {
     //game engine
 
 
-    testCardPosition(): object{
-        this.left = this.left - 0.1
-        this.top = this.top - 0.1
+    testCardPosition(index: number): object{
+
 
         return {
-            'left': this.left + '%',
-            'top': this.top + '%'
+            'transform': 'translate(-' + index/2 + '%, -' + index/2 + '%)'
         }
     }
 
