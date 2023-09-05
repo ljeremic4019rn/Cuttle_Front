@@ -13,14 +13,16 @@ body{
     position: fixed;
     width: 800px;
     height: 700px;
-    background: red;
     border-radius: 10px;
     box-shadow: 5px 20px 50px #000;
-    background: linear-gradient(to bottom, #05386B, #0a5ca9, #0d569d);
+    /*background: linear-gradient(to bottom, #ccc8c6, #eee9e6, #fffdfd);*/
+    background: #f9f8f5;
 }
+
 #chk{
     display: none;
 }
+
 .login{
     position: relative;
     width:100%;
@@ -35,7 +37,7 @@ body{
 }
 
 .custom-label{
-    color: #fff;
+    color: black;
     font-size: 2.3em;
     justify-content: center;
     display: flex;

@@ -26,7 +26,6 @@
             #test2="cdkDropList"
             [cdkDropListData]="this.gameEngineService.cardsTestHand"
             [cdkDropListConnectedTo]="[test1]"
-            (cdkDropListDropped)="dropTest($event)"
             class="player-hand-{{this.cardPositionOnScreen[0]}}" [rowPlayerNumber]=0></app-card-hand>
 
         <app-card-hand id="hand_1" class="player-hand-{{this.cardPositionOnScreen[1]}}" [rowPlayerNumber]=1></app-card-hand>

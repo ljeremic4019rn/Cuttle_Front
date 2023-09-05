@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {GameEngineService} from "../../../services/game-engine.service";
 
 
 
@@ -29,11 +30,16 @@ export class CardComponent  implements OnInit{
         } else this.color = "black"
     }
 
-    constructor() {
+    constructor(private elementRef: ElementRef, public gameEngineService: GameEngineService) {
     }
 
     click(){
         console.log("KLIKNUTO NA " +this.value + "_" + this.suit)
+        console.log(this.elementRef.nativeElement.getBoundingClientRect())
+
+
+        this.card = "new card"
+        console.log(this.gameEngineService.cardsTestTable)
     }
 
 }

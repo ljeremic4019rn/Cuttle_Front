@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, Renderer2} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {RoomService} from "../../../services/room.service";
 import {GameAction} from "../../../Models/room.model";
@@ -26,7 +26,11 @@ export class TableComponent implements OnInit {
     cardPositionOnScreen: string [] = []
 
 
-    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
+    originalPosition = { x: 651, y: 0 };
+
+
+    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService,
+    private el: ElementRef, private renderer: Renderer2) {
         // this.roomKey = ''
         this.testInputAction = ''
         this.gameAction = {
@@ -52,6 +56,17 @@ export class TableComponent implements OnInit {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         this.setPlayerPositions()
         this.connect()
+
+
+        //todo skloni ovo
+
+        // const element = this.renderer.selectRootElement('#table_0');
+        // if (element) {
+        //     const boundingRect = element.getBoundingClientRect();
+        //
+        //     // Now 'boundingRect' contains the position and dimensions of the element.
+        //     console.log('Bounding Rectangle:', boundingRect);
+        // }
     }
 
     //game engine
@@ -69,15 +84,16 @@ export class TableComponent implements OnInit {
     dropTest(event: CdkDragDrop<string[]>) {
         console.log(event)
 
-        if (event.previousContainer === event.container) {
-            // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-        } else {
+        if (event.previousContainer != event.container) {
             transferArrayItem(
                 event.previousContainer.data,
                 event.container.data,
                 event.previousIndex,
-                event.currentIndex,
+                event.container.data.length,
             );
+        }
+        else {
+            console.log("its the same place")
         }
     }
 

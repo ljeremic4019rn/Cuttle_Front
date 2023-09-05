@@ -1,7 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
-import {CdkDragDrop, CdkDropList, CdkDrag, CdkDragMove, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, CdkDragEnd, CdkDropList, CdkDrag, CdkDragMove, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -28,6 +28,7 @@ import {CdkDragDrop, CdkDropList, CdkDrag, CdkDragMove, moveItemInArray, transfe
 })
 
 
+
 export class CardRowComponent implements OnInit {
     @Input()
     rowPlayerNumber: number = -1
@@ -35,6 +36,7 @@ export class CardRowComponent implements OnInit {
     myPlayerNumber: number = -1
     visible: boolean = true
     covered: boolean = false
+
 
     constructor(public gameEngineService: GameEngineService) {
     }
@@ -49,42 +51,6 @@ export class CardRowComponent implements OnInit {
         if (this.myPlayerNumber == this.rowPlayerNumber){
             this.covered = false//todo stavi ovo na true
         }
-    }
-
-    drop(event: CdkDragDrop<string[]>) {
-        console.log("triggered")
-        moveItemInArray(this.gameEngineService.cardsTestTable, event.previousIndex, event.currentIndex);
-    }
-
-    onDragStarted(item: any) {
-        // Initialize dragging state
-        item.dragging = true;
-    }
-
-    onDragEnded(item: any) {
-        // Reset dragging state
-        item.dragging = false;
-    }
-
-    onDragMoved(event: CdkDragMove, draggedItem: any) {
-        // console.log("moving")
-        // console.log(event)
-        // console.log(draggedItem)
-
-
-        // for (const targetItem of this.gameEngineService.cardsTestTable) {
-        //     if (draggedItem !== targetItem && targetItem.dragging !== true) {
-        //         if (
-        //             event.pointerPosition.x > targetItem.position.x &&
-        //             event.pointerPosition.x < targetItem.position.x + 100 && // Assuming width is 100px
-        //             event.pointerPosition.y > targetItem.position.y &&
-        //             event.pointerPosition.y < targetItem.position.y + 50 // Assuming height is 50px
-        //         ) {
-        //             // Collision detected, update styles or perform actions
-        //             console.log('Collision detected between', draggedItem.name, 'and', targetItem.name);
-        //         }
-        //     }
-        // }
     }
 
 
