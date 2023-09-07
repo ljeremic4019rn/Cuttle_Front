@@ -10,6 +10,8 @@
     padding: 0;
     background-color: #efefef;
     border: 1px solid lightgray;
+    z-index: 3;
+
 }
 
 .card-name {

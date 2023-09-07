@@ -29,7 +29,8 @@ export class TableComponent implements OnInit {
     visible: boolean[] = []
     borderActive: boolean = false
 
-    dropAreaBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+    dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+    centerDropAreaBorder: string = 'border: 5px dashed rgba(255, 255, 102, 0.0)'
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -83,10 +84,11 @@ export class TableComponent implements OnInit {
 
     draw(){
         //todo send draw action
+        console.log("clicked on the deck")
     }
 
     lookIntoGraveyard(){
-
+        console.log("clicked on the graveyard")
     }
 
     sendAction() {
@@ -204,22 +206,24 @@ export class TableComponent implements OnInit {
     }
 
     activateDropZoneBorders(){
-        this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+        this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+        this.centerDropAreaBorder = 'border: 5px dashed rgba(255, 255, 102, 0.7)'
     }
 
     deactivateDropZoneBorders(){
-        this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+        this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+        this.centerDropAreaBorder = 'border: 5px dashed rgba(255, 255, 102, 0.0)'
     }
 
     //depricated
     changeBorder() {
         if (this.borderActive) {
             this.borderActive = false;
-            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+            this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
         }
         else {
             this.borderActive = true;
-            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+            this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
         }
     }
 
