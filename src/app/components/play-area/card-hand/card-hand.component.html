@@ -1,9 +1,8 @@
 <mat-card>
     <mat-card-content>
         <div class='card-layout' style="display: flex"  fxLayout='row wrap' fxLayoutGap="20px">
-<!--            <div  *ngFor="let card of gameEngineService.playerHands.get(this.positionNumber); let i = index"  fxFlex="90px">-->
+<!--            <div  *ngFor="let card of gameEngineService.playerHands.get(positionNumber); let i = index"  fxFlex="90px">-->
             <div *ngFor="let card of gameEngineService.cardsTestHand; let i = index" fxFlex="90px">
-<!--                <doc-card class="hand" [card]='card' [covered]="covered" [style.transform]="calculateRotation(i)" cdkDrag></doc-card>-->
                 <doc-card id="card-hand-{{card}}" class="card" [card]='card' [covered]="covered"
                           cdkDrag
                           [cdkDragDisabled] = dragDisabled

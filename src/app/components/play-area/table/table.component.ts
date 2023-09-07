@@ -25,11 +25,11 @@ export class TableComponent implements OnInit {
     gameAction: GameAction
     myPlayerNumber: number = -1
     dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
+    filteredDomTreeElements: Element[] = []
 
     //visuals
     cardPositionOnScreen: string [] = []
     visible: boolean[] = []
-    borderActive: boolean = false
     dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
     centerDropAreaBorder: string = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
 
@@ -113,66 +113,100 @@ export class TableComponent implements OnInit {
         );
     }
 
-    //CARD DRAG FUNCTIONS
+    endTurn(){
 
-    filteredDomTreeElements: Element[] = []
+    }
+
+    playPoint(){
+
+    }
+
+    playCenterAction(){
+
+    }
+
+    playActionOnEnemy(){
+
+    }
+
+    counterAction(){
+
+    }
+
+
+
+    //CARD DRAG FUNCTIONS
 
     cdkDragStartedFun(){
         this.activateDropZoneBorders()
 
-        //todo skloni ovo odavde i stavi ga negde pametnije
-        this.getDropZoneCords()
-        this.filteredDomTreeElements = this.filterElementIds(document.querySelectorAll("*"), "card")
+        this.getDropZoneCords() //todo skloni ovo odavde i stavi ga negde pametnije
     }
+
+
+    /*
+    todo
+
+    kada se baci na svoj teren aktiviraj playPoint f koja namesti POINT kaciju u game action
+
+    centar je samo magic ali obradi vrstu karte
+
+    enemy je isto samo magic ali obrati na sta je bacena i da li moze da prodje
+
+    ! smisli kako ce da se counteruje 2
+
+    !smisli kako ce 7 da radi
+
+    napravi spec model karte (-90deg) kada je na terenu kralj/dama/p8
+
+     */
 
     cdkDragStoppedFun(cardDto: CardDto){
         this.deactivateDropZoneBorders()
 
+        const dropped = this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y).split("-")
 
-        switch (this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y)){
-            case "center":
-                console.log("center")
-                break
-            case "table-0":
-                console.log("tab0")
-                break
-            case "table-1":
-                console.log("tab1")
-                break
-            case "table-2":
-                console.log("tab2")
-                break
-            case "table-3":
-                console.log("tab3")
-                break
-            case "FAIL":
-                cardDto.event.source._dragRef.reset()
-                break
+        if (dropped[0] == "center"){
+            //aktiviraj magiju ako moze
+            console.log("center")
+
+            //todo sendAction
         }
+        else if (dropped[0] == "table"){
+            let tableNum = parseInt(dropped[1])
 
-        // this.doCardAction(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, cardDto.card)
+            if (tableNum == this.myPlayerNumber){
+                console.log("my table")
+                //stavi mi poen
+            }
+            else {
+                console.log(dropped[1] + " enemy table")
+                //uardi akciju na enemy playera
+                let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, tableNum)
+                console.log("hovering above " + hoveredCard)
+            }
+
+            //todo sendAction
+        }
+        else {
+            cardDto.event.source._dragRef.reset()
+        }
     }
 
 
-    doCardAction(mouse_x: number, mouse_y: number, draggedCard: string){
-        // const allElements = document.querySelectorAll("*");
-        // const filtered = this.filterElementIds(allElements, "card")
-
-        let cardId
-
-        for (let card of this.filteredDomTreeElements){
-           cardId = card.id.split("-")
-
-            if (cardId[1] == "row"){
-                console.log("checking for table <---")
-
-                if (this.isHovered(mouse_x, mouse_y, card.getBoundingClientRect())){
-                    console.log("found a hovered card, its " + cardId[2])
-                }
+    //if card is dropped on en enemy players table find which card it has been dropped on
+    getHoveredCard(mouse_x: number, mouse_y: number, playerTable: number): string {
+        this.filteredDomTreeElements = this.filterElementIds(document.querySelectorAll("*"), "card-table")
+        for (let card of this.filteredDomTreeElements) {
+            let cardSplit = card.id.split("-")
+            if (parseInt(cardSplit[2]) == playerTable && this.isHovered(mouse_x, mouse_y, card.getBoundingClientRect())) {
+                return cardSplit[3]
             }
         }
+        return "FAIL"
     }
 
+    //get in which drop zone the cards has been dropped
     getWhereCardIsDropped(mouse_x: number, mouse_y: number): string {
         //dropZone[0] = key dropZone[1] = values
         for (let dropZone of Array.from(this.dropZoneCordsMap.entries())) {
@@ -183,11 +217,8 @@ export class TableComponent implements OnInit {
         return "FAIL"
     }
 
-    //checks if the card bounds are around the mouse cursor when the card drag is finished
-    isHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
-        return boundingRect.left < mouse_x && boundingRect.right > mouse_x && boundingRect.top < mouse_y && boundingRect.bottom > mouse_y;
-    }
-
+    //get ids of all droppable zones (center and player tables)
+    //this is dynamic because if the player changed the screen size it will change the droppable zone cords
     getDropZoneCords() {
         this.dropZoneCordsMap.set("center", document.querySelector('#center')!.getBoundingClientRect())
         for (let i = 0; i < this.gameEngineService.numberOfPlayers; i++) {
@@ -195,6 +226,10 @@ export class TableComponent implements OnInit {
         }
     }
 
+    //checks if the card bounds are around the mouse cursor when the card drag is finished
+    isHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
+        return boundingRect.left < mouse_x && boundingRect.right > mouse_x && boundingRect.top < mouse_y && boundingRect.bottom > mouse_y;
+    }
 
     //find all html elements containing a certain word in id
     filterElementIds(elements: NodeListOf<Element>, filterWord: string) {
