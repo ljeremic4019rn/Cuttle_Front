@@ -32,15 +32,17 @@ import {CdkDragDrop, CdkDragEnd, CdkDropList, CdkDrag, CdkDragMove, moveItemInAr
 export class CardRowComponent implements OnInit {
 
     myPlayerNumber: number = -1
+    positionNumber: number = -1
     visible: boolean = true
     covered: boolean = false
 
 
-    constructor(public gameEngineService: GameEngineService) {
+    constructor(public gameEngineService: GameEngineService, private elementRef: ElementRef) {
     }
 
     ngOnInit(): void {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
+        this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
     }
 
 

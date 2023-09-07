@@ -36,7 +36,8 @@ export class CardHandComponent implements OnInit {
     cdkDragStartedEvent = new EventEmitter<void>();
 
     myPlayerNumber: number = -1
-    covered: boolean = true
+    positionNumber: number = -1
+    covered: boolean = false//todo vrati covered na true
     dragDisabled = true
 
     constructor(public gameEngineService: GameEngineService, private elementRef: ElementRef) {
@@ -44,9 +45,9 @@ export class CardHandComponent implements OnInit {
 
     ngOnInit(): void {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
-        const htmlElement: HTMLElement = this.elementRef.nativeElement;
+        this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
 
-        if (htmlElement.id.split("-")[1] == this.myPlayerNumber.toString()){
+        if (this.positionNumber == this.myPlayerNumber){
             this.dragDisabled = false
             this.covered = false
         }

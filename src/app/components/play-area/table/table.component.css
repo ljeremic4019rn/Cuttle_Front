@@ -43,14 +43,14 @@
 .player-hand-left{
     position: absolute;
     bottom: 35%;
-    left: 3%;
+    left: 0;
     transform: rotate(90deg);
 }
 
 .player-hand-right{
     position: absolute;
     bottom: 35%;
-    right: 3%;
+    right: 0;
     transform: rotate(-90deg);
 }
 

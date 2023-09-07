@@ -46,11 +46,7 @@ export class GameEngineService {
         }
 
         console.log("nakon settovanja")//todo skloni ovo
-        console.log(this.deck)
-        console.log(this.graveyard)
-        console.log(this.playerHands)
-        console.log(this.playerTables)
-        console.log(this.playerScore)
+        this.printAll()
 
         // //todo ovo ce vrv da se promeni kasnije, biris nepotrebne
         // if (gameResponse.gameResponseType == "REGULAR_GO_NEXT") {
@@ -61,6 +57,7 @@ export class GameEngineService {
         //     console.log("PLAYER WON " + gameResponse.playerWhoWon)
         // }
     }
+
 
     updateGameState(newState: any) {
         console.log("new state received from the server: ")
@@ -75,11 +72,7 @@ export class GameEngineService {
         }
 
         console.log("nakon UPDATE")//todo skloni ovo
-        console.log(this.deck)
-        console.log(this.graveyard)
-        console.log(this.playerHands)
-        console.log(this.playerTables)
-        console.log(this.playerScore)
+        this.printAll()
 
     }
 
@@ -89,6 +82,14 @@ export class GameEngineService {
             size++
         }
         return size
+    }
+
+    printAll(){
+        console.log(this.deck)
+        console.log(this.graveyard)
+        console.log(this.playerHands)
+        console.log(this.playerTables)
+        console.log(this.playerScore)
     }
 
 }

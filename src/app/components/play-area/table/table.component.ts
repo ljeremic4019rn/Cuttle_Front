@@ -151,7 +151,6 @@ export class TableComponent implements OnInit {
         }
 
         // this.doCardAction(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, cardDto.card)
-
     }
 
 
