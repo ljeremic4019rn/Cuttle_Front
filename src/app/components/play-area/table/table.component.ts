@@ -6,8 +6,7 @@ import * as SockJS from "sockjs-client";
 import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
-import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
-import {AllDropZoneCords, CardDto, DropZoneCords} from "../../../Models/card.model";
+import {CardDto, DropZoneCords} from "../../../Models/card.model";
 
 @Component({
     selector: 'app-room',
@@ -25,7 +24,7 @@ export class TableComponent implements OnInit {
     testInputAction: string
     gameAction: GameAction
     myPlayerNumber: number = -1
-    dropZoneCords: AllDropZoneCords
+    dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
 
     //visuals
     cardPositionOnScreen: string [] = []
@@ -58,13 +57,13 @@ export class TableComponent implements OnInit {
         this.visible[2] = false
         this.visible[3] = false
 
-        this.dropZoneCords = new class implements AllDropZoneCords {
-            center = {left: 0, right: 0, top: 0, bottom: 0};
-            table0 = {left: 0, right: 0, top: 0, bottom: 0};
-            table1 = {left: 0, right: 0, top: 0, bottom: 0};
-            table2 = {left: 0, right: 0, top: 0, bottom: 0};
-            table3 = {left: 0, right: 0, top: 0, bottom: 0};
-        }
+        this.dropZoneCordsMap.set("center", new DOMRect())
+        this.dropZoneCordsMap.set("table-0", new DOMRect())
+        this.dropZoneCordsMap.set("table-1", new DOMRect())
+        this.dropZoneCordsMap.set("table-2", new DOMRect())
+        this.dropZoneCordsMap.set("table-3", new DOMRect())
+
+        // this.dropZoneCordsMap.set("table-3", {left: 0, right: 0, top: 0, bottom: 0})
     }
 
 
@@ -82,13 +81,11 @@ export class TableComponent implements OnInit {
             this.visible[i] = true
         }
 
-        // window.onbeforeunload = function (e) {
-        //     return "Are you sure you want to leave this page?";
-        // };
+        //todo page reload block - VRATI GA KASNIJE
 
-        window.onbeforeunload = function (e) {
-            return e.returnValue = 'Are you sure you want to leave this page?';
-        };
+        // window.onbeforeunload = function (e) {
+        //     return e.returnValue = 'Are you sure you want to leave this page?';
+        // };
     }
 
 
@@ -122,14 +119,39 @@ export class TableComponent implements OnInit {
 
     cdkDragStartedFun(){
         this.activateDropZoneBorders()
+
+        //todo skloni ovo odavde i stavi ga negde pametnije
+        this.getDropZoneCords()
         this.filteredDomTreeElements = this.filterElementIds(document.querySelectorAll("*"), "card")
     }
 
     cdkDragStoppedFun(cardDto: CardDto){
-        console.log(cardDto)
-
         this.deactivateDropZoneBorders()
-        this.doCardAction(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, cardDto.card)
+
+
+        switch (this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y)){
+            case "center":
+                console.log("center")
+                break
+            case "table-0":
+                console.log("tab0")
+                break
+            case "table-1":
+                console.log("tab1")
+                break
+            case "table-2":
+                console.log("tab2")
+                break
+            case "table-3":
+                console.log("tab3")
+                break
+            case "FAIL":
+                cardDto.event.source._dragRef.reset()
+                break
+        }
+
+        // this.doCardAction(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, cardDto.card)
+
     }
 
 
@@ -145,24 +167,37 @@ export class TableComponent implements OnInit {
             if (cardId[1] == "row"){
                 console.log("checking for table <---")
 
-                if (this.isCardHovered(mouse_x, mouse_y, card.getBoundingClientRect())){
+                if (this.isHovered(mouse_x, mouse_y, card.getBoundingClientRect())){
                     console.log("found a hovered card, its " + cardId[2])
                 }
             }
         }
     }
 
+    getWhereCardIsDropped(mouse_x: number, mouse_y: number): string {
+        //dropZone[0] = key dropZone[1] = values
+        for (let dropZone of Array.from(this.dropZoneCordsMap.entries())) {
+            if (this.isHovered(mouse_x, mouse_y, dropZone[1])){
+                return dropZone[0]
+            }
+        }
+        return "FAIL"
+    }
 
     //checks if the card bounds are around the mouse cursor when the card drag is finished
-    isCardHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
+    isHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
         return boundingRect.left < mouse_x && boundingRect.right > mouse_x && boundingRect.top < mouse_y && boundingRect.bottom > mouse_y;
     }
 
-    getDropZoneCords(){
-
+    getDropZoneCords() {
+        this.dropZoneCordsMap.set("center", document.querySelector('#center')!.getBoundingClientRect())
+        for (let i = 0; i < this.gameEngineService.numberOfPlayers; i++) {
+            this.dropZoneCordsMap.set("table-" + i, document.querySelector('#table-' + i)!.getBoundingClientRect())
+        }
     }
 
-    //find all html elements containing a certain word
+
+    //find all html elements containing a certain word in id
     filterElementIds(elements: NodeListOf<Element>, filterWord: string) {
         const filteredElements = [];
         for (const element of Array.from(elements)) {
@@ -172,6 +207,8 @@ export class TableComponent implements OnInit {
         }
         return filteredElements;
     }
+
+
 
 
     //CONNECTIVITY
@@ -203,6 +240,8 @@ export class TableComponent implements OnInit {
         console.log("Disconnected");
     }
 
+
+
     //VISUALS
 
     calculateDeckVisualSize(){
@@ -229,18 +268,6 @@ export class TableComponent implements OnInit {
     deactivateDropZoneBorders(){
         this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
         this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
-    }
-
-    //depricated
-    changeBorder() {
-        if (this.borderActive) {
-            this.borderActive = false;
-            this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-        }
-        else {
-            this.borderActive = true;
-            this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
-        }
     }
 
     setPlayerPositions() {

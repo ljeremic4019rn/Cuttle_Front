@@ -18,14 +18,6 @@ export interface CardDto{
     card: string;
 }
 
-export interface AllDropZoneCords{
-    center: DropZoneCords
-    table0: DropZoneCords
-    table1: DropZoneCords
-    table2: DropZoneCords
-    table3: DropZoneCords
-}
-
 export interface DropZoneCords{
     left: number;
     right: number;

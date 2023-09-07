@@ -46,7 +46,7 @@ export class CardHandComponent implements OnInit {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         const htmlElement: HTMLElement = this.elementRef.nativeElement;
 
-        if (htmlElement.id.split("_")[1] == this.myPlayerNumber.toString()){
+        if (htmlElement.id.split("-")[1] == this.myPlayerNumber.toString()){
             this.dragDisabled = false
             this.covered = false
         }

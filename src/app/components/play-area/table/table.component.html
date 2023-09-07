@@ -3,49 +3,49 @@
 <div class="full-border">
     <div class="center-container" cdkDropListGroup>
 
-        <app-card-row id="table_0"
+        <app-card-row id="table-0"
                       *ngIf="visible[0]"
                       [style]="dropAreasBorder"
                       class="table-cards-{{this.cardPositionOnScreen[0]}}">
         </app-card-row>
-        <app-card-row id="table_1"
+        <app-card-row id="table-1"
                       *ngIf="visible[1]"
                       [style]="dropAreasBorder"
                       class="table-cards-{{this.cardPositionOnScreen[1]}}">
         </app-card-row>
-        <app-card-row id="table_2" fxflex="90"
+        <app-card-row id="table-2" fxflex="90"
                       *ngIf="visible[2]"
                       [style]="dropAreasBorder"
                       class="table-cards-{{this.cardPositionOnScreen[2]}}">
         </app-card-row>
-        <app-card-row id="table_3"
+        <app-card-row id="table-3"
                       *ngIf="visible[3]"
                       [style]="dropAreasBorder"
                       class="table-cards-{{this.cardPositionOnScreen[3]}}">
         </app-card-row>
 
 
-        <app-card-hand id="hand_0"
+        <app-card-hand id="hand-0"
                        *ngIf="visible[0]"
                        (cdkDragStartedEvent)="cdkDragStartedFun()"
                        (cdkDragStoppedEvent)="cdkDragStoppedFun($event)"
                        class="player-hand-{{this.cardPositionOnScreen[0]}}">
         </app-card-hand>
-        <app-card-hand id="hand_1"
+        <app-card-hand id="hand-1"
                        *ngIf="visible[1]"
                        class="player-hand-{{this.cardPositionOnScreen[1]}}">
         </app-card-hand>
-        <app-card-hand id="hand_2"
+        <app-card-hand id="hand-2"
                        *ngIf="visible[2]"
                        class="player-hand-{{this.cardPositionOnScreen[2]}}">
         </app-card-hand>
-        <app-card-hand id="hand_3"
+        <app-card-hand id="hand-3"
                        *ngIf="visible[3]"
                        class="player-hand-{{this.cardPositionOnScreen[3]}}">
         </app-card-hand>
 
 
-        <div id="center-drop" class="center-drop-area" [style]="centerDropAreaBorder"></div>
+        <div id="center" class="center-drop-area" [style]="centerDropAreaBorder"></div>
 
     </div>
 
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-<!--    <button (click)="test()">KURAC</button>-->
+    <button (click)="getWhereCardIsDropped(1,1)">KURAC</button>
 
 
 <!--    <div class="graveyard-display-center">-->
