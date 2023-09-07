@@ -7,7 +7,7 @@ import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
-import {CardDto} from "../../../Models/card.model";
+import {AllDropZoneCords, CardDto, DropZoneCords} from "../../../Models/card.model";
 
 @Component({
     selector: 'app-room',
@@ -16,21 +16,24 @@ import {CardDto} from "../../../Models/card.model";
 })
 export class TableComponent implements OnInit {
 
+    //connectivity
     // @ts-ignore
     stompClient: CompatClient;
     isConnected: boolean = false;
 
+    //game engine
     testInputAction: string
     gameAction: GameAction
-
     myPlayerNumber: number = -1
-    cardPositionOnScreen: string [] = []
+    dropZoneCords: AllDropZoneCords
 
+    //visuals
+    cardPositionOnScreen: string [] = []
     visible: boolean[] = []
     borderActive: boolean = false
-
     dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-    centerDropAreaBorder: string = 'border: 5px dashed rgba(255, 255, 102, 0.0)'
+    centerDropAreaBorder: string = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
+
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -54,8 +57,15 @@ export class TableComponent implements OnInit {
         this.visible[1] = false
         this.visible[2] = false
         this.visible[3] = false
-    }
 
+        this.dropZoneCords = new class implements AllDropZoneCords {
+            center = {left: 0, right: 0, top: 0, bottom: 0};
+            table0 = {left: 0, right: 0, top: 0, bottom: 0};
+            table1 = {left: 0, right: 0, top: 0, bottom: 0};
+            table2 = {left: 0, right: 0, top: 0, bottom: 0};
+            table3 = {left: 0, right: 0, top: 0, bottom: 0};
+        }
+    }
 
 
     ngOnInit(): void {
@@ -72,8 +82,12 @@ export class TableComponent implements OnInit {
             this.visible[i] = true
         }
 
+        // window.onbeforeunload = function (e) {
+        //     return "Are you sure you want to leave this page?";
+        // };
+
         window.onbeforeunload = function (e) {
-            return "Are you sure you want to leave this page?";
+            return e.returnValue = 'Are you sure you want to leave this page?';
         };
     }
 
@@ -119,7 +133,6 @@ export class TableComponent implements OnInit {
     }
 
 
-
     doCardAction(mouse_x: number, mouse_y: number, draggedCard: string){
         // const allElements = document.querySelectorAll("*");
         // const filtered = this.filterElementIds(allElements, "card")
@@ -142,8 +155,11 @@ export class TableComponent implements OnInit {
 
     //checks if the card bounds are around the mouse cursor when the card drag is finished
     isCardHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
-        return boundingRect.x < mouse_x && boundingRect.right > mouse_x &&
-            boundingRect.y < mouse_y && boundingRect.bottom > mouse_y;
+        return boundingRect.left < mouse_x && boundingRect.right > mouse_x && boundingRect.top < mouse_y && boundingRect.bottom > mouse_y;
+    }
+
+    getDropZoneCords(){
+
     }
 
     //find all html elements containing a certain word
@@ -207,12 +223,12 @@ export class TableComponent implements OnInit {
 
     activateDropZoneBorders(){
         this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
-        this.centerDropAreaBorder = 'border: 5px dashed rgba(255, 255, 102, 0.7)'
+        this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.7)'
     }
 
     deactivateDropZoneBorders(){
         this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-        this.centerDropAreaBorder = 'border: 5px dashed rgba(255, 255, 102, 0.0)'
+        this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
     }
 
     //depricated

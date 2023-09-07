@@ -14,8 +14,8 @@ export class GameEngineService {
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
 
-    public cardsTestHand: string[] = ["1_C", "2_C"]
-    public cardsTestTable: string[] = ["1_D", "2_D"]
+    public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "4_C"]
+    public cardsTestTable: string[] = ["1_D", "2_D", "3_D", "4_D"]
 
     public deckTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
     public graveYardTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
