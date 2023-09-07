@@ -36,19 +36,6 @@ export class CardRowComponent implements OnInit {
     covered: boolean = false
 
 
-    /* todo
-    card = null
-    onDragStart this.draggedCard = dragged card
-    <div *ngIf this == this.draggedCard invisible>
-     */
-
-
-    dropTest(event: CdkDragEnd) {
-        console.log("EVENT")
-        // console.log(event)
-        //event.dropPoint.x/y
-    }
-
     constructor(public gameEngineService: GameEngineService) {
     }
 

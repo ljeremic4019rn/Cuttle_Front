@@ -7,6 +7,7 @@ import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CdkDragDrop, transferArrayItem} from "@angular/cdk/drag-drop";
+import {CardDto} from "../../../Models/card.model";
 
 @Component({
     selector: 'app-room',
@@ -28,16 +29,7 @@ export class TableComponent implements OnInit {
     visible: boolean[] = []
     borderActive: boolean = false
 
-
-    thirtyPercentOfDeckSize = 15
-    sixtyPercentOfDeckSize = 10
-
-    visible1: boolean = true
-    visible2: boolean = true
-    visible3: boolean = true
-
     dropAreaBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -64,9 +56,6 @@ export class TableComponent implements OnInit {
     }
 
 
-    testDeck: string[] = ["1_D",  "2_D", "3_D", "4_D", "5_D","1_D", "2_D", "3_D", "4_D", "5_D",]
-    // testDeck: string[] = ["1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D","1_D"]
-
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
@@ -89,23 +78,14 @@ export class TableComponent implements OnInit {
 
 
 
-    //game engine
 
-
-    testCardPosition(index: number): object{
-
-
-        return {
-            'transform': 'translate(-' + index/2 + '%, -' + index/2 + '%)'
-        }
-    }
+    //GAME ENGINE
 
     draw(){
         //todo send draw action
-        this.changeDeckVisuals()
     }
 
-    playCards(){
+    lookIntoGraveyard(){
 
     }
 
@@ -120,41 +100,63 @@ export class TableComponent implements OnInit {
         );
     }
 
+    //CARD DRAG FUNCTIONS
 
+    filteredDomTreeElements: Element[] = []
 
-    changeBorder() {
-        if (this.borderActive) {
-            this.borderActive = false;
-            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-        }
-        else {
-            this.borderActive = true;
-            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
-        }
+    cdkDragStartedFun(){
+        this.activateDropZoneBorders()
+        this.filteredDomTreeElements = this.filterElementIds(document.querySelectorAll("*"), "card")
     }
 
-    changeDeckVisuals(){
-        const deckSize = this.gameEngineService.deck.length
+    cdkDragStoppedFun(cardDto: CardDto){
+        console.log(cardDto)
 
-
-        if (deckSize == 0){
-            this.visible1 = false
-        }
-        else if (deckSize < this.thirtyPercentOfDeckSize) {
-            this.visible2 = false
-        }
-        else if (deckSize < this.sixtyPercentOfDeckSize) {
-            this.visible3 = false
-        }
-        else {
-            this.visible1 = true
-            this.visible2 = true
-            this.visible3 = true
-        }
+        this.deactivateDropZoneBorders()
+        this.doCardAction(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, cardDto.card)
     }
 
 
-    //connectivity
+
+    doCardAction(mouse_x: number, mouse_y: number, draggedCard: string){
+        // const allElements = document.querySelectorAll("*");
+        // const filtered = this.filterElementIds(allElements, "card")
+
+        let cardId
+
+        for (let card of this.filteredDomTreeElements){
+           cardId = card.id.split("-")
+
+            if (cardId[1] == "row"){
+                console.log("checking for table <---")
+
+                if (this.isCardHovered(mouse_x, mouse_y, card.getBoundingClientRect())){
+                    console.log("found a hovered card, its " + cardId[2])
+                }
+            }
+        }
+    }
+
+
+    //checks if the card bounds are around the mouse cursor when the card drag is finished
+    isCardHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
+        return boundingRect.x < mouse_x && boundingRect.right > mouse_x &&
+            boundingRect.y < mouse_y && boundingRect.bottom > mouse_y;
+    }
+
+    //find all html elements containing a certain word
+    filterElementIds(elements: NodeListOf<Element>, filterWord: string) {
+        const filteredElements = [];
+        for (const element of Array.from(elements)) {
+            if (element.id && element.id.startsWith(filterWord)) {
+                filteredElements.push(element);
+            }
+        }
+        return filteredElements;
+    }
+
+
+    //CONNECTIVITY
 
     connect() {
         const socket = new SockJS(`${environment.cuttleEngineServer}/ws?jwt=${sessionStorage.getItem('token')}`);
@@ -181,6 +183,44 @@ export class TableComponent implements OnInit {
         }
         this.isConnected = false;
         console.log("Disconnected");
+    }
+
+    //VISUALS
+
+    calculateDeckVisualSize(){
+        //todo umesto ovoga samo koristi pravi dek ali uradi i/3 ili tako nesto
+    }
+
+    setDeckCardPosition(index: number): object{
+        return {
+            'transform': 'translate(-' + index/2 + '%, -' + index/2 + '%)'
+        }
+    }
+
+    setGraveyardCardPosition(index: number): object{
+        return {
+            'transform': 'translate(' + index/2 + '%, -' + index/2 + '%)'
+        }
+    }
+
+    activateDropZoneBorders(){
+        this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+    }
+
+    deactivateDropZoneBorders(){
+        this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+    }
+
+    //depricated
+    changeBorder() {
+        if (this.borderActive) {
+            this.borderActive = false;
+            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+        }
+        else {
+            this.borderActive = true;
+            this.dropAreaBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+        }
     }
 
     setPlayerPositions() {

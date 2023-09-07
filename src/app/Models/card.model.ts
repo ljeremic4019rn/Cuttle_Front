@@ -1,3 +1,5 @@
+import {CdkDragEnd} from "@angular/cdk/drag-drop";
+
 export interface Card {
     name: string;
     value: number;
@@ -9,4 +11,9 @@ export enum Suit {
     Diamond = 'diamond',
     Heart = 'heart',
     Spade = 'spade',
+}
+
+export interface CardDto{
+    event: CdkDragEnd;
+    card: string;
 }

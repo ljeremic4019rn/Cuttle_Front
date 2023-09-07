@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2} from '@angular/core';
-import {Card} from "../../../Models/card.model";
+import {Card, CardDto} from "../../../Models/card.model";
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CdkDrag, CdkDragEnd, CdkDragStart, CdkDragMove, CdkDragDrop} from "@angular/cdk/drag-drop";
@@ -30,30 +30,38 @@ import {CdkDrag, CdkDragEnd, CdkDragStart, CdkDragMove, CdkDragDrop} from "@angu
 
 export class CardHandComponent implements OnInit {
 
+    @Output()
+    cdkDragStoppedEvent = new EventEmitter<CardDto>();
+    @Output()
+    cdkDragStartedEvent = new EventEmitter<void>();
+
     myPlayerNumber: number = -1
     covered: boolean = false
+    dragDisabled = true
 
-
-    @Output()
-    changeParentBorder = new EventEmitter<void>();
-
-    constructor(public gameEngineService: GameEngineService, private renderer: Renderer2,  private el: ElementRef) {
+    constructor(public gameEngineService: GameEngineService, private elementRef: ElementRef) {
     }
 
     ngOnInit(): void {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
+        const htmlElement: HTMLElement = this.elementRef.nativeElement;
+
+        if (htmlElement.id.split("_")[1] == this.myPlayerNumber.toString()){
+            this.dragDisabled = false
+        }
     }
 
-    showDropArea(event: CdkDragStart){
-        this.changeParentBorder.emit();
+    cdkDragStartedFun(event: CdkDragStart){
+        this.cdkDragStartedEvent.emit();
     }
 
-    positionDetection(event: CdkDragEnd, card: string) {
-        console.log("EVENT")
-        this.changeParentBorder.emit();
-        // console.log(event)
-
-        //event.dropPoint.x/y
+    cdkDragEndedFun(event: CdkDragEnd, card: string) {
+        console.log("DROPPED")
+        const cardDto: CardDto = {
+            event: event,
+            card: card
+        };
+        this.cdkDragStoppedEvent.emit(cardDto);
     }
 
 

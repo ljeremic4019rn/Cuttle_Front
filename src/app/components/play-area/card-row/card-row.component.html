@@ -5,13 +5,11 @@
 <!--            <div  *ngFor="let card of this.gameEngineService.playerTables.get(this.rowPlayerNumber)" fxFlex="90px">-->
         <div style="display: flex;" fxLayout='row wrap' fxLayoutGap="20px" class='card-layout'  [@cardAnimation]="this.gameEngineService.cardsTestTable!.length">
             <div *ngFor="let card of this.gameEngineService.cardsTestTable"  fxFlex="90px"  >
-                <doc-card class="card" [card]='card' [covered]="covered" (cdkDragEnded)= "dropTest($event)"  cdkDrag ></doc-card>
+                <doc-card id="card-row-{{card}}" class="card" [card]='card' [covered]="covered"></doc-card>
             </div>
         </div>
     </mat-card-content>
 
 <!-- todo stavi ovo umesto testa  gameEngineService.playerTables.get(rowPlayerNumber)  -->
-
-<!--    (cdkDragMoved)="onDragMoved($event, card)"-->
 
 </mat-card>

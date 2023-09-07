@@ -3,30 +3,16 @@
 <div class="full-border">
     <div class="center-container" cdkDropListGroup>
 
-
-
         <app-card-row id="table_0"
                       *ngIf="visible[0]"
                       [style]="dropAreaBorder"
                       class="table-cards-{{this.cardPositionOnScreen[0]}}">
         </app-card-row>
-
-
-
         <app-card-row id="table_1"
                       *ngIf="visible[1]"
                       [style]="dropAreaBorder"
                       class="table-cards-{{this.cardPositionOnScreen[1]}}">
         </app-card-row>
-
-<!--        <div class="testDiv">-->
-<!--            <app-card-row id="table_1"-->
-<!--                          *ngIf="visible[1]"-->
-<!--                          class="testTable"-->
-<!--                          [style]="dropAreaBorder">-->
-<!--            </app-card-row>-->
-<!--        </div>-->
-
         <app-card-row id="table_2" fxflex="90"
                       *ngIf="visible[2]"
                       [style]="dropAreaBorder"
@@ -41,7 +27,8 @@
 
         <app-card-hand id="hand_0"
                        *ngIf="visible[0]"
-                       (changeParentBorder)="changeBorder()"
+                       (cdkDragStartedEvent)="cdkDragStartedFun()"
+                       (cdkDragStoppedEvent)="cdkDragStoppedFun($event)"
                        class="player-hand-{{this.cardPositionOnScreen[0]}}">
         </app-card-hand>
         <app-card-hand id="hand_1"
@@ -58,37 +45,28 @@
         </app-card-hand>
     </div>
 
+<!-- todo zameni dek test za deck -->
     <div class="deck">
-        <div *ngFor="let card of this.gameEngineService.deck; let i = index" >
-            <mat-card class="deck-card" [ngStyle]="testCardPosition(i)" (click)="draw()"></mat-card>
+        <div *ngFor="let card of this.gameEngineService.deckTest; let i = index" >
+            <mat-card class="deck-card" [ngStyle]="setDeckCardPosition(i)" (click)="draw()"></mat-card>
         </div>
     </div>
 
-    <div style="display: flex;" fxLayout='row wrap' fxLayoutGap="20px" class='card-layout'>
-        <doc-card class="graveyard-card" [covered]="false"></doc-card>
-<!--        <doc-card class="deck-card2" [covered]="true"></doc-card>-->
-<!--        <doc-card class="deck-card3" [covered]="true"></doc-card>-->
+    <div class="graveyard">
+        <div *ngFor="let card of this.gameEngineService.graveYardTest; let i = index" >
+            <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="lookIntoGraveyard()" [card]='card' [covered]="false"></doc-card>
+        </div>
     </div>
 
-</div>
+<!--    <button (click)="test()">KURAC</button>-->
 
 
-<!--    <div class="form-check">-->
-<!--        <input [(ngModel)]="gameAction.actionType" class="form-check-input" type="text" id="actionType">-->
-<!--        <label class="form-check-label" for="actionType">actionType</label>-->
-<!--        <br>-->
-<!--        <input [(ngModel)]="gameAction.fromPlayer" class="form-check-input" type="text" id="fromPlayer">-->
-<!--        <label class="form-check-label" for="fromPlayer">fromPlayer</label>-->
-<!--        <br>-->
-<!--        <input [(ngModel)]="gameAction.cardPlayed" class="form-check-input" type="text" id="cardPlayed">-->
-<!--        <label class="form-check-label" for="cardPlayed">cardPlayed</label>-->
-<!--        <br>-->
-<!--        <input [(ngModel)]="gameAction.ontoPlayer" class="form-check-input" type="number" id="ontoPlayer">-->
-<!--        <label class="form-check-label" for="ontoPlayer">ontoPlayer</label>-->
-<!--        <br>-->
-<!--        <input [(ngModel)]="gameAction.ontoCardPlayed" class="form-check-input" type="text" id="ontoCardPlayed">-->
-<!--        <label class="form-check-label" for="ontoCardPlayed">ontoCardPlayed</label>-->
+<!--    <div class="graveyard-display-center">-->
+<!--        <div class="graveyard-display">-->
+<!--            <div *ngFor="let card of this.gameEngineService.graveYardTest"  fxFlex="90px"  >-->
+<!--                <doc-card class="card" style="scale: 70%; margin: -0.5rem" [card]='card' [covered]="false"></doc-card>-->
+<!--            </div>-->
+<!--        </div>-->
 <!--    </div>-->
-<!--    <button type="submit" class="btn btn-outline-primary" (click)="sendAction()">Test Action</button>-->
-<!--    <button type="submit" class="btn btn-outline-primary" (click)="startRoom()">Start room</button>-->
-<!--    <br>-->
+
+</div>

@@ -80,13 +80,13 @@
 
 .deck{
     position: absolute;
-    left: 38%;
+    left: 36%;
     bottom: 55%;
 }
 
 .deck-card{
     position: absolute;
-    transform: translate(-50%, -50%);
+    /*transform: translate(-50%, -50%);*/
 
     width: 72px;
     height: 100px;
@@ -98,10 +98,32 @@
     background-size: 100%;
 }
 
-
 .graveyard-card{
     position: absolute;
-    top: 50%;
-    right: 35%;
-    transform: translate(-50%, -50%);
+    scale: 90%;
+}
+
+.graveyard{
+    position: absolute;
+    right: 40%;
+    bottom: 55%;
+}
+
+.graveyard-display-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.graveyard-display{
+    display: flex;
+    position: absolute;
+    background-color: gray;
+    bottom: 20%;
+
+    height: 500px;
+    width: 1000px;
+
+    border: 2px solid red;
+
 }
