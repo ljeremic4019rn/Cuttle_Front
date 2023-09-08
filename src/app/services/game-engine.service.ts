@@ -7,7 +7,7 @@ import {RoomService} from "./room.service";
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 2 //todo vrati na 0
+    public numberOfPlayers: number = 4 //todo vrati na 0
     public currentPlayersTurn: number = 0;
 
     public deck: string[] = []
@@ -17,7 +17,7 @@ export class GameEngineService {
     public playerScore: Map<number, number> = new Map<number, number>()
 
     public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "4_C"]
-    public cardsTestTable: string[] = ["1_D", "2_D", "3_D", "4_D"]
+    public cardsTestTable: string[] = ["1_D", "K_D", "Q_D", "4_D", "P_8_D", "J_S_0_J_H_2_J_C_1_J_D_2_10_D"]
     public deckTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
     public graveYardTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
 

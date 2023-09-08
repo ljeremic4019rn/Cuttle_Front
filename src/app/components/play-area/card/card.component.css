@@ -11,7 +11,23 @@
     background-color: #efefef;
     border: 1px solid lightgray;
     z-index: 3;
+}
 
+.jacked0 {
+    transform: translate(40%, -100%);
+    position: absolute;
+}
+.jacked1 {
+    transform: translate(80%, -100%);
+    position: absolute;
+}
+.jacked2 {
+    transform: translate(120%, -100%);
+    position: absolute;
+}
+.jacked3 {
+    transform: translate(160%, -100%);
+    position: absolute;
 }
 
 .card-name {
@@ -50,6 +66,12 @@
 .top-left {
     top: 10px;
     left: 10px;
+}
+
+
+.top-left-number {
+    top: -30px;
+    left: 15px;
 }
 
 .bottom-right {

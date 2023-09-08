@@ -165,7 +165,7 @@ export class TableComponent implements OnInit {
 
         if (droppedCardInfo[0] == "center"){//play global magic card
             //if a target specific card is played as a global just ignore it
-            if (this.badPlayChecker(playedCardSplit[0], ["J","9","2","10"], cardDto.event, "Can't play target specific magic card as global")) return;
+            if (this.badPlayChecker(playedCardSplit[0], ["2", "4", "9", "10", "J"], cardDto.event, "Can't play target specific magic card as global")) return;
             this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
         }
         else if (droppedCardInfo[0] == "table"){
