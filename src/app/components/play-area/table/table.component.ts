@@ -7,6 +7,7 @@ import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto, DropZoneCords} from "../../../Models/card.model";
+import {CdkDragEnd} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-room',
@@ -102,7 +103,15 @@ export class TableComponent implements OnInit {
         console.log("clicked on the graveyard")
     }
 
-    sendAction() {
+    endTurn(){
+        this.sendGameAction()
+    }
+
+    counterAction(){
+
+    }
+
+    sendGameAction() {
         console.log("sending to this room key")
         console.log(this.gameAction.roomKey)
 
@@ -113,27 +122,13 @@ export class TableComponent implements OnInit {
         );
     }
 
-    endTurn(){
-
+    setGameAction(actionType: string, cardPlayed: string, onToPlayer: number, helperCardList: []){
+        this.gameAction.fromPlayer = this.gameEngineService.currentPlayersTurn
+        this.gameAction.actionType = actionType
+        this.gameAction.cardPlayed = cardPlayed
+        this.gameAction.ontoPlayer = onToPlayer
+        this.gameAction.helperCardList = helperCardList
     }
-
-    playPoint(){
-
-    }
-
-    playCenterAction(){
-
-    }
-
-    playActionOnEnemy(){
-
-    }
-
-    counterAction(){
-
-    }
-
-
 
     //CARD DRAG FUNCTIONS
 
@@ -145,12 +140,6 @@ export class TableComponent implements OnInit {
 
 
     /*
-    todo
-
-    kada se baci na svoj teren aktiviraj playPoint f koja namesti POINT kaciju u game action
-
-    centar je samo magic ali obradi vrstu karte
-
     enemy je isto samo magic ali obrati na sta je bacena i da li moze da prodje
 
     ! smisli kako ce da se counteruje 2
@@ -158,32 +147,44 @@ export class TableComponent implements OnInit {
     !smisli kako ce 7 da radi
 
     napravi spec model karte (-90deg) kada je na terenu kralj/dama/p8
-
      */
+
 
     cdkDragStoppedFun(cardDto: CardDto){
         this.deactivateDropZoneBorders()
 
-        const dropped = this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y).split("-")
-
-        if (dropped[0] == "center"){
-            //aktiviraj magiju ako moze
-            console.log("center")
-
-            //todo sendAction
+        //if it's not my turn - do nothing
+        console.log("TURN CHECKING " + this.myPlayerNumber + " WHO'S TURN IT IS " + this.gameEngineService.currentPlayersTurn)
+        if(this.myPlayerNumber != this.gameEngineService.currentPlayersTurn){
+            cardDto.event.source._dragRef.reset()
+            return
         }
-        else if (dropped[0] == "table"){
-            let tableNum = parseInt(dropped[1])
 
-            if (tableNum == this.myPlayerNumber){
-                console.log("my table")
-                //stavi mi poen
+        const playedCardSplit = cardDto.card.split("_")
+        const droppedCardInfo = this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y).split("-")
+
+        if (droppedCardInfo[0] == "center"){//play global magic card
+            //if a target specific card is played as a global just ignore it
+            if (this.badPlayChecker(playedCardSplit[0], ["J","9","2","10"], cardDto.event, "Can't play target specific magic card as global")) return;
+            this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
+        }
+        else if (droppedCardInfo[0] == "table"){
+            let tableNum = parseInt(droppedCardInfo[1])
+
+            if (tableNum == this.myPlayerNumber){//play a point on my field
+                if (this.badPlayChecker(playedCardSplit[0], ["J","Q","K"], cardDto.event, "Can't play power card as point")) return;
+                this.setGameAction("NUMBER", cardDto.card, this.myPlayerNumber, [])
             }
-            else {
-                console.log(dropped[1] + " enemy table")
-                //uardi akciju na enemy playera
+            else {//play a magic card onto the enemy card
+                console.log(droppedCardInfo[1] + " enemy table")
                 let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, tableNum)
                 console.log("hovering above " + hoveredCard)
+
+
+                //todo
+                // this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
+                // this.setGameAction("SCUTTLE", cardDto.card, this.myPlayerNumber, [])
+
             }
 
             //todo sendAction
@@ -191,6 +192,20 @@ export class TableComponent implements OnInit {
         else {
             cardDto.event.source._dragRef.reset()
         }
+    }
+
+    //checks if the played card is one of the ones in the list
+    //aka it checks if the card can be played at that specific spot, and if not "cancel" the play
+    badPlayChecker(cardToMatch: string, listToMatch: string[], event: CdkDragEnd, alertMsg: string): boolean{
+        for (let i = 0; i < listToMatch.length; i++) {
+            if (cardToMatch == listToMatch[i]) {
+                console.log('FOUND IT')
+                alert(alertMsg)
+                event.source._dragRef.reset()
+                return true
+            }
+        }
+        return false
     }
 
 

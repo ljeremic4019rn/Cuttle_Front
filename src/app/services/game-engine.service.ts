@@ -7,7 +7,9 @@ import {RoomService} from "./room.service";
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 4; //todo vrati na 0
+    public numberOfPlayers: number = 2 //todo vrati na 0
+    public currentPlayersTurn: number = 0;
+
     public deck: string[] = []
     public graveyard: string[] = []
     public playerHands: Map<number, string[]> = new Map<number, string[]>()
@@ -16,7 +18,6 @@ export class GameEngineService {
 
     public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "4_C"]
     public cardsTestTable: string[] = ["1_D", "2_D", "3_D", "4_D"]
-
     public deckTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
     public graveYardTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
 
@@ -37,6 +38,7 @@ export class GameEngineService {
         this.playerScore.clear()
 
         this.numberOfPlayers = this.getMapSize(gameResponse.playerHands)
+        this.currentPlayersTurn = gameResponse.currentPlayersTurn
         this.deck = gameResponse.deck
         this.graveyard = gameResponse.graveyard
         for (let i = 0; i < this.numberOfPlayers; i++) {
@@ -65,6 +67,8 @@ export class GameEngineService {
 
         this.deck = newState.deck
         this.graveyard = newState.graveyard
+        this.currentPlayersTurn = parseInt(newState.currentPlayersTurn)
+        console.log("KURAC  " + this.currentPlayersTurn)
         for (let i = 0; i < this.numberOfPlayers; i++) {
             this.playerHands.set(i, newState.playerHands[i])
             this.playerTables.set(i, newState.playerTables[i])

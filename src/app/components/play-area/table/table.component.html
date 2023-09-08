@@ -33,14 +33,20 @@
         </app-card-hand>
         <app-card-hand id="hand-1"
                        *ngIf="visible[1]"
+                       (cdkDragStartedEvent)="cdkDragStartedFun()"
+                       (cdkDragStoppedEvent)="cdkDragStoppedFun($event)"
                        class="player-hand-{{this.cardPositionOnScreen[1]}}">
         </app-card-hand>
         <app-card-hand id="hand-2"
                        *ngIf="visible[2]"
+                       (cdkDragStartedEvent)="cdkDragStartedFun()"
+                       (cdkDragStoppedEvent)="cdkDragStoppedFun($event)"
                        class="player-hand-{{this.cardPositionOnScreen[2]}}">
         </app-card-hand>
         <app-card-hand id="hand-3"
                        *ngIf="visible[3]"
+                       (cdkDragStartedEvent)="cdkDragStartedFun()"
+                       (cdkDragStoppedEvent)="cdkDragStoppedFun($event)"
                        class="player-hand-{{this.cardPositionOnScreen[3]}}">
         </app-card-hand>
 
