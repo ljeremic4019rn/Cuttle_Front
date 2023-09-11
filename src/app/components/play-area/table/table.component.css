@@ -31,12 +31,12 @@
 
 .player-hand-bottom{
     position: absolute;
-    bottom: -5%;
+    bottom: -6%;
 }
 
 .player-hand-top{
     position: absolute;
-    top: -5%;
+    top: -6%;
     transform: rotate(180deg);
 }
 
