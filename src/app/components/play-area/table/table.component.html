@@ -71,19 +71,21 @@
     <!-- todo postavi graveyard i isto kao deck i/3 -->
     <div id="graveyard" class="graveyard">
         <div *ngFor="let card of this.gameEngineService.graveYardTest; let i = index" >
-            <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="lookIntoGraveyard()" [card]='card' [covered]="false"></doc-card>
+            <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="openGraveyard()" [card]='card' [covered]="false"></doc-card>
         </div>
     </div>
+
 
     <button (click)="endTurn()">TEST</button>
 
 
-<!--    <div class="graveyard-display-center">-->
-<!--        <div class="graveyard-display">-->
-<!--            <div *ngFor="let card of this.gameEngineService.graveYardTest" fxFlex="90px">-->
-<!--                <doc-card class="card" style="scale: 70%; margin: -0.5rem" [card]='card' [covered]="false"></doc-card>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div *ngIf="graveyardVisible" class="graveyard-display-center">
+        <a class="close graveyard-button" (click)="closeGraveyard()"></a>
+        <div class="graveyard-display">
+            <div *ngFor="let card of this.gameEngineService.graveYardTest" fxFlex="90px">
+                <doc-card class="card" style="scale: 70%; margin: -0.5rem" [card]='card' [covered]="false"></doc-card>
+            </div>
+        </div>
+    </div>
 
 </div>

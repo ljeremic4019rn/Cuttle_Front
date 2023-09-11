@@ -33,7 +33,7 @@ export class TableComponent implements OnInit {
     visible: boolean[] = []
     dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
     centerDropAreaBorder: string = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
-
+    graveyardVisible: boolean = true
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -99,8 +99,12 @@ export class TableComponent implements OnInit {
         console.log("clicked on the deck")
     }
 
-    lookIntoGraveyard(){
-        console.log("clicked on the graveyard")
+    openGraveyard(){
+        this.graveyardVisible = true
+    }
+
+    closeGraveyard(){
+        this.graveyardVisible = false
     }
 
     endTurn(){
