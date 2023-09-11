@@ -1,8 +1,8 @@
-<mat-card id="{{this.value + '_' + this.suit}}" class="card" [style]="isRotated()" (click)="click()">
+<mat-card id="{{this.value + '_' + this.suit}}" class="card" [style]="isRotated()" >
     <ng-container *ngIf="!covered; else elseBlock">
         <!-- Display this content if condition is true -->
         <div class="suit-image top-left" [ngClass]="suit"></div>
-        <div class="suit-image top-left-number {{color}}" style="scale: 90%">{{value}}</div>
+        <div *ngIf="jacksOnTopOfCard.length != 0" class="suit-image top-left-number {{color}}" style="scale: 90%">{{value}}</div>
         <div class="card-name {{color}}">{{value}}</div>
         <div class="suit-image bottom-right" [ngClass]="suit"></div>
     </ng-container>

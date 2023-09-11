@@ -37,7 +37,7 @@ export class CardHandComponent implements OnInit {
 
     myPlayerNumber: number = -1
     positionNumber: number = -1
-    covered: boolean = false//todo vrati covered na true
+    covered: boolean = true//todo vrati covered na true
     dragDisabled = true
 
     constructor(public gameEngineService: GameEngineService, private elementRef: ElementRef) {
@@ -47,10 +47,16 @@ export class CardHandComponent implements OnInit {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
 
+        //if 8-power card is in action, uncover all enemy cards
+        if (this.gameEngineService.power8InAction != 0){
+            this.covered = false
+        }
+
         if (this.positionNumber == this.myPlayerNumber){
             this.dragDisabled = false
             this.covered = false
         }
+
     }
 
     cdkDragStartedFun(event: CdkDragStart){
@@ -58,7 +64,6 @@ export class CardHandComponent implements OnInit {
     }
 
     cdkDragEndedFun(event: CdkDragEnd, card: string) {
-        console.log("DROPPED")
         const cardDto: CardDto = {
             event: event,
             card: card

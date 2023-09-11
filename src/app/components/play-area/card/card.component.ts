@@ -13,7 +13,7 @@ export class CardComponent implements OnInit {
     public card: string = ""
 
     @Input()
-    public covered: boolean = true//todo stavi da je sve osim moje pokriveno
+    public covered: boolean = true
 
 
     suit: string = ""
@@ -26,7 +26,7 @@ export class CardComponent implements OnInit {
 
     jacksOnTopOfCardMap: Map<number, string[]> = new Map<number, string[]>()
 
-    constructor(private elementRef: ElementRef, public gameEngineService: GameEngineService) {
+    constructor(public gameEngineService: GameEngineService) {
     }
 
     ngOnInit(): void {

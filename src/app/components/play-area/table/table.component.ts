@@ -135,7 +135,7 @@ export class TableComponent implements OnInit {
     cdkDragStartedFun(){
         this.activateDropZoneBorders()
 
-        this.getDropZoneCords() //todo skloni ovo odavde i stavi ga negde pametnije
+        this.getDropZoneCoordinates() //todo skloni ovo odavde i stavi ga negde pametnije
     }
 
 
@@ -154,7 +154,6 @@ export class TableComponent implements OnInit {
         this.deactivateDropZoneBorders()
 
         //if it's not my turn - do nothing
-        console.log("TURN CHECKING " + this.myPlayerNumber + " WHO'S TURN IT IS " + this.gameEngineService.currentPlayersTurn)
         if(this.myPlayerNumber != this.gameEngineService.currentPlayersTurn){
             cardDto.event.source._dragRef.reset()
             return
@@ -165,24 +164,33 @@ export class TableComponent implements OnInit {
 
         if (droppedCardInfo[0] == "center"){//play global magic card
             //if a target specific card is played as a global just ignore it
-            if (this.badPlayChecker(playedCardSplit[0], ["2", "4", "9", "10", "J"], cardDto.event, "Can't play target specific magic card as global")) return;
+
+          //todo za 4 specificno ovde napravi scanner (wait for arrow click, osim ako nije 1v1)
+          //todo  this.powerCardActionHelper("")
+
+            if (this.badPlayChecker(playedCardSplit[0], ["2", "9", "10", "J"], cardDto.event, "Can't play target specific magic card as global")) return;
             this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
+            //todo sendAction
         }
         else if (droppedCardInfo[0] == "table"){
-            let tableNum = parseInt(droppedCardInfo[1])
+            //its card on my table set as a point
+            //if cards on enemy table, find hovered card and play magic on that card
+            let tablePositionNum = parseInt(droppedCardInfo[1])
 
-            if (tableNum == this.myPlayerNumber){//play a point on my field
+            if (tablePositionNum == this.myPlayerNumber){//play a point on my field
                 if (this.badPlayChecker(playedCardSplit[0], ["J","Q","K"], cardDto.event, "Can't play power card as point")) return;
                 this.setGameAction("NUMBER", cardDto.card, this.myPlayerNumber, [])
             }
             else {//play a magic card onto the enemy card
                 console.log(droppedCardInfo[1] + " enemy table")
-                let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, tableNum)
+                let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, tablePositionNum)
                 console.log("hovering above " + hoveredCard)
 
+                this.targetSpecificCardChecker()//todo
 
-                //todo
+
                 // this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
+                //or
                 // this.setGameAction("SCUTTLE", cardDto.card, this.myPlayerNumber, [])
 
             }
@@ -192,6 +200,21 @@ export class TableComponent implements OnInit {
         else {
             cardDto.event.source._dragRef.reset()
         }
+    }
+
+    targetSpecificCardChecker(){
+//todo
+    }
+
+    powerCardActionHelper(card: string) {
+
+        switch (card) {
+
+            case "8":
+                this.gameEngineService.power8InAction++
+                break
+        }
+
     }
 
     //checks if the played card is one of the ones in the list
@@ -211,7 +234,7 @@ export class TableComponent implements OnInit {
 
     //if card is dropped on en enemy players table find which card it has been dropped on
     getHoveredCard(mouse_x: number, mouse_y: number, playerTable: number): string {
-        this.filteredDomTreeElements = this.filterElementIds(document.querySelectorAll("*"), "card-table")
+        this.filteredDomTreeElements = this.filterDOMElementIds(document.querySelectorAll("*"), "card-table")
         for (let card of this.filteredDomTreeElements) {
             let cardSplit = card.id.split("-")
             if (parseInt(cardSplit[2]) == playerTable && this.isHovered(mouse_x, mouse_y, card.getBoundingClientRect())) {
@@ -234,7 +257,7 @@ export class TableComponent implements OnInit {
 
     //get ids of all droppable zones (center and player tables)
     //this is dynamic because if the player changed the screen size it will change the droppable zone cords
-    getDropZoneCords() {
+    getDropZoneCoordinates() {
         this.dropZoneCordsMap.set("center", document.querySelector('#center')!.getBoundingClientRect())
         for (let i = 0; i < this.gameEngineService.numberOfPlayers; i++) {
             this.dropZoneCordsMap.set("table-" + i, document.querySelector('#table-' + i)!.getBoundingClientRect())
@@ -247,7 +270,7 @@ export class TableComponent implements OnInit {
     }
 
     //find all html elements containing a certain word in id
-    filterElementIds(elements: NodeListOf<Element>, filterWord: string) {
+    filterDOMElementIds(elements: NodeListOf<Element>, filterWord: string) {
         const filteredElements = [];
         for (const element of Array.from(elements)) {
             if (element.id && element.id.startsWith(filterWord)) {
