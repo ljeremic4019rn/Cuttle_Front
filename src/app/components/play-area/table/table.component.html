@@ -7,23 +7,19 @@
 
         <app-card-row id="table-0"
                       *ngIf="visible[0]"
-                      [style]="dropAreasBorder"
-                      class="table-cards-{{this.cardPositionOnScreen[0]}}">
+                      class="table-cards-{{this.cardPositionOnScreen[0]}} table-border">
         </app-card-row>
         <app-card-row id="table-1"
                       *ngIf="visible[1]"
-                      [style]="dropAreasBorder"
-                      class="table-cards-{{this.cardPositionOnScreen[1]}}">
+                      class="table-cards-{{this.cardPositionOnScreen[1]}} table-border">
         </app-card-row>
         <app-card-row id="table-2" fxflex="90"
                       *ngIf="visible[2]"
-                      [style]="dropAreasBorder"
-                      class="table-cards-{{this.cardPositionOnScreen[2]}}">
+                      class="table-cards-{{this.cardPositionOnScreen[2]}} table-border">
         </app-card-row>
         <app-card-row id="table-3"
                       *ngIf="visible[3]"
-                      [style]="dropAreasBorder"
-                      class="table-cards-{{this.cardPositionOnScreen[3]}}">
+                      class="table-cards-{{this.cardPositionOnScreen[3]}} table-border">
         </app-card-row>
 
 
@@ -53,7 +49,7 @@
         </app-card-hand>
 
 
-        <div id="center" class="center-drop-area" [style]="centerDropAreaBorder"></div>
+        <div id="center" class="center-drop-area center-border" ></div>
 
     </div>
 
@@ -66,6 +62,7 @@
         <div *ngFor="let card of this.gameEngineService.deckTest; let i = index" >
             <mat-card class="deck-card" [ngStyle]="setDeckCardPosition(i)" (click)="draw()"></mat-card>
         </div>
+        <label class="deck-label">deck</label>
     </div>
 
     <!-- todo postavi graveyard i isto kao deck i/3 -->
@@ -73,11 +70,10 @@
         <div *ngFor="let card of this.gameEngineService.graveYardTest; let i = index" >
             <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="openGraveyard()" [card]='card' [covered]="false"></doc-card>
         </div>
+        <label class="graveyard-label">graveyard</label>
     </div>
 
-
     <button (click)="endTurn()">TEST</button>
-
 
     <div *ngIf="graveyardVisible" class="graveyard-display-center">
         <a class="close graveyard-button" (click)="closeGraveyard()"></a>

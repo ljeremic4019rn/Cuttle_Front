@@ -31,9 +31,9 @@ export class TableComponent implements OnInit {
     //visuals
     cardPositionOnScreen: string [] = []
     visible: boolean[] = []
-    dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-    centerDropAreaBorder: string = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
-    graveyardVisible: boolean = true
+    // dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+    // centerDropAreaBorder: string = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
+    graveyardVisible: boolean = false
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -137,7 +137,7 @@ export class TableComponent implements OnInit {
     //CARD DRAG FUNCTIONS
 
     cdkDragStartedFun(){
-        this.activateDropZoneBorders()
+        // this.activateDropZoneBorders()
 
         this.getDropZoneCoordinates() //todo skloni ovo odavde i stavi ga negde pametnije
     }
@@ -155,7 +155,7 @@ export class TableComponent implements OnInit {
 
 
     cdkDragStoppedFun(cardDto: CardDto){
-        this.deactivateDropZoneBorders()
+        // this.deactivateDropZoneBorders()
 
         //if it's not my turn - do nothing
         if(this.myPlayerNumber != this.gameEngineService.currentPlayersTurn){
@@ -336,15 +336,15 @@ export class TableComponent implements OnInit {
         }
     }
 
-    activateDropZoneBorders(){
-        this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
-        this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.7)'
-    }
-
-    deactivateDropZoneBorders(){
-        this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-        this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
-    }
+    // activateDropZoneBorders(){
+    //     this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
+    //     this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.7)'
+    // }
+    //
+    // deactivateDropZoneBorders(){
+    //     this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
+    //     this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
+    // }
 
     setPlayerPositions() {
         if (this.gameEngineService.numberOfPlayers == 2) {
