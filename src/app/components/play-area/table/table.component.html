@@ -59,7 +59,7 @@
 
 <!-- todo zameni deck_test za pravi deck i prmeni ja je i/3 a ne i/2 -->
     <div id="deck" class="deck">
-        <div *ngFor="let card of this.gameEngineService.deckTest; let i = index" >
+        <div *ngFor="let card of this.gameEngineService.deck; let i = index" >
             <mat-card class="deck-card" [ngStyle]="setDeckCardPosition(i)" (click)="draw()"></mat-card>
         </div>
         <label class="deck-label">deck</label>
@@ -67,7 +67,7 @@
 
     <!-- todo postavi graveyard i isto kao deck i/3 -->
     <div id="graveyard" class="graveyard">
-        <div *ngFor="let card of this.gameEngineService.graveYardTest; let i = index" >
+        <div *ngFor="let card of this.gameEngineService.graveyard; let i = index" >
             <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="openGraveyard()" [card]='card' [covered]="false"></doc-card>
         </div>
         <label class="graveyard-label">graveyard</label>
@@ -78,7 +78,7 @@
     <div *ngIf="graveyardVisible" class="graveyard-display-center">
         <a class="close graveyard-button" (click)="closeGraveyard()"></a>
         <div class="graveyard-display">
-            <div *ngFor="let card of this.gameEngineService.graveYardTest" fxFlex="90px">
+            <div *ngFor="let card of this.gameEngineService.graveyard" fxFlex="90px">
                 <doc-card class="card" style="scale: 70%; margin: -0.5rem" [card]='card' [covered]="false"></doc-card>
             </div>
         </div>

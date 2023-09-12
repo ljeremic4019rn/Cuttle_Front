@@ -126,10 +126,12 @@ export class TableComponent implements OnInit {
         );
     }
 
-    setGameAction(actionType: string, cardPlayed: string, onToPlayer: number, helperCardList: []){
+
+    setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed:string, onToPlayer: number, helperCardList: []){
         this.gameAction.fromPlayer = this.gameEngineService.currentPlayersTurn
         this.gameAction.actionType = actionType
         this.gameAction.cardPlayed = cardPlayed
+        this.gameAction.ontoCardPlayed = ontoCardPlayed
         this.gameAction.ontoPlayer = onToPlayer
         this.gameAction.helperCardList = helperCardList
     }
@@ -141,17 +143,6 @@ export class TableComponent implements OnInit {
 
         this.getDropZoneCoordinates() //todo skloni ovo odavde i stavi ga negde pametnije
     }
-
-
-    /*
-    enemy je isto samo magic ali obrati na sta je bacena i da li moze da prodje
-
-    ! smisli kako ce da se counteruje 2
-
-    !smisli kako ce 7 da radi
-
-    napravi spec model karte (-90deg) kada je na terenu kralj/dama/p8
-     */
 
 
     cdkDragStoppedFun(cardDto: CardDto){
@@ -173,25 +164,46 @@ export class TableComponent implements OnInit {
           //todo  this.powerCardActionHelper("")
 
             if (this.badPlayChecker(playedCardSplit[0], ["2", "9", "10", "J"], cardDto.event, "Can't play target specific magic card as global")) return;
-            this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
+            this.setGameAction("POWER", cardDto.card,"", this.myPlayerNumber, [])
             //todo sendAction
         }
         else if (droppedCardInfo[0] == "table"){
             //its card on my table set as a point
             //if cards on enemy table, find hovered card and play magic on that card
-            let tablePositionNum = parseInt(droppedCardInfo[1])
+            let enemyTablePositionNum = parseInt(droppedCardInfo[1])
 
-            if (tablePositionNum == this.myPlayerNumber){//play a point on my field
+            if (enemyTablePositionNum == this.myPlayerNumber){//play a point on my field
                 if (this.badPlayChecker(playedCardSplit[0], ["J","Q","K"], cardDto.event, "Can't play power card as point")) return;
-                this.setGameAction("NUMBER", cardDto.card, this.myPlayerNumber, [])
+                this.setGameAction("NUMBER", cardDto.card, "", this.myPlayerNumber, [])
             }
             else {//play a magic card onto the enemy card
                 console.log(droppedCardInfo[1] + " enemy table")
-                let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, tablePositionNum)
+                let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, enemyTablePositionNum)
                 console.log("hovering above " + hoveredCard)
 
-                this.targetSpecificCardChecker()//todo
 
+
+                // this.targetSpecificCardChecker()//todo
+
+
+                switch (playedCardSplit[0]) {
+
+                    case "8":
+                        this.gameEngineService.power8InAction++
+                        break
+                    case "9":
+                        if (!this.badPlayChecker("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!, cardDto.event, "Player has a queen in play")) return;
+
+                        this.setGameAction("POWER", hoveredCard, cardDto.card, enemyTablePositionNum, [])
+                        console.log(this.gameAction)
+                        break
+                    case "J":
+                        if (!this.badPlayChecker(playedCardSplit[0], ["Q"], cardDto.event, "Player has a queen in play")) return;
+
+                        this.setGameAction("POWER", hoveredCard, cardDto.card, enemyTablePositionNum, [])
+                        console.log(this.gameAction)
+                        break
+                }
 
                 // this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
                 //or
@@ -210,23 +222,13 @@ export class TableComponent implements OnInit {
 //todo
     }
 
-    powerCardActionHelper(card: string) {
-
-        switch (card) {
-
-            case "8":
-                this.gameEngineService.power8InAction++
-                break
-        }
-
-    }
-
     //checks if the played card is one of the ones in the list
     //aka it checks if the card can be played at that specific spot, and if not "cancel" the play
     badPlayChecker(cardToMatch: string, listToMatch: string[], event: CdkDragEnd, alertMsg: string): boolean{
+        console.log(listToMatch)
+        console.log(cardToMatch)
         for (let i = 0; i < listToMatch.length; i++) {
             if (cardToMatch == listToMatch[i]) {
-                console.log('FOUND IT')
                 alert(alertMsg)
                 event.source._dragRef.reset()
                 return true

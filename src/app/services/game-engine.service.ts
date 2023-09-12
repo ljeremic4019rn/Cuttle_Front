@@ -7,7 +7,7 @@ import {RoomService} from "./room.service";
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 4 //todo vrati na 0
+    public numberOfPlayers: number = 2 //todo vrati na 0
     public currentPlayersTurn: number = 0;
     public power8InAction: number = 0
 
@@ -17,14 +17,26 @@ export class GameEngineService {
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
 
-    public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "8_C"]
-    public cardsTestTable: string[] = ["1_D", "K_D", "Q_D", "4_D", "P_8_D", "J_S_0_J_H_2_J_C_1_J_D_2_10_D"]
-    public deckTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
-
-    public graveYardTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
+    // public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "8_C"]
+    // public cardsTestTable: string[] = ["1_D", "K_D", "Q_D", "4_D", "P_8_D", "J_S_0_J_H_2_J_C_1_J_D_2_10_D"]
+    // public deckTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
+    // public graveYardTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
 
 
     constructor(private roomService: RoomService) {
+
+        this.playerHands.set(0, ["1_C", "2_C", "9_C", "K_C"])
+        this.playerHands.set(1, ["1_C", "2_C", "3_C", "8_C"])
+        this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
+        this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
+
+        this.playerTables.set(0, ["1_C", "2_C", "3_C", "K_C"])
+        this.playerTables.set(1, ["1_C", "2_C", "3_C", "Q_C"])
+        this.playerTables.set(2, ["1_C", "2_C", "3_C", "Q_H"])
+        this.playerTables.set(3, ["1_C", "2_C", "3_C", "8_C"])
+
+        this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
+        this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
     }
 
     setUpGame(gameResponse: any) {

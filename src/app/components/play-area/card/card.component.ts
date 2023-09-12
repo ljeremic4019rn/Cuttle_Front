@@ -15,6 +15,8 @@ export class CardComponent implements OnInit {
     @Input()
     public covered: boolean = true
 
+    @Input()
+    public isOnTable: boolean = false
 
     suit: string = ""
     value: string = ""
@@ -35,7 +37,7 @@ export class CardComponent implements OnInit {
         if (this.cardSplit.length == 2) {//if length is 2
             this.value = this.cardSplit[0];
             this.suit = this.cardSplit[1];
-            if (this.value == "Q" || this.value == "K")
+            if (this.isOnTable && (this.value == "Q" || this.value == "K"))
                 this.rotated = true
         }
         else if (this.cardSplit[0] == "P") {
