@@ -238,6 +238,17 @@
     right: 1%;
 }
 
+.arrow3:hover{
+    color: #77f877;
+}
+
+.arrow2:hover{
+    color: #77f877;
+}
+
+.arrow1:hover{
+    color: #77f877;
+}
 
 @keyframes slide1 {
     0%,
@@ -274,4 +285,53 @@
     }
 }
 
+
+/* DISCARD SELECTOR */
+
+/*.graveyard-hover{*/
+/*    border: 5px solid rgba(255, 255, 0, 0);*/
+/*    border-radius: 10px;*/
+/*}*/
+
+/*.graveyard-hover:hover{*/
+/*    border: 5px yellow solid;*/
+/*    border-radius: 10px;*/
+/*}*/
+
+/*.discard-display-center{*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*}*/
+
+/*.discard-display{*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*    flex-direction: row;*/
+/*    position: absolute;*/
+/*    background-color: #1d5e2b;*/
+/*    border: 20px solid #80511f;*/
+/*    border-radius: 20px;*/
+/*    bottom: 40%;*/
+/*    padding: 20px;*/
+/*    max-width: 1000px;*/
+
+/*}*/
+
+
+/*.discard-label{*/
+/*    transform: translate(-50%, -50%);*/
+/*    position: absolute;*/
+/*    left: 50%;*/
+/*    bottom: -30%;*/
+/*    font-size: 1.1em;*/
+/*    font-style: italic;*/
+/*    color: rgba(178, 178, 178, 0.8);*/
+/*}*/
+
+/*.discard-button{*/
+/*    position: absolute;*/
+/*    bottom: 20%;*/
+/*    !*left: 10%;*!*/
+/*}*/
 

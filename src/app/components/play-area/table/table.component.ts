@@ -37,6 +37,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
     filteredDomTreeElements: Element[] = []
     graveyardCardsAreSelectable: boolean = false
+    selectedPlayerToDiscard: number = -1
 
     //visuals
     cardPositionOnScreen: string [] = []
@@ -98,7 +99,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
 
         //todo page reload block - VRATI GA KASNIJE
-
         // window.onbeforeunload = function (e) {
         //     return e.returnValue = 'Are you sure you want to leave this page?';
         // };
@@ -136,7 +136,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         console.log("SALJEMO NA SERVER")
         console.log(this.gameAction)
         if(this.gameAction.actionType == ""){
-            alert("AN ERROR OCCURRED")
+            alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
             return
         }
         this.stompClient.send(
@@ -156,13 +156,16 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameAction.helperCardList = helperCardList
     }
 
+    getOppositePlayer(): number{
+        if (this.myPlayerNumber == 0) return 1
+        else return 0
+    }
+
 
     //POWER CARD FUNCTIONS (AND CARD DRAG FUNCTIONS)
 
     cdkDragStartedFun(){
-        // this.activateDropZoneBorders()
-
-        this.getDropZoneCoordinates() //todo skloni ovo odavde i stavi ga negde pametnije
+        this.getDropZoneCoordinates() //todo ovo mozda nije najbolje mesto ali ne znam gde pametnije
     }
 
     cdkDragStoppedFun(cardDto: CardDto){
@@ -235,7 +238,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
 
     //just displaced code to make the main fun more compact
-    powerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string,  playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd){
+    powerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string,  playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd) {
         switch (playedCardSplit0) {
             case "2":
                 break
@@ -245,9 +248,24 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
                 break
             case "4":
+
+                console.log("USLI SMO OVDE")
                 this.selectArrowVisible = true
-                break
-            case "7":
+                //todo display selection screen later
+                this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
+
+                //todo OVDE IMA BUG DA SE NE MENJA ONTO PLAYER NEGDO UVEK BUDE 0 STA KOJ KURAC
+
+                if (this.gameEngineService.numberOfPlayers == 2){
+                    console.log("setujemo kurac?")
+                    console.log(this.myPlayerNumber)
+                    console.log(this.getOppositePlayer())
+                    let oppositePlayer = this.getOppositePlayer()
+                    console.log(oppositePlayer)
+                    this.setGameAction("POWER", playedCard, ontoPlayedCard, 69, [])
+                }
+                console.log(this.gameAction)
+
                 break
             case "8":
                 this.gameEngineService.power8InAction++
@@ -273,14 +291,14 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     selectPlayerForCardDiscard(selectedPosition: string){
-        console.log("KLIKNUTO NA "  + selectedPosition)
-        let selectedPlayer: number = -1
-
         this.cardPositionOnScreen.forEach((position, playerNum) => {
             if (selectedPosition == position){
-                selectedPlayer = playerNum
+                this.selectedPlayerToDiscard = playerNum
+                return
             }
         });
+        //todo ovo pomeri ako se selektuje
+        // this.sendGameAction()
     }
 
     //checks if the played card is one of the ones in the list

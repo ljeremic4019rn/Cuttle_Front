@@ -8,7 +8,7 @@ import {LoginComponent} from "../components/login/login.component";
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 2 //todo vrati na 0
+    public numberOfPlayers: number = 3 //todo vrati na 0
     public currentPlayersTurn: number = 0;
     public power8InAction: number = 0
     public forced7Card = null
@@ -27,8 +27,8 @@ export class GameEngineService {
 
     constructor(private roomService: RoomService) {
 
-        this.playerHands.set(0, ["1_C", "2_C", "3_C", "K_C"])
-        this.playerHands.set(1, ["1_C", "2_C", "3_C", "8_C"])
+        this.playerHands.set(0, ["1_C", "2_C", "4_C", "K_C"])
+        this.playerHands.set(1, ["1_C", "2_C", "4_C", "8_C"])
         this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
         this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
