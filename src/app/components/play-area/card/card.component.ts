@@ -21,7 +21,6 @@ export class CardComponent implements OnInit {
     suit: string = ""
     value: string = ""
     color: string = ""
-
     rotated: boolean = false
     cardSplit: string[] = []
     jacksOnTopOfCard: string[] = []

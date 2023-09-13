@@ -119,12 +119,16 @@ export class TableComponent implements OnInit {
     sendGameAction() {
         console.log("SALJEMO NA SERVER")
         console.log(this.gameAction)
-
+        if(this.gameAction.actionType == ""){
+            alert("AN ERROR OCCURRED")
+            return
+        }
         this.stompClient.send(
             `/app/playAction`,
             {},
             JSON.stringify(this.gameAction)
         );
+        this.gameAction.actionType = ""
     }
 
     setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed:string, onToPlayer: number, helperCardList: []){
@@ -215,7 +219,6 @@ export class TableComponent implements OnInit {
                 this.graveyardVisible = true
                 this.graveyardCardsAreSelectable = true
                 this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
-
                 break
             case "4":
                 break
