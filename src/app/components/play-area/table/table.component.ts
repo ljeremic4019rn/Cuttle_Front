@@ -94,7 +94,8 @@ export class TableComponent implements OnInit {
     //GAME ENGINE
 
     draw(){
-        //todo send draw action
+        this.setGameAction("DRAW", "", "", -1, [])
+        this.sendGameAction()
         console.log("clicked on the deck")
     }
 

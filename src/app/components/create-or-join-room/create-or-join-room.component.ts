@@ -107,6 +107,11 @@ export class CreateOrJoinRoomComponent implements OnInit {
         })
     }
 
+    startRoomBtnVisible(): object{
+        if(this.createRoomKey != "") return {'visibility': 'visible'}
+        return {'visibility': 'hidden'}
+    }
+
     updateRoom(newState: any) {
         let roomUpdateResponse: RoomUpdateResponse = JSON.parse(newState.body)
 
