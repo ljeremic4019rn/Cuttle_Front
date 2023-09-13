@@ -130,6 +130,11 @@
     background-size: 100%;
 }
 
+.hover-cursor:hover{
+    cursor:pointer;
+}
+
+
 /* GRAVEYARD */
 
 .graveyard-card{
@@ -182,34 +187,10 @@
     color: rgba(178, 178, 178, 0.8);
 }
 
-.close {
+.graveyard-button{
     position: absolute;
-    width: 32px;
-    height: 32px;
-    scale: 130%;
-    opacity: 0.7;
-    border: 2px #80511f solid;
-    border-radius: 100px;
-    top: 15%;
-    right: 26%;
-    z-index: 1;
-}
-.close:hover {
-    opacity: 1;
-}
-.close:before, .close:after {
-    position: absolute;
-    left: 15px;
-    content: ' ';
-    height: 33px;
-    width: 2px;
-    background-color: #80511f;
-}
-.close:before {
-    transform: rotate(45deg);
-}
-.close:after {
-    transform: rotate(-45deg);
+    bottom: 20%;
+    /*left: 10%;*/
 }
 
 

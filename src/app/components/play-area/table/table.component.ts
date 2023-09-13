@@ -7,7 +7,7 @@ import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto, DropZoneCords} from "../../../Models/card.model";
-import {CdkDragEnd} from "@angular/cdk/drag-drop";
+import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-room',
@@ -27,12 +27,11 @@ export class TableComponent implements OnInit {
     myPlayerNumber: number = -1
     dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
     filteredDomTreeElements: Element[] = []
+    graveyardCardsAreSelectable: boolean = false
 
     //visuals
     cardPositionOnScreen: string [] = []
     visible: boolean[] = []
-    // dropAreasBorder: string = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-    // centerDropAreaBorder: string = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
     graveyardVisible: boolean = false
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
@@ -111,9 +110,6 @@ export class TableComponent implements OnInit {
         this.sendGameAction()
     }
 
-    counterAction(){
-
-    }
 
     sendGameAction() {
         console.log("sending to this room key")
@@ -160,10 +156,13 @@ export class TableComponent implements OnInit {
         if (droppedCardInfo[0] == "center"){//play global magic card
             //if a target specific card is played as a global just ignore it
 
-          //todo za 4 specificno ovde napravi scanner (wait for arrow click, osim ako nije 1v1)
-          //todo  this.powerCardActionHelper("")
-
             if (this.badPlayChecker(playedCardSplit[0], ["2", "9", "10", "J"], cardDto.event, "Can't play target specific magic card as global")) return;
+
+            this.powerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1, cardDto.event)
+
+            //todo if 4
+            //todo if 7
+
             this.setGameAction("POWER", cardDto.card,"", this.myPlayerNumber, [])
             //todo sendAction
         }
@@ -182,28 +181,12 @@ export class TableComponent implements OnInit {
                 console.log("hovering above " + hoveredCard)
 
 
+                //todo if J
+                //todo if 2
+                //todo if 4
 
-                // this.targetSpecificCardChecker()//todo
+                this.powerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
 
-
-                switch (playedCardSplit[0]) {
-
-                    case "8":
-                        this.gameEngineService.power8InAction++
-                        break
-                    case "9":
-                        if (!this.badPlayChecker("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!, cardDto.event, "Player has a queen in play")) return;
-
-                        this.setGameAction("POWER", hoveredCard, cardDto.card, enemyTablePositionNum, [])
-                        console.log(this.gameAction)
-                        break
-                    case "J":
-                        if (!this.badPlayChecker(playedCardSplit[0], ["Q"], cardDto.event, "Player has a queen in play")) return;
-
-                        this.setGameAction("POWER", hoveredCard, cardDto.card, enemyTablePositionNum, [])
-                        console.log(this.gameAction)
-                        break
-                }
 
                 // this.setGameAction("POWER", cardDto.card, this.myPlayerNumber, [])
                 //or
@@ -218,9 +201,48 @@ export class TableComponent implements OnInit {
         }
     }
 
-    targetSpecificCardChecker(){
-//todo
+
+    //just displaced code to make the main fun more compact
+    powerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string,  playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd){
+        switch (playedCardSplit0) {
+            case "2":
+                break
+            case "3":
+                this.graveyardVisible = true
+                this.graveyardCardsAreSelectable = true
+                this.setGameAction("POWER", ontoPlayedCard, playedCard, enemyTablePositionNum, [])
+
+                break
+            case "4":
+                break
+            case "7":
+                break
+            case "8":
+                this.gameEngineService.power8InAction++
+                break
+            case "9":
+                if (!this.badPlayChecker("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!, event, "Player has a queen in play")) return;
+
+                this.setGameAction("POWER", ontoPlayedCard, playedCard, enemyTablePositionNum, [])
+                console.log(this.gameAction)
+                break
+            case "J":
+                if (!this.badPlayChecker(playedCardSplit0, ["Q"], event, "Player has a queen in play")) return;
+
+                this.setGameAction("POWER", ontoPlayedCard, playedCard, enemyTablePositionNum, [])
+                console.log(this.gameAction)
+                break
+        }
     }
+
+    selectGraveyardCard(selectedCard: string) {
+        if (this.graveyardCardsAreSelectable) {
+            this.gameAction.ontoCardPlayed = selectedCard
+            this.sendGameAction()
+            this.graveyardVisible = false
+        }
+    }
+
 
     //checks if the played card is one of the ones in the list
     //aka it checks if the card can be played at that specific spot, and if not "cancel" the play
