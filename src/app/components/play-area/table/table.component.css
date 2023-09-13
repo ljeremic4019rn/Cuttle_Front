@@ -139,12 +139,12 @@
 
 .graveyard-card{
     position: absolute;
-    scale: 90%;
+    scale: 95%;
 }
 
 .graveyard{
     position: absolute;
-    right: 40%;
+    right: 35%;
     bottom: 43%;
     padding-bottom: 115px;
     padding-top: 0;
@@ -193,24 +193,85 @@
     /*left: 10%;*/
 }
 
-/*arrow test*/
+/*PLAYER SELECT ARROWS*/
+
+.item {
+    width: 100px;
+    height: 50px;
+    margin: 10px;
+    position: relative;
+}
 
 
 .arrow1 {
     animation: slide1 1s ease-in-out infinite;
     margin-left: 9px;
+    font-size: 100px;
+    color: #fdee00;
+
+    z-index: 1;
+    position: absolute;
+    top: 30%;
 }
 
+.arrow2 {
+    animation: slide2 1s ease-in-out infinite;
+    margin-left: 9px;
+    font-size: 100px;
+    color: #fdee00;
+
+    z-index: 1;
+    position: absolute;
+    top: 2%;
+    right: 44%;
+}
+
+.arrow3 {
+    animation: slide3 1s ease-in-out infinite;
+    margin-left: 9px;
+    font-size: 100px;
+    color: #fdee00;
+
+    z-index: 1;
+    position: absolute;
+    top: 30%;
+    right: 1%;
+}
+
+
 @keyframes slide1 {
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(180deg);
+    }
+
+    50% {
+        transform: translate(10px, 0) rotate(180deg);
+    }
+}
+
+
+@keyframes slide2 {
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(-90deg);
+    }
+
+    50% {
+        transform: translate(0px, 10px) rotate(-90deg);
+    }
+}
+
+
+@keyframes slide3 {
     0%,
     100% {
         transform: translate(0, 0);
     }
 
     50% {
-        transform: translate(10px, 0);
+        transform: translate(-10px, 0);
     }
 }
-
 
 

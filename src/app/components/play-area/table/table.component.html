@@ -5,14 +5,7 @@
 
     <div class="center-container" cdkDropListGroup>
 
-<!--        <h1 style="z-index: 1">asdfasdfasdfsdasdf</h1>-->
 
-        <div class="item" style="scale: 200%; z-index: 1;">
-            <button>R
-                <i class="fa fa-long-arrow-right arrow1" aria-hidden="true"></i>
-            </button>
-
-        </div>
         <app-card-row id="table-0"
                       *ngIf="visible[0]"
                       class="table-cards-{{this.cardPositionOnScreen[0]}} table-border">
@@ -56,13 +49,16 @@
                        class="player-hand-{{this.cardPositionOnScreen[3]}} hover-cursor">
         </app-card-hand>
 
-
-        <div id="center" class="center-drop-area center-border" ></div>
-
+        <!--arrows for selecting which player to discard cards with power 4-->
+        <div id="center" class="center-drop-area center-border">
+            <i *ngIf="gameEngineService.numberOfPlayers >= 3" class="fa fa-long-arrow-right arrow2 hover-cursor"
+               [ngStyle]="selectArrowStyle()" aria-hidden="true" (click)="selectPlayerForCardDiscard('top')"></i>
+            <i *ngIf="gameEngineService.numberOfPlayers >= 3" class="fa fa-long-arrow-right arrow1 hover-cursor"
+               [ngStyle]="selectArrowStyle()" aria-hidden="true" (click)="selectPlayerForCardDiscard('left')"></i>
+            <i *ngIf="gameEngineService.numberOfPlayers == 4" class="fa fa-long-arrow-right arrow3 hover-cursor"
+               [ngStyle]="selectArrowStyle()" aria-hidden="true" (click)="selectPlayerForCardDiscard('right')"></i>
+        </div>
     </div>
-
-
-
 
 
 <!-- todo zameni deck_test za pravi deck i prmeni ja je i/3 a ne i/2 -->
@@ -81,7 +77,10 @@
         <label class="graveyard-label">graveyard</label>
     </div>
 
-    <button (click)="endTurn()">TEST</button>
+    <button (click)="endTurn()">END TURN</button>
+
+    <input [(ngModel)]="input" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">
+<!--    <button (click)="highlightCard(gameEngineService.forced7Card)">TEST</button>-->
 
 <!--    todo stavi zuti border kada hoverujes preko i selektujees onu koju zelis za izvuces sa P3 -->
 

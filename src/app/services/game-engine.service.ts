@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Card} from "../Models/card.model";
 import {RoomService} from "./room.service";
+import {LoginComponent} from "../components/login/login.component";
 
 @Injectable({
     providedIn: 'root'
@@ -10,6 +11,7 @@ export class GameEngineService {
     public numberOfPlayers: number = 2 //todo vrati na 0
     public currentPlayersTurn: number = 0;
     public power8InAction: number = 0
+    public forced7Card = null
 
     public deck: string[] = []
     public graveyard: string[] = []
@@ -63,35 +65,31 @@ export class GameEngineService {
 
         console.log("nakon settovanja")//todo skloni ovo
         this.printAll()
-
-        // //todo ovo ce vrv da se promeni kasnije, biris nepotrebne
-        // if (gameResponse.gameResponseType == "REGULAR_GO_NEXT") {
-        //     console.log("regular turn")
-        // } else if (gameResponse.gameResponseType == "SEVEN") {
-        //     console.log("SEVEN turn")
-        // } else if (gameResponse.gameResponseType == "GAME_OVER_WON") {
-        //     console.log("PLAYER WON " + gameResponse.playerWhoWon)
-        // }
     }
 
 
-    updateGameState(newState: any) {
+    updateGameState(gameResponse: any) {
         console.log("new state received from the server: ")
-        console.log(newState)
+        console.log(gameResponse)
 
-        this.deck = newState.deck
-        this.graveyard = newState.graveyard
-        this.currentPlayersTurn = parseInt(newState.currentPlayersTurn)
+        this.forced7Card = null//todo keep an eye on this just in case
+        this.deck = gameResponse.deck
+        this.graveyard = gameResponse.graveyard
+        this.currentPlayersTurn = parseInt(gameResponse.currentPlayersTurn)
         console.log("KURAC  " + this.currentPlayersTurn)
         for (let i = 0; i < this.numberOfPlayers; i++) {
-            this.playerHands.set(i, newState.playerHands[i])
-            this.playerTables.set(i, newState.playerTables[i])
-            this.playerScore.set(i, newState.playerScore[i])
+            this.playerHands.set(i, gameResponse.playerHands[i])
+            this.playerTables.set(i, gameResponse.playerTables[i])
+            this.playerScore.set(i, gameResponse.playerScore[i])
+        }
+
+        if (gameResponse.gameResponseType == "SEVEN"){
+            let handLength = gameResponse.playerHands[this.currentPlayersTurn].length
+            this.forced7Card = gameResponse.playerHands[this.currentPlayersTurn][handLength - 1]
         }
 
         console.log("nakon UPDATE")//todo skloni ovo
         this.printAll()
-
     }
 
     getMapSize(map: Map<number, string[]>): number{
@@ -109,5 +107,16 @@ export class GameEngineService {
         console.log(this.playerTables)
         console.log(this.playerScore)
     }
+
+    filterDOMElementIds(elements: NodeListOf<Element>, filterWord: string) {
+        const filteredElements = [];
+        for (const element of Array.from(elements)) {
+            if (element.id && element.id.startsWith(filterWord)) {
+                filteredElements.push(element);
+            }
+        }
+        return filteredElements;
+    }
+
 
 }

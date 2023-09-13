@@ -1,4 +1,13 @@
-import {Component, ElementRef, Input, OnChanges, OnInit, Renderer2, SimpleChanges} from '@angular/core';
+import {
+    AfterViewChecked,
+    Component,
+    ElementRef,
+    Input,
+    OnChanges,
+    OnInit,
+    Renderer2,
+    SimpleChanges
+} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {RoomService} from "../../../services/room.service";
 import {GameAction} from "../../../Models/room.model";
@@ -14,7 +23,7 @@ import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, AfterViewChecked {
 
     //connectivity
     // @ts-ignore
@@ -33,6 +42,7 @@ export class TableComponent implements OnInit {
     cardPositionOnScreen: string [] = []
     visible: boolean[] = []
     graveyardVisible: boolean = false
+    selectArrowVisible: boolean = true
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -64,6 +74,12 @@ export class TableComponent implements OnInit {
         this.dropZoneCordsMap.set("table-3", new DOMRect())
 
         // this.dropZoneCordsMap.set("table-3", {left: 0, right: 0, top: 0, bottom: 0})
+    }
+
+    ngAfterViewChecked(): void {
+        if(this.gameEngineService.forced7Card){
+            this.highlightCard(this.gameEngineService.forced7Card!)
+        }
     }
 
 
@@ -140,14 +156,14 @@ export class TableComponent implements OnInit {
         this.gameAction.helperCardList = helperCardList
     }
 
-    //CARD DRAG FUNCTIONS
+
+    //POWER CARD FUNCTIONS (AND CARD DRAG FUNCTIONS)
 
     cdkDragStartedFun(){
         // this.activateDropZoneBorders()
 
         this.getDropZoneCoordinates() //todo skloni ovo odavde i stavi ga negde pametnije
     }
-
 
     cdkDragStoppedFun(cardDto: CardDto){
         // this.deactivateDropZoneBorders()
@@ -160,6 +176,11 @@ export class TableComponent implements OnInit {
 
         const playedCardSplit = cardDto.card.split("_")
         const droppedCardInfo = this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y).split("-")
+
+        if (this.gameEngineService.forced7Card != null && cardDto.card != this.gameEngineService.forced7Card){
+            this.highlightCard(this.gameEngineService.forced7Card!)
+            alert("You have to play a designated card given by the 7 power card")
+        }
 
         if (droppedCardInfo[0] == "center"){//play global magic card
             //if a target specific card is played as a global just ignore it
@@ -207,6 +228,9 @@ export class TableComponent implements OnInit {
         else {
             cardDto.event.source._dragRef.reset()
         }
+        // this.removeForced7Card()//if card is saved in service remove it
+        // console.log("karta sklonjena")
+        // console.log(this.gameEngineService.forced7Card)
     }
 
 
@@ -221,6 +245,7 @@ export class TableComponent implements OnInit {
                 this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
                 break
             case "4":
+                this.selectArrowVisible = true
                 break
             case "7":
                 break
@@ -228,18 +253,12 @@ export class TableComponent implements OnInit {
                 this.gameEngineService.power8InAction++
                 break
             case "9":
-                console.log("USLI SMO U 9")
                 if (this.badPlayChecker("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!, event, "Player has a queen in play")) return;
-
-                console.log("PROSLI SMO CHECK")
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
-                console.log(this.gameAction)
                 break
             case "J":
-                if (this.badPlayChecker(playedCardSplit0, ["Q"], event, "Player has a queen in play")) return;
-
+                if (this.badPlayChecker("J", ["Q"], event, "Player has a queen in play")) return;
                 this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
-                console.log(this.gameAction)
                 break
         }
     }
@@ -249,9 +268,20 @@ export class TableComponent implements OnInit {
             this.gameAction.ontoCardPlayed = selectedCard
             this.sendGameAction()
             this.graveyardVisible = false
+            this.graveyardCardsAreSelectable = false
         }
     }
 
+    selectPlayerForCardDiscard(selectedPosition: string){
+        console.log("KLIKNUTO NA "  + selectedPosition)
+        let selectedPlayer: number = -1
+
+        this.cardPositionOnScreen.forEach((position, playerNum) => {
+            if (selectedPosition == position){
+                selectedPlayer = playerNum
+            }
+        });
+    }
 
     //checks if the played card is one of the ones in the list
     //aka it checks if the card can be played at that specific spot, and if not "cancel" the play
@@ -353,8 +383,10 @@ export class TableComponent implements OnInit {
 
     //VISUALS
 
-    calculateDeckVisualSize(){
-        //todo umesto ovoga samo koristi pravi dek ali uradi i/3 ili tako nesto
+    input: string = ""
+    highlightCard(card: string){
+        const cardToHighlight = document.querySelector("#card-hand-" + card)
+        if (cardToHighlight != null) cardToHighlight.classList.add("highlighted")
     }
 
     setDeckCardPosition(index: number): object{
@@ -363,21 +395,17 @@ export class TableComponent implements OnInit {
         }
     }
 
+    selectArrowStyle(): object{
+        if(this.selectArrowVisible) return {'visibility': 'visible'}
+        return {'visibility': 'hidden'}
+    }
+
     setGraveyardCardPosition(index: number): object{
         return {
             'transform': 'translate(' + index/2 + '%, -' + index/2 + '%)'
         }
     }
 
-    // activateDropZoneBorders(){
-    //     this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.7)'
-    //     this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.7)'
-    // }
-    //
-    // deactivateDropZoneBorders(){
-    //     this.dropAreasBorder = 'border: 5px dashed rgba(169, 169, 169, 0.0)'
-    //     this.centerDropAreaBorder = 'border: 5px dashed rgba(0, 204, 255, 0.0)'
-    // }
 
     setPlayerPositions() {
         if (this.gameEngineService.numberOfPlayers == 2) {

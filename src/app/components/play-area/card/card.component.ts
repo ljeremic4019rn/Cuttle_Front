@@ -22,9 +22,10 @@ export class CardComponent implements OnInit {
     value: string = ""
     color: string = ""
     rotated: boolean = false
+    highlighted: string = ""
+
     cardSplit: string[] = []
     jacksOnTopOfCard: string[] = []
-
     jacksOnTopOfCardMap: Map<number, string[]> = new Map<number, string[]>()
 
     constructor(public gameEngineService: GameEngineService) {
@@ -85,6 +86,10 @@ export class CardComponent implements OnInit {
                 'margin-left': '16px'
             }
         return {}
+    }
+
+    highlightCard(){
+        this.highlighted = "highlighted"
     }
 
     click() {
