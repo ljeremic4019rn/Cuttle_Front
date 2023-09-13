@@ -94,6 +94,10 @@ export class TableComponent implements OnInit {
     //GAME ENGINE
 
     draw(){
+        if(this.myPlayerNumber != this.gameEngineService.currentPlayersTurn){
+            alert("It is not your turn")
+            return
+        }
         this.setGameAction("DRAW", "", "", -1, [])
         this.sendGameAction()
         console.log("clicked on the deck")
