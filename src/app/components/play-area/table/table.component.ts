@@ -117,8 +117,8 @@ export class TableComponent implements OnInit {
 
 
     sendGameAction() {
-        console.log("sending to this room key")
-        console.log(this.gameAction.roomKey)
+        console.log("SALJEMO NA SERVER")
+        console.log(this.gameAction)
 
         this.stompClient.send(
             `/app/playAction`,
@@ -126,7 +126,6 @@ export class TableComponent implements OnInit {
             JSON.stringify(this.gameAction)
         );
     }
-
 
     setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed:string, onToPlayer: number, helperCardList: []){
         this.gameAction.fromPlayer = this.gameEngineService.currentPlayersTurn
@@ -215,7 +214,7 @@ export class TableComponent implements OnInit {
             case "3":
                 this.graveyardVisible = true
                 this.graveyardCardsAreSelectable = true
-                this.setGameAction("POWER", ontoPlayedCard, playedCard, enemyTablePositionNum, [])
+                this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
 
                 break
             case "4":
@@ -226,15 +225,17 @@ export class TableComponent implements OnInit {
                 this.gameEngineService.power8InAction++
                 break
             case "9":
-                if (!this.badPlayChecker("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!, event, "Player has a queen in play")) return;
+                console.log("USLI SMO U 9")
+                if (this.badPlayChecker("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!, event, "Player has a queen in play")) return;
 
-                this.setGameAction("POWER", ontoPlayedCard, playedCard, enemyTablePositionNum, [])
+                console.log("PROSLI SMO CHECK")
+                this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
                 console.log(this.gameAction)
                 break
             case "J":
-                if (!this.badPlayChecker(playedCardSplit0, ["Q"], event, "Player has a queen in play")) return;
+                if (this.badPlayChecker(playedCardSplit0, ["Q"], event, "Player has a queen in play")) return;
 
-                this.setGameAction("POWER", ontoPlayedCard, playedCard, enemyTablePositionNum, [])
+                this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
                 console.log(this.gameAction)
                 break
         }
