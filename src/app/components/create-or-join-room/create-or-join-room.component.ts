@@ -59,6 +59,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
                 sessionStorage.setItem("myPlayerNumber", joinRoomResponse.playerNumber.toString())
                 this.updatePlayersInRoom(joinRoomResponse.currentPlayersInRoom)
                 this.actualRoomKey = this.joinRoomKey
+                this.createRoomKey = ""//clear so the create and join dont mix
 
                 this.connect()
             },

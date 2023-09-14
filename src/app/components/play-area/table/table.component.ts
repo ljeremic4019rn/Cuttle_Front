@@ -17,6 +17,7 @@ import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto, DropZoneCords} from "../../../Models/card.model";
 import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
+import {parse} from "@angular/compiler/src/render3/view/style_parser";
 
 @Component({
     selector: 'app-room',
@@ -43,7 +44,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     cardPositionOnScreen: string [] = []
     visible: boolean[] = []
     graveyardVisible: boolean = false
-    selectArrowVisible: boolean = true
+    selectArrowVisible: boolean = false
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -187,15 +188,10 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         if (droppedCardInfo[0] == "center"){//play global magic card
             //if a target specific card is played as a global just ignore it
-
             if (this.badPlayChecker(playedCardSplit[0], ["2", "9", "10", "J"], cardDto.event, "Can't play target specific magic card as global")) return;
-
-            this.powerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1, cardDto.event)
-
-            //todo if 4
-            //todo if 7
-
             this.setGameAction("POWER", cardDto.card,"", this.myPlayerNumber, [])
+            this.powerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1, cardDto.event) //if its a special card like 4 or 7, do some more magic
+
             //todo sendAction
         }
         else if (droppedCardInfo[0] == "table"){
@@ -254,17 +250,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 //todo display selection screen later
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
 
-                //todo OVDE IMA BUG DA SE NE MENJA ONTO PLAYER NEGDO UVEK BUDE 0 STA KOJ KURAC
-
                 if (this.gameEngineService.numberOfPlayers == 2){
-                    console.log("setujemo kurac?")
-                    console.log(this.myPlayerNumber)
-                    console.log(this.getOppositePlayer())
-                    let oppositePlayer = this.getOppositePlayer()
-                    console.log(oppositePlayer)
-                    this.setGameAction("POWER", playedCard, ontoPlayedCard, 69, [])
+                    this.gameAction.ontoPlayer = this.getOppositePlayer()
                 }
-                console.log(this.gameAction)
 
                 break
             case "8":
@@ -293,12 +281,11 @@ export class TableComponent implements OnInit, AfterViewChecked {
     selectPlayerForCardDiscard(selectedPosition: string){
         this.cardPositionOnScreen.forEach((position, playerNum) => {
             if (selectedPosition == position){
-                this.selectedPlayerToDiscard = playerNum
-                return
+                this.gameAction.ontoPlayer = playerNum
+                this.sendGameAction()
+                this.selectArrowVisible = false
             }
         });
-        //todo ovo pomeri ako se selektuje
-        // this.sendGameAction()
     }
 
     //checks if the played card is one of the ones in the list
