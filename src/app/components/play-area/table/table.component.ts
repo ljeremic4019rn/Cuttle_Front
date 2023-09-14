@@ -1,13 +1,4 @@
-import {
-    AfterViewChecked,
-    Component,
-    ElementRef,
-    Input,
-    OnChanges,
-    OnInit,
-    Renderer2,
-    SimpleChanges, ViewChild
-} from '@angular/core';
+import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {RoomService} from "../../../services/room.service";
 import {GameAction} from "../../../Models/room.model";
@@ -15,9 +6,8 @@ import * as SockJS from "sockjs-client";
 import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
-import {CardDto, DropZoneCords} from "../../../Models/card.model";
-import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
-import {parse} from "@angular/compiler/src/render3/view/style_parser";
+import {CardDto} from "../../../Models/card.model";
+import {CdkDragEnd} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-room',
@@ -82,7 +72,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     ngAfterViewChecked(): void {
-        if(this.gameEngineService.forced7Card){
+        if (this.gameEngineService.forced7Card) {
             this.highlightCard(this.gameEngineService.forced7Card!)
         }
     }
@@ -112,22 +102,19 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
 
-
-
     //GAME ENGINE
 
-    setTimer(){
+    setTimer() {
         setInterval(() => {
             if (this.timer == 0) {
                 this.sendGameAction()
                 this.timer = 60
-            }
-            else this.timer--
+            } else this.timer--
         }, 1000);
     }
 
-    draw(){
-        if(this.myPlayerNumber != this.gameEngineService.currentPlayersTurn){
+    draw() {
+        if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
             alert("It is not your turn")
             return
         }
@@ -136,15 +123,15 @@ export class TableComponent implements OnInit, AfterViewChecked {
         console.log("clicked on the deck")
     }
 
-    openGraveyard(){
+    openGraveyard() {
         this.graveyardVisible = true
     }
 
-    closeGraveyard(){
+    closeGraveyard() {
         this.graveyardVisible = false
     }
 
-    endTurn(){
+    endTurn() {
         this.sendGameAction()
     }
 
@@ -152,7 +139,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     sendGameAction() {
         console.log("SALJEMO NA SERVER")
         console.log(this.gameAction)
-        if(this.gameAction.actionType == ""){
+        if (this.gameAction.actionType == "") {
             alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
             return
         }
@@ -164,7 +151,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameAction.actionType = ""
     }
 
-    setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed:string, onToPlayer: number, helperCardList: []){
+    setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed: string, onToPlayer: number, helperCardList: []) {
         this.gameAction.fromPlayer = this.gameEngineService.currentPlayersTurn
         this.gameAction.actionType = actionType
         this.gameAction.cardPlayed = cardPlayed
@@ -173,49 +160,48 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameAction.helperCardList = helperCardList
     }
 
-    getOppositePlayer(): number{
+    getOppositePlayer(): number {
         if (this.myPlayerNumber == 0) return 1
         else return 0
     }
 
     cardSuitComparator(playedCardSuit: string, ontoPlayedCardSuit: string): string {//check if left (played) iz bigger
-    switch (playedCardSuit) {
-        case "C":
-            return "NOT_BIGGER"
-        case "D":
-            if (ontoPlayedCardSuit == "C") return "BIGGER";
-            if (ontoPlayedCardSuit == "D") return "NOT_BIGGER";
-            if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
-            if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
-        break
-        case "H" :
-            if (ontoPlayedCardSuit == "C") return "BIGGER";
-            if (ontoPlayedCardSuit == "D") return "BIGGER";
-            if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
-            if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
-        break
-        case "S" :
-            if (ontoPlayedCardSuit == "C") return "BIGGER";
-            if (ontoPlayedCardSuit == "D") return "BIGGER";
-            if (ontoPlayedCardSuit == "H") return "BIGGER";
-            if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
-        break
+        switch (playedCardSuit) {
+            case "C":
+                return "NOT_BIGGER"
+            case "D":
+                if (ontoPlayedCardSuit == "C") return "BIGGER";
+                if (ontoPlayedCardSuit == "D") return "NOT_BIGGER";
+                if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
+                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
+                break
+            case "H" :
+                if (ontoPlayedCardSuit == "C") return "BIGGER";
+                if (ontoPlayedCardSuit == "D") return "BIGGER";
+                if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
+                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
+                break
+            case "S" :
+                if (ontoPlayedCardSuit == "C") return "BIGGER";
+                if (ontoPlayedCardSuit == "D") return "BIGGER";
+                if (ontoPlayedCardSuit == "H") return "BIGGER";
+                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
+                break
+        }
+        return "NOT_BIGGER";
     }
-    return "NOT_BIGGER";
-}
 
 
     //POWER CARD FUNCTIONS (AND CARD DRAG FUNCTIONS)
 
-    cdkDragStartedFun(){
+    cdkDragStartedFun() {
+        if (this.selectArrowVisible) this.selectArrowVisible = false
         this.getDropZoneCoordinates() //todo ovo mozda nije najbolje mesto ali ne znam gde pametnije
     }
 
-    cdkDragStoppedFun(cardDto: CardDto){
-        // this.deactivateDropZoneBorders()
-
+    cdkDragStoppedFun(cardDto: CardDto) {
         //if it's not my turn - do nothing
-        if(this.myPlayerNumber != this.gameEngineService.currentPlayersTurn){
+        if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
             cardDto.event.source._dragRef.reset()
             return
         }
@@ -223,64 +209,64 @@ export class TableComponent implements OnInit, AfterViewChecked {
         const playedCardSplit = cardDto.card.split("_")
         const droppedLocationInfo = this.getWhereCardIsDropped(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y).split("-")//split if for parsing dom tree id
 
-        if (this.gameEngineService.forced7Card != null && cardDto.card != this.gameEngineService.forced7Card){
+        if (this.gameEngineService.forced7Card != null && cardDto.card != this.gameEngineService.forced7Card) {
             this.highlightCard(this.gameEngineService.forced7Card!)
             alert("You have to play a designated card given by the 7 power card")
         }
 
-        if (droppedLocationInfo[0] == "center"){//play global magic card
-            //if a target specific card is played as a global just ignore it
-            if (this.listContainCardCheck(playedCardSplit[0], ["2", "9", "10", "J"])){
+        if (droppedLocationInfo[0] == "center") {//play global magic card
+            if (this.listContainCardCheck(playedCardSplit[0], ["2", "9", "10", "J"])) { //if a target specific card is played as a global just ignore it
                 alert("Can't play target specific magic card as global")
                 cardDto.event.source._dragRef.reset()
                 return
             }
-            this.setGameAction("POWER", cardDto.card,"", this.myPlayerNumber, [])
-            this.powerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1, cardDto.event) //if its a special card like 4 or 7, do some more magic
+            this.setGameAction("POWER", cardDto.card, "", this.myPlayerNumber, [])
+            this.globalPowerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1, cardDto.event) //if its a special card like 4 or 7, do some more magic
         }
-        else if (droppedLocationInfo[0] == "table"){
+        else if (droppedLocationInfo[0] == "table") {
             //its card on my table set as a point
             //if cards on enemy table, find hovered card and play magic on that card
             let enemyTablePositionNum = parseInt(droppedLocationInfo[1])
 
-            if (enemyTablePositionNum == this.myPlayerNumber){//play a point on my field
-                if (this.listContainCardCheck(playedCardSplit[0], ["J","Q","K"])) {
+            if (enemyTablePositionNum == this.myPlayerNumber) {//play a point on my field
+                if (this.listContainCardCheck(playedCardSplit[0], ["J", "Q", "K"])) {
                     alert("Can't play power card as point")
                     cardDto.event.source._dragRef.reset()
                     return
                 }
                 this.setGameAction("NUMBER", cardDto.card, "", this.myPlayerNumber, [])
             }
-            //todo 2 counter
-            //todo reset arrows if 4 is not played somehow
             else {//play a magic card onto the enemy card
                 let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, enemyTablePositionNum)
-                this.setGameAction("SCUTTLE", cardDto.card, hoveredCard,  enemyTablePositionNum, []) //originally set scuttle, but if it's a 2/9/J it will change in the powerCardEventHelper
-                this.powerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
+                this.setGameAction("SCUTTLE", cardDto.card, hoveredCard, enemyTablePositionNum, []) //originally set scuttle, but if it's a 2/9/J it will change in the powerCardEventHelper
+                this.targetedPowerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
                 //if it's still scuttle we need to check if the scuttle is valid
-                if (this.gameAction.actionType == "SCUTTLE"){
+                if (this.gameAction.actionType == "SCUTTLE") {
                     let ontoPlayedCardSplit = hoveredCard.split("_")[0]
                     let playedCardValue = parseInt(playedCardSplit[0])
                     let ontoPlayedCardValue = parseInt(ontoPlayedCardSplit[0])
 
-                    if (playedCardValue < ontoPlayedCardValue){
+                    if (playedCardValue < ontoPlayedCardValue) {
                         alert("You cant scuttle with a lesser value card")
-                    }
-                    else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER"){
+                    } else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
                         alert("You cant scuttle with a lesser or equal suit card")
                     }
                 }
             }
         }
-        else cardDto.event.source._dragRef.reset()
+        else {
+            cardDto.event.source._dragRef.reset()
+        }
 
         console.log("FINAL")
         console.log(this.gameAction)
     }
 
+    //todo 2 counter
+    //todo reset arrows if 4 is not played somehow
 
     //just displaced code to make the main fun more compact
-    powerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string,  playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd) {
+    globalPowerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string, playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd) {
         switch (playedCardSplit0) {
             //GLOBAL POWER CARDS
             case "3":
@@ -293,18 +279,23 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 //todo display selection screen later
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
 
-                if (this.gameEngineService.numberOfPlayers == 2){
+                if (this.gameEngineService.numberOfPlayers == 2) {
                     this.gameAction.ontoPlayer = this.getOppositePlayer()
                 }
                 break
             case "8":
                 this.gameEngineService.power8InAction++
                 break
+        }
+    }
 
+    //just displaced code to make the main fun more compact
+    targetedPowerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string, playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd) {
+        switch (playedCardSplit0) {
             //TARGET SPECIFIC POWER CARDS
             case "2":
-                if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J","Q","K","P"])) return; //if card hovered is not in list, it's not a power play
-                if (ontoPlayedCard.split("_")[0] != "Q" &&  this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)){
+                if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J", "Q", "K", "P"])) return; //if card hovered is not in list, it's not a power play
+                if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
                     return
@@ -313,8 +304,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
                 break
             case "9":
-                if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J","Q","K","P"])) return; //if card hovered is not in list, it's not a power play
-                if (ontoPlayedCard.split("_")[0] != "Q" &&  this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)){
+                if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J", "Q", "K", "P"])) return; //if card hovered is not in list, it's not a power play
+                if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
                     return
@@ -322,12 +313,12 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
                 break
             case "J":
-                if (this.listContainCardCheck("J", ["Q"])){
+                if (this.listContainCardCheck("J", ["Q"])) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
                     return
                 }
-                this.setGameAction("POWER", playedCard, ontoPlayedCard,enemyTablePositionNum, [])
+                this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
                 break
         }
     }
@@ -341,9 +332,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    selectPlayerForCardDiscard(selectedPosition: string){
+    selectPlayerForCardDiscard(selectedPosition: string) {
         this.cardPositionOnScreen.forEach((position, playerNum) => {
-            if (selectedPosition == position){
+            if (selectedPosition == position) {
                 this.gameAction.ontoPlayer = playerNum
                 this.sendGameAction()
                 this.selectArrowVisible = false
@@ -353,7 +344,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     //checks if the played card is one of the ones in the list
     //aka it checks if the card can be played at that specific spot, and if not "cancel" the play
-    listContainCardCheck(cardToMatch: string, listToMatch: string[]): boolean{
+    listContainCardCheck(cardToMatch: string, listToMatch: string[]): boolean {
         // console.log(listToMatch)
         // console.log(cardToMatch)
         for (let i = 0; i < listToMatch.length; i++) {
@@ -383,7 +374,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     getWhereCardIsDropped(mouse_x: number, mouse_y: number): string {
         //dropZone[0] = key dropZone[1] = values
         for (let dropZone of Array.from(this.dropZoneCordsMap.entries())) {
-            if (this.isHovered(mouse_x, mouse_y, dropZone[1])){
+            if (this.isHovered(mouse_x, mouse_y, dropZone[1])) {
                 return dropZone[0]
             }
         }
@@ -400,7 +391,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     //checks if the card bounds are around the mouse cursor when the card drag is finished
-    isHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean{
+    isHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean {
         return boundingRect.left < mouse_x && boundingRect.right > mouse_x && boundingRect.top < mouse_y && boundingRect.bottom > mouse_y;
     }
 
@@ -414,8 +405,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
         return filteredElements;
     }
-
-
 
 
     //CONNECTIVITY
@@ -448,29 +437,29 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
 
-
     //VISUALS
 
     input: string = ""
-    highlightCard(card: string){
+
+    highlightCard(card: string) {
         const cardToHighlight = document.querySelector("#card-hand-" + card)
         if (cardToHighlight != null) cardToHighlight.classList.add("highlighted")
     }
 
-    setDeckCardPosition(index: number): object{
+    setDeckCardPosition(index: number): object {
         return {
-            'transform': 'translate(-' + index/2 + '%, -' + index/2 + '%)'
+            'transform': 'translate(-' + index / 2 + '%, -' + index / 2 + '%)'
         }
     }
 
-    selectArrowStyle(): object{
-        if(this.selectArrowVisible) return {'visibility': 'visible'}
+    selectArrowStyle(): object {
+        if (this.selectArrowVisible) return {'visibility': 'visible'}
         return {'visibility': 'hidden'}
     }
 
-    setGraveyardCardPosition(index: number): object{
+    setGraveyardCardPosition(index: number): object {
         return {
-            'transform': 'translate(' + index/2 + '%, -' + index/2 + '%)'
+            'transform': 'translate(' + index / 2 + '%, -' + index / 2 + '%)'
         }
     }
 
@@ -487,8 +476,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     this.cardPositionOnScreen[1] = "bottom"
                     break
             }
-        }
-        else if (this.gameEngineService.numberOfPlayers == 3) {
+        } else if (this.gameEngineService.numberOfPlayers == 3) {
             switch (this.myPlayerNumber) {
                 case 0:
                     this.cardPositionOnScreen[0] = "bottom"
@@ -506,8 +494,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     this.cardPositionOnScreen[2] = "bottom"
                     break
             }
-        }
-        else if (this.gameEngineService.numberOfPlayers == 4) {
+        } else if (this.gameEngineService.numberOfPlayers == 4) {
             switch (this.myPlayerNumber) {
                 case 0:
                     this.cardPositionOnScreen[0] = "bottom"
