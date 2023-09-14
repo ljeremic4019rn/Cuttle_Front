@@ -35,8 +35,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /*text-align: center;*/
     font-size: 30px;
+    user-select: none;
 }
 
 .red {
@@ -53,6 +53,7 @@
     width: 20px;
     background-position: center center;
     background-size: 20px;
+    user-select: none;
 }
 
 .covered-image {

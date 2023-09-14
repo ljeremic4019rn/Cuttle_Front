@@ -32,8 +32,8 @@ export class GameEngineService {
         this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
         this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
-        this.playerTables.set(0, ["1_C", "2_C", "3_C", "K_C"])
-        this.playerTables.set(1, ["1_C", "2_C", "3_C", "Q_C"])
+        this.playerTables.set(0, ["1_C", "2_C", "K_C", "Q_C"])
+        this.playerTables.set(1, ["1_C", "2_C", "K_C", "Q_C"])
         this.playerTables.set(2, ["1_C", "2_C", "3_C", "Q_H"])
         this.playerTables.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
@@ -107,16 +107,5 @@ export class GameEngineService {
         console.log(this.playerTables)
         console.log(this.playerScore)
     }
-
-    filterDOMElementIds(elements: NodeListOf<Element>, filterWord: string) {
-        const filteredElements = [];
-        for (const element of Array.from(elements)) {
-            if (element.id && element.id.startsWith(filterWord)) {
-                filteredElements.push(element);
-            }
-        }
-        return filteredElements;
-    }
-
 
 }

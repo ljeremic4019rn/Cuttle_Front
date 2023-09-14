@@ -60,6 +60,8 @@
 .table-border{
     border: 3px solid rgba(178, 178, 178, 0.4);
     border-radius: 15px;
+    min-height: 150px;
+    min-width: 100px;
 }
 
 .center-border{
