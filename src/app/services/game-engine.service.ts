@@ -1,28 +1,39 @@
 import {Injectable} from '@angular/core';
 import {RoomService} from "./room.service";
-import {GameVisualUpdate} from "../Models/room.model";
+import {GameAction, GameVisualUpdate} from "../Models/room.model";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GameEngineService {
 
+    //server data
     public numberOfPlayers: number = 4 //todo vrati na 0
     public currentPlayersTurn: number = 0;
-    public power8InAction: number = 0
-    public forced7Card = null
+    public endOfRoundTime: number = 5
+    public totalRoundTime: number = 100
 
+    //card data
     public deck: string[] = []
     public graveyard: string[] = []
     public playerHands: Map<number, string[]> = new Map<number, string[]>()
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
+    public gameAction: GameAction
 
+
+    //vars for visual aid
     public visualUpdate: GameVisualUpdate
-    public phantomCenterCard: any = "1_C" //todo vrati na null
-    public counterCards: string[] = []
+    public playedCardVisualAid: any = null
     public ontoCardPlayed_x: number = 0
     public ontoCardPlayed_y: number = 0
+
+    //special card interaction data
+    public counterCards: string[] = [] //<rank>_<suit>_<playerId> 2_S_3
+    public lastCardPlayed: string = ""
+    public baseCardWasCountered: boolean = false
+    public power8InAction: number = 0
+    public forced7Card: any = null
 
     // public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "8_C"]
     // public cardsTestTable: string[] = ["1_D", "K_D", "Q_D", "4_D", "P_8_D", "J_S_0_J_H_2_J_C_1_J_D_2_10_D"]
@@ -31,7 +42,6 @@ export class GameEngineService {
 
 
     constructor(private roomService: RoomService) {
-
         this.playerHands.set(0, ["1_C", "2_C", "4_C", "K_C"])
         this.playerHands.set(1, ["1_C", "2_C", "4_C", "8_C"])
         this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
@@ -42,8 +52,20 @@ export class GameEngineService {
         this.playerTables.set(2, ["1_C", "2_C","1_C", "2_C", "3_C", "Q_H"])
         this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
 
+        this.counterCards.push("2_H_1","2_C_2","2_D_3","2_S_0")
+
         this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
-        this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
+        this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D"]
+
+        this.gameAction = {
+            roomKey: "",
+            actionType: "",
+            fromPlayer: -1,
+            cardPlayed: "",
+            ontoPlayer: -1,
+            ontoCardPlayed: "",
+            helperCardList: []
+        }
 
         this.visualUpdate = {
             roomKey: "",
@@ -89,20 +111,28 @@ export class GameEngineService {
         console.log("new state received from the server: ")
         console.log(gameResponse)
         if (gameResponse.visualUpdate)
-            this.updateVisuals(gameResponse)
+            this.updateVisualsAndCounterPlays(gameResponse)
         else this.updateCardData(gameResponse)
     }
 
-    updateVisuals(gameResponse: any) {
+    updateVisualsAndCounterPlays(gameResponse: any) {
         this.visualUpdate = gameResponse
-        this.phantomCenterCard = this.visualUpdate.cardPlayed
-        this.ontoCardPlayed_x = this.visualUpdate.ontoCardPlayed_x - 25
-        this.ontoCardPlayed_y = this.visualUpdate.ontoCardPlayed_y - 70
 
         if (this.visualUpdate.actionType == "COUNTER") {
-            this.counterCards.push(this.visualUpdate.cardPlayed)
-        }
+            this.counterCards.push(this.visualUpdate.cardPlayed + "_" + this.visualUpdate.fromPlayer)
 
+            if (this.lastCardPlayed.startsWith("2")){//if 2 counter was already played, we counter the 2 or base based od number of counters played
+
+            }
+            else {//we counter the base card
+                this.baseCardWasCountered = true
+            }
+
+        }
+        this.playedCardVisualAid = this.visualUpdate.cardPlayed //1c
+        this.lastCardPlayed = this.visualUpdate.cardPlayed //1c
+        this.ontoCardPlayed_x = this.visualUpdate.ontoCardPlayed_x - 25
+        this.ontoCardPlayed_y = this.visualUpdate.ontoCardPlayed_y - 70
     }
 
     updateCardData(gameResponse: any) {
@@ -129,7 +159,7 @@ export class GameEngineService {
     }
 
     clearVisualHelperCards() {
-        this.phantomCenterCard = null
+        this.playedCardVisualAid = null
         this.counterCards = []
         this.ontoCardPlayed_x = 0
         this.ontoCardPlayed_y = 0

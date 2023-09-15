@@ -39,7 +39,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     arrowVisible: boolean = true
 
     //timer
-    timer = 100
+    timer = this.gameEngineService.totalRoundTime
     timerInterval: any;
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
@@ -151,14 +151,11 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     //this happens when the card is dropped (action played) and determines the action played
     cdkDragStoppedFun(cardDto: CardDto) {
-        //if it's not my turn - do nothing
-        if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
+        if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {//if it's not my turn reset card, unless it's a counter card (2)
             if (cardDto.card.startsWith("2")){//if played a 2 try to see if counter play is possible and send it
-                //todo postavi funkciju koja proverava da li je 2 counter moguc
-                //todo u action type stavi COUNTER
+                this.playCounterCard(cardDto.card, cardDto.event)
             }
             else {
-
                 cardDto.event.source._dragRef.reset()
                 return
             }
@@ -182,9 +179,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             this.globalPowerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1) //if its a special card like 4 or 7, do some more magic
         }
         else if (droppedLocationInfo[0] == "table") {
-            //its card on my table set as a point
-            //if cards on enemy table, find hovered card and play magic on that card
-            let enemyTablePositionNum = parseInt(droppedLocationInfo[1])
+            let enemyTablePositionNum = parseInt(droppedLocationInfo[1])//if card on my table set as a point - if cards on enemy table, find hovered card and play magic on that card
 
             if (enemyTablePositionNum == this.myPlayerNumber) {//play a point on my field
                 if (this.listContainCardCheck(playedCardSplit[0], ["J", "Q", "K"])) {
@@ -198,15 +193,16 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, enemyTablePositionNum)
                 this.setGameAction("SCUTTLE", cardDto.card, hoveredCard, enemyTablePositionNum, []) //originally set scuttle, but if it's a 2/9/J it will change in the powerCardEventHelper
                 this.targetedPowerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
-                //if it's still scuttle we need to check if the scuttle is valid
-                if (this.gameAction.actionType == "SCUTTLE") {
+
+                if (this.gameAction.actionType == "SCUTTLE") {//if it's still scuttle we need to check if the scuttle is valid
                     let ontoPlayedCardSplit = hoveredCard.split("_")[0]
                     let playedCardValue = parseInt(playedCardSplit[0])
                     let ontoPlayedCardValue = parseInt(ontoPlayedCardSplit[0])
 
                     if (playedCardValue < ontoPlayedCardValue) {
                         alert("You cant scuttle with a lesser value card")
-                    } else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
+                    }
+                    else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
                         alert("You cant scuttle with a lesser or equal suit card")
                     }
                 }
@@ -220,7 +216,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.setDataForVisualSocketUpdate(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y)
         this.sendVisualUpdate()
 
-        this.timer = 5
+        this.timer = this.gameEngineService.endOfRoundTime
         console.log("FINAL")
         console.log(this.gameAction)
     }
@@ -377,10 +373,33 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 //todo vrati send
                 // this.sendGameAction()
                 console.log("SENDING DATA WITH TIMER")
-                this.timer = 100
+                this.timer = this.gameEngineService.totalRoundTime
             }
             else this.timer--
         }, 1000);
+    }
+
+    playCounterCard(counterCard: string, event: CdkDragEnd){
+        if (this.timer > this.gameEngineService.endOfRoundTime){//janky way of blocking a "2 counter play" before the opponent has played something
+            alert("A play has not been made yet")
+            event.source._dragRef.reset()
+            return
+        }
+        if (this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(this.gameEngineService.currentPlayersTurn)!)) {
+            alert("Player has a queen in play")
+            event.source._dragRef.reset()
+            return
+        }
+
+        //we send to the server that a counter to the last card has been made
+        this.visualUpdate.actionType = "COUNTER"
+        this.visualUpdate.cardPlayed = counterCard
+        this.visualUpdate.fromPlayer = this.myPlayerNumber
+        this.sendVisualUpdate()
+        this.timer = this.gameEngineService.endOfRoundTime
+
+
+        //todo gameaction action type = COUNTER
     }
 
     draw() {
@@ -430,6 +449,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
             alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
             return
         }
+
+        //todo if current player == myPlayerNumber { send } else skip (da me bi 4 igraca odjednom slala podatke)
         this.stompClient.send(
             `/app/playAction`,
             {},

@@ -143,6 +143,34 @@
     cursor:pointer;
 }
 
+/* COUNTER CARD LIST */
+
+.counter-card-list{
+    scale: 115%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    position: absolute;
+    background-color: #1d5e2b;
+    border: 14px solid #80511f;
+    border-radius: 15px;
+    padding: 15px;
+    padding-top: 30px;
+    max-height: 100px;
+    min-width: 170px;
+    top: 3%;
+    right: 15%;
+}
+
+.counter-card-list-label{
+    position: absolute;
+    font-size: 20px;
+    text-decoration: underline;
+    color: #e1e1e1;
+    top: 3%;
+    left: 5%;
+}
+
 
 /* GRAVEYARD */
 
@@ -307,25 +335,25 @@
 /*    border-radius: 10px;*/
 /*}*/
 
-/*.discard-display-center{*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*}*/
+.discard-display-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-/*.discard-display{*/
-/*    display: flex;*/
-/*    flex-wrap: wrap;*/
-/*    flex-direction: row;*/
-/*    position: absolute;*/
-/*    background-color: #1d5e2b;*/
-/*    border: 20px solid #80511f;*/
-/*    border-radius: 20px;*/
-/*    bottom: 40%;*/
-/*    padding: 20px;*/
-/*    max-width: 1000px;*/
-
-/*}*/
+.discard-display{
+    scale: 120%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    position: absolute;
+    background-color: #1d5e2b;
+    border: 20px solid #80511f;
+    border-radius: 20px;
+    bottom: 40%;
+    padding: 20px;
+    max-height: 100px;
+}
 
 
 /*.discard-label{*/
