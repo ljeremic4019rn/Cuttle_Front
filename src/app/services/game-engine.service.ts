@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Card} from "../Models/card.model";
 import {RoomService} from "./room.service";
-import {LoginComponent} from "../components/login/login.component";
+import {GameVisualUpdate} from "../Models/room.model";
 
 @Injectable({
     providedIn: 'root'
 })
 export class GameEngineService {
 
-    public numberOfPlayers: number = 3 //todo vrati na 0
+    public numberOfPlayers: number = 4 //todo vrati na 0
     public currentPlayersTurn: number = 0;
     public power8InAction: number = 0
     public forced7Card = null
@@ -18,6 +17,12 @@ export class GameEngineService {
     public playerHands: Map<number, string[]> = new Map<number, string[]>()
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
+
+    public visualUpdate: GameVisualUpdate
+    public phantomCenterCard: any = "1_C" //todo vrati na null
+    public counterCards: string[] = []
+    public ontoCardPlayed_x: number = 0
+    public ontoCardPlayed_y: number = 0
 
     // public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "8_C"]
     // public cardsTestTable: string[] = ["1_D", "K_D", "Q_D", "4_D", "P_8_D", "J_S_0_J_H_2_J_C_1_J_D_2_10_D"]
@@ -32,13 +37,25 @@ export class GameEngineService {
         this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
         this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
-        this.playerTables.set(0, ["1_C", "2_C", "K_C", "Q_C"])
-        this.playerTables.set(1, ["1_C", "2_C", "K_C", "Q_C"])
-        this.playerTables.set(2, ["1_C", "2_C", "3_C", "Q_H"])
-        this.playerTables.set(3, ["1_C", "2_C", "3_C", "8_C"])
+        this.playerTables.set(0, ["1_C", "2_C","1_C", "2_C", "K_C", "Q_C"])
+        this.playerTables.set(1, ["1_C", "2_C","1_C", "2_C", "K_C", "Q_C"])
+        this.playerTables.set(2, ["1_C", "2_C","1_C", "2_C", "3_C", "Q_H"])
+        this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
 
-        this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
+        this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
         this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
+
+        this.visualUpdate = {
+            roomKey: "",
+            actionType: "",
+            visualUpdate: true,
+            fromPlayer: -1,
+            cardPlayed: "",
+            ontoPlayer: -1,
+            ontoCardPlayed: "",
+            ontoCardPlayed_x: 0,
+            ontoCardPlayed_y: 0,
+        }
     }
 
     setUpGame(gameResponse: any) {
@@ -71,6 +88,25 @@ export class GameEngineService {
     updateGameState(gameResponse: any) {
         console.log("new state received from the server: ")
         console.log(gameResponse)
+        if (gameResponse.visualUpdate)
+            this.updateVisuals(gameResponse)
+        else this.updateCardData(gameResponse)
+    }
+
+    updateVisuals(gameResponse: any) {
+        this.visualUpdate = gameResponse
+        this.phantomCenterCard = this.visualUpdate.cardPlayed
+        this.ontoCardPlayed_x = this.visualUpdate.ontoCardPlayed_x - 25
+        this.ontoCardPlayed_y = this.visualUpdate.ontoCardPlayed_y - 70
+
+        if (this.visualUpdate.actionType == "COUNTER") {
+            this.counterCards.push(this.visualUpdate.cardPlayed)
+        }
+
+    }
+
+    updateCardData(gameResponse: any) {
+        this.clearVisualHelperCards()
 
         this.forced7Card = null//todo keep an eye on this just in case
         this.deck = gameResponse.deck
@@ -83,7 +119,7 @@ export class GameEngineService {
             this.playerScore.set(i, gameResponse.playerScore[i])
         }
 
-        if (gameResponse.gameResponseType == "SEVEN"){
+        if (gameResponse.gameResponseType == "SEVEN") {
             let handLength = gameResponse.playerHands[this.currentPlayersTurn].length
             this.forced7Card = gameResponse.playerHands[this.currentPlayersTurn][handLength - 1]
         }
@@ -92,15 +128,23 @@ export class GameEngineService {
         this.printAll()
     }
 
-    getMapSize(map: Map<number, string[]>): number{
+    clearVisualHelperCards() {
+        this.phantomCenterCard = null
+        this.counterCards = []
+        this.ontoCardPlayed_x = 0
+        this.ontoCardPlayed_y = 0
+    }
+
+    getMapSize(map: Map<number, string[]>): number {
         let size = 0;
-        for (const i in map){
+        for (const i in map) {
             size++
         }
         return size
     }
 
-    printAll(){
+
+    printAll() {
         console.log(this.deck)
         console.log(this.graveyard)
         console.log(this.playerHands)

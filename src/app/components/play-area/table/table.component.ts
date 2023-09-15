@@ -1,7 +1,7 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {RoomService} from "../../../services/room.service";
-import {GameAction} from "../../../Models/room.model";
+import {GameAction, GameVisualUpdate} from "../../../Models/room.model";
 import * as SockJS from "sockjs-client";
 import {environment} from "../../../../environments/environment";
 import {CompatClient, Stomp} from "@stomp/stompjs";
@@ -24,6 +24,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     //game engine
     testInputAction: string
     gameAction: GameAction
+    visualUpdate: GameVisualUpdate
     myPlayerNumber: number = -1
     dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
     filteredDomTreeElements: Element[] = []
@@ -35,9 +36,11 @@ export class TableComponent implements OnInit, AfterViewChecked {
     visible: boolean[] = []
     graveyardVisible: boolean = false
     selectArrowVisible: boolean = false
+    arrowVisible: boolean = true
 
-    timer = 60
-
+    //timer
+    timer = 100
+    timerInterval: any;
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
         // this.roomKey = ''
@@ -50,6 +53,18 @@ export class TableComponent implements OnInit, AfterViewChecked {
             ontoPlayer: -1,
             ontoCardPlayed: "",
             helperCardList: []
+        }
+
+        this.visualUpdate = {
+            roomKey: "",
+            actionType: "",
+            visualUpdate: true,
+            fromPlayer: -1,
+            cardPlayed: "",
+            ontoPlayer: -1,
+            ontoCardPlayed: "",
+            ontoCardPlayed_x: 0,
+            ontoCardPlayed_y: 0,
         }
 
         this.cardPositionOnScreen[0] = "bottom"
@@ -82,6 +97,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
             this.gameAction.roomKey = params.get('key')!;
+            this.visualUpdate.roomKey = params.get('key')!;
         });
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         this.setPlayerPositions()
@@ -92,8 +108,18 @@ export class TableComponent implements OnInit, AfterViewChecked {
             this.visible[i] = true
         }
 
-        //todo this.setTimer()
+        this.setTimer()
 
+        // document.addEventListener("visibilitychange", onchange);
+
+        // window.addEventListener('blur', () => {
+        //     // Code to execute when the window loses focus
+        //     console.log('Window lost focus');
+        // });
+        //
+        // window.addEventListener('unload', (event) => {
+        //     console.log('left page');
+        // });
 
         //todo page reload block - VRATI GA KASNIJE
         // window.onbeforeunload = function (e) {
@@ -102,14 +128,22 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
 
+
     //GAME ENGINE
 
+    test(){
+
+    }
+
     setTimer() {
-        setInterval(() => {
+        this.timerInterval = setInterval(() => {
             if (this.timer == 0) {
-                this.sendGameAction()
-                this.timer = 60
-            } else this.timer--
+                //todo vrati send
+                // this.sendGameAction()
+                console.log("SENDING DATA WITH TIMER")
+                this.timer = 100
+            }
+            else this.timer--
         }, 1000);
     }
 
@@ -135,6 +169,23 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.sendGameAction()
     }
 
+
+    sendVisualUpdate() {
+        console.log("SALJEMO NA SERVER")
+        console.log(this.visualUpdate)
+
+        if (this.visualUpdate.actionType == "") {
+            alert("AN ERROR OCCURRED - VISUAL ACTION TYPE EMPTY")
+            return
+        }
+
+        this.stompClient.send(
+            `/app/visualUpdate`,
+            {},
+            JSON.stringify(this.visualUpdate)
+        );
+        this.visualUpdate.actionType = ""
+    }
 
     sendGameAction() {
         console.log("SALJEMO NA SERVER")
@@ -191,6 +242,14 @@ export class TableComponent implements OnInit, AfterViewChecked {
         return "NOT_BIGGER";
     }
 
+    /* todo list
+    -2 counter (change socket)
+    -timer (improve)
+    -power 4 - user picks which cards to discard himself
+    -user leaves page pause game - returns on button click unpause for all
+    -hand hover socket? (mozda previse)
+    -animacija za draw
+    */
 
     //POWER CARD FUNCTIONS (AND CARD DRAG FUNCTIONS)
 
@@ -199,11 +258,19 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.getDropZoneCoordinates() //todo ovo mozda nije najbolje mesto ali ne znam gde pametnije
     }
 
+    //this happens when the card is dropped (action played) and determines the action played
     cdkDragStoppedFun(cardDto: CardDto) {
         //if it's not my turn - do nothing
         if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
-            cardDto.event.source._dragRef.reset()
-            return
+            if (cardDto.card.startsWith("2")){//if played a 2 try to see if counter play is possible and send it
+                //todo postavi funkciju koja proverava da li je 2 counter moguc
+                //todo u action type stavi COUNTER
+            }
+            else {
+
+                cardDto.event.source._dragRef.reset()
+                return
+            }
         }
 
         const playedCardSplit = cardDto.card.split("_")
@@ -221,7 +288,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 return
             }
             this.setGameAction("POWER", cardDto.card, "", this.myPlayerNumber, [])
-            this.globalPowerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1, cardDto.event) //if its a special card like 4 or 7, do some more magic
+            this.globalPowerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1) //if its a special card like 4 or 7, do some more magic
         }
         else if (droppedLocationInfo[0] == "table") {
             //its card on my table set as a point
@@ -258,15 +325,17 @@ export class TableComponent implements OnInit, AfterViewChecked {
             cardDto.event.source._dragRef.reset()
         }
 
+        //todo postavi counter reset za card countered by 2
+        this.setDataForVisualSocketUpdate(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y)
+        this.sendVisualUpdate()
+
+        this.timer = 5
         console.log("FINAL")
         console.log(this.gameAction)
     }
 
-    //todo 2 counter
-    //todo reset arrows if 4 is not played somehow
-
     //just displaced code to make the main fun more compact
-    globalPowerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string, playedCard: string, enemyTablePositionNum: number, event: CdkDragEnd) {
+    globalPowerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string, playedCard: string, enemyTablePositionNum: number) {
         switch (playedCardSplit0) {
             //GLOBAL POWER CARDS
             case "3":
@@ -439,17 +508,13 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     //VISUALS
 
-    input: string = ""
-
     highlightCard(card: string) {
         const cardToHighlight = document.querySelector("#card-hand-" + card)
         if (cardToHighlight != null) cardToHighlight.classList.add("highlighted")
     }
 
     setDeckCardPosition(index: number): object {
-        return {
-            'transform': 'translate(-' + index / 2 + '%, -' + index / 2 + '%)'
-        }
+        return {'transform': 'translate(-' + index / 2 + '%, -' + index / 2 + '%)'}
     }
 
     selectArrowStyle(): object {
@@ -458,9 +523,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     setGraveyardCardPosition(index: number): object {
-        return {
-            'transform': 'translate(' + index / 2 + '%, -' + index / 2 + '%)'
-        }
+        return {'transform': 'translate(' + index / 2 + '%, -' + index / 2 + '%)'}
     }
 
 
@@ -516,12 +579,91 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     break
                 case 3:
                     this.cardPositionOnScreen[0] = "left"
-                    this.cardPositionOnScreen[1] = "1op"
+                    this.cardPositionOnScreen[1] = "top"
                     this.cardPositionOnScreen[2] = "right"
                     this.cardPositionOnScreen[3] = "bottom"
                     break
             }
         }
+    }
+
+    visualUpdateCardsStyle():object{
+        this.arrowVisible = true
+
+        if (this.gameEngineService.visualUpdate.ontoCardPlayed == ""){
+            this.arrowVisible = false
+        }
+        else if (this.gameEngineService.visualUpdate.actionType == "NUMBER"){
+            switch (this.gameEngineService.currentPlayersTurn){
+                case 0: return this.getCardPosition(this.cardPositionOnScreen[0])
+                case 1: return this.getCardPosition(this.cardPositionOnScreen[1])
+                case 2: return this.getCardPosition(this.cardPositionOnScreen[2])
+                case 3: return this.getCardPosition(this.cardPositionOnScreen[3])
+            }
+        }
+
+        return {}
+    }
+
+    getCardPosition(position: string): object{
+        switch (position){
+            case "top":
+                return {
+                    'position': 'absolute',
+                    'bottom': '56%',
+                    'left': '30%',
+                    'transform': 'rotate(180deg)'
+                }
+            case "left":
+                return {
+                    'position': 'absolute',
+                    'bottom': '23%',
+                    'left': '27%',
+                    'transform': 'translate(-50%, -50%) rotate(90deg)'
+                }
+            case "right":
+                return {
+                    'position': 'absolute',
+                    'bottom': '50%',
+                    'right': '27%',
+                    'transform': 'translate(50%, -50%) rotate(-90deg)'
+                }
+            default: return {}
+        }
+    }
+
+    getScreenCenterX(){
+        return (window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) / 2
+    }
+
+    getScreenCenterY(){
+        return ((window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight) / 2) - 100
+    }
+
+    calculateTriangleCoordinates() {
+        const x1 = this.gameEngineService.ontoCardPlayed_x
+        const y1 = this.gameEngineService.ontoCardPlayed_y
+
+        const angle = Math.atan2(this.getScreenCenterY() - y1, this.getScreenCenterX() - x1) + Math.PI;
+        const halfWidth = 17;
+        const tx1 = x1 + halfWidth * Math.cos(angle - Math.PI / 6);
+        const ty1 = y1 + halfWidth * Math.sin(angle - Math.PI / 6);
+        const tx2 = x1 + halfWidth * Math.cos(angle + Math.PI / 6);
+        const ty2 = y1 + halfWidth * Math.sin(angle + Math.PI / 6);
+        const tx3 = x1 + halfWidth * 2 * Math.cos(angle);
+        const ty3 = y1 + halfWidth * 2 * Math.sin(angle);
+        return `${tx1},${ty1} ${tx2},${ty2} ${tx3},${ty3}`
+    }
+
+
+    setDataForVisualSocketUpdate(ontoCard_x: number, ontoCard_y: number) {
+        this.visualUpdate.fromPlayer = this.gameEngineService.currentPlayersTurn
+        this.visualUpdate.cardPlayed = this.gameAction.cardPlayed
+        this.visualUpdate.actionType = this.gameAction.actionType
+        this.visualUpdate.ontoCardPlayed = this.gameAction.ontoCardPlayed
+        this.visualUpdate.ontoPlayer = this.gameAction.ontoPlayer
+        this.visualUpdate.ontoCardPlayed_x = ontoCard_x
+        this.visualUpdate.ontoCardPlayed_y = ontoCard_y
     }
 
 }

@@ -94,6 +94,13 @@
     transform: translate(50%, -50%) rotate(-90deg);
 }
 
+/* CENTER CARD */
+
+.center-card{
+    position: absolute;
+    bottom: 43%;
+}
+
 /* DECK */
 
 .deck{

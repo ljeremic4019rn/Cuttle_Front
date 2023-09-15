@@ -12,6 +12,19 @@ export interface GameAction {
     helperCardList: []
 }
 
+export interface GameVisualUpdate {
+    roomKey: string
+    actionType: string //VISUAL
+    visualUpdate: boolean
+    fromPlayer: number
+    cardPlayed: string
+    ontoPlayer: number
+    ontoCardPlayed: string
+    ontoCardPlayed_x: number
+    ontoCardPlayed_y: number
+}
+
+
 export interface GameResponse{
     gameResponseType: string
     currentPlayersTurn: number
