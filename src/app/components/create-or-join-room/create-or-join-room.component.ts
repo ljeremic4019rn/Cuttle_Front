@@ -83,7 +83,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
                 sessionStorage.setItem("myPlayerNumber", "0")
 
                 console.log(sessionStorage.getItem("username")!)
-                this.playersInRoom[0] = sessionStorage.getItem("username")!//todo ovo je vrv redundant i smece jer se iz login uzima username
+                this.playersInRoom[0] = sessionStorage.getItem("username")!
 
                 this.connect()
             },
@@ -99,7 +99,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
                 console.log("we got a response")
                 // const gameResponse = JSON.parse(response);
                 this.gameEngineService.setUpGame(JSON.parse(response))
-                this.disconnect()//todo proveri ovo dal je dobro ili da se pomeri negde
+                this.disconnect()
                 this.router.navigate(["room/" + this.actualRoomKey])
             },
             error: err => {
@@ -122,7 +122,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
         else if (roomUpdateResponse.roomUpdateType == "START"){
             console.log(roomUpdateResponse.gameResponse)
             this.gameEngineService.setUpGame(roomUpdateResponse.gameResponse)
-            this.disconnect()//todo proveri ovo dal je dobro ili da se pomeri negde
+            this.disconnect()
             this.router.navigate(["room/" + this.actualRoomKey])
         }
     }
