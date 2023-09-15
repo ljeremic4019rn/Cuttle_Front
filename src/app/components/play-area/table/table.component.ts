@@ -129,122 +129,13 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
 
 
-    //GAME ENGINE
-
-    test(){
-
-    }
-
-    setTimer() {
-        this.timerInterval = setInterval(() => {
-            if (this.timer == 0) {
-                //todo vrati send
-                // this.sendGameAction()
-                console.log("SENDING DATA WITH TIMER")
-                this.timer = 100
-            }
-            else this.timer--
-        }, 1000);
-    }
-
-    draw() {
-        if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
-            alert("It is not your turn")
-            return
-        }
-        this.setGameAction("DRAW", "", "", -1, [])
-        this.sendGameAction()
-        console.log("clicked on the deck")
-    }
-
-    openGraveyard() {
-        this.graveyardVisible = true
-    }
-
-    closeGraveyard() {
-        this.graveyardVisible = false
-    }
-
-    endTurn() {
-        this.sendGameAction()
-    }
-
-
-    sendVisualUpdate() {
-        console.log("SALJEMO NA SERVER")
-        console.log(this.visualUpdate)
-
-        if (this.visualUpdate.actionType == "") {
-            alert("AN ERROR OCCURRED - VISUAL ACTION TYPE EMPTY")
-            return
-        }
-
-        this.stompClient.send(
-            `/app/visualUpdate`,
-            {},
-            JSON.stringify(this.visualUpdate)
-        );
-        this.visualUpdate.actionType = ""
-    }
-
-    sendGameAction() {
-        console.log("SALJEMO NA SERVER")
-        console.log(this.gameAction)
-        if (this.gameAction.actionType == "") {
-            alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
-            return
-        }
-        this.stompClient.send(
-            `/app/playAction`,
-            {},
-            JSON.stringify(this.gameAction)
-        );
-        this.gameAction.actionType = ""
-    }
-
-    setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed: string, onToPlayer: number, helperCardList: []) {
-        this.gameAction.fromPlayer = this.gameEngineService.currentPlayersTurn
-        this.gameAction.actionType = actionType
-        this.gameAction.cardPlayed = cardPlayed
-        this.gameAction.ontoCardPlayed = ontoCardPlayed
-        this.gameAction.ontoPlayer = onToPlayer
-        this.gameAction.helperCardList = helperCardList
-    }
-
-    getOppositePlayer(): number {
-        if (this.myPlayerNumber == 0) return 1
-        else return 0
-    }
-
-    cardSuitComparator(playedCardSuit: string, ontoPlayedCardSuit: string): string {//check if left (played) iz bigger
-        switch (playedCardSuit) {
-            case "C":
-                return "NOT_BIGGER"
-            case "D":
-                if (ontoPlayedCardSuit == "C") return "BIGGER";
-                if (ontoPlayedCardSuit == "D") return "NOT_BIGGER";
-                if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
-                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
-                break
-            case "H" :
-                if (ontoPlayedCardSuit == "C") return "BIGGER";
-                if (ontoPlayedCardSuit == "D") return "BIGGER";
-                if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
-                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
-                break
-            case "S" :
-                if (ontoPlayedCardSuit == "C") return "BIGGER";
-                if (ontoPlayedCardSuit == "D") return "BIGGER";
-                if (ontoPlayedCardSuit == "H") return "BIGGER";
-                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
-                break
-        }
-        return "NOT_BIGGER";
-    }
-
     /* todo list
+    HIGH
     -2 counter (change socket)
     -timer (improve)
+    -check visual aid
+
+    LOW
     -power 4 - user picks which cards to discard himself
     -user leaves page pause game - returns on button click unpause for all
     -hand hover socket? (mozda previse)
@@ -333,6 +224,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         console.log("FINAL")
         console.log(this.gameAction)
     }
+
 
     //just displaced code to make the main fun more compact
     globalPowerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string, playedCard: string, enemyTablePositionNum: number) {
@@ -473,6 +365,117 @@ export class TableComponent implements OnInit, AfterViewChecked {
             }
         }
         return filteredElements;
+    }
+
+
+
+    //HELPER GAME ENGINE FUNCTIONS
+
+    setTimer() {
+        this.timerInterval = setInterval(() => {
+            if (this.timer == 0) {
+                //todo vrati send
+                // this.sendGameAction()
+                console.log("SENDING DATA WITH TIMER")
+                this.timer = 100
+            }
+            else this.timer--
+        }, 1000);
+    }
+
+    draw() {
+        if (this.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
+            alert("It is not your turn")
+            return
+        }
+        this.setGameAction("DRAW", "", "", -1, [])
+        this.sendGameAction()
+        console.log("clicked on the deck")
+    }
+
+    openGraveyard() {
+        this.graveyardVisible = true
+    }
+
+    closeGraveyard() {
+        this.graveyardVisible = false
+    }
+
+    endTurn() {
+        this.sendGameAction()
+    }
+
+
+    sendVisualUpdate() {
+        console.log("SALJEMO NA SERVER")
+        console.log(this.visualUpdate)
+
+        if (this.visualUpdate.actionType == "") {
+            alert("AN ERROR OCCURRED - VISUAL ACTION TYPE EMPTY")
+            return
+        }
+
+        this.stompClient.send(
+            `/app/visualUpdate`,
+            {},
+            JSON.stringify(this.visualUpdate)
+        );
+        this.visualUpdate.actionType = ""
+    }
+
+    sendGameAction() {
+        console.log("SALJEMO NA SERVER")
+        console.log(this.gameAction)
+        if (this.gameAction.actionType == "") {
+            alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
+            return
+        }
+        this.stompClient.send(
+            `/app/playAction`,
+            {},
+            JSON.stringify(this.gameAction)
+        );
+        this.gameAction.actionType = ""
+    }
+
+    setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed: string, onToPlayer: number, helperCardList: []) {
+        this.gameAction.fromPlayer = this.gameEngineService.currentPlayersTurn
+        this.gameAction.actionType = actionType
+        this.gameAction.cardPlayed = cardPlayed
+        this.gameAction.ontoCardPlayed = ontoCardPlayed
+        this.gameAction.ontoPlayer = onToPlayer
+        this.gameAction.helperCardList = helperCardList
+    }
+
+    getOppositePlayer(): number {
+        if (this.myPlayerNumber == 0) return 1
+        else return 0
+    }
+
+    cardSuitComparator(playedCardSuit: string, ontoPlayedCardSuit: string): string {//check if left (played) iz bigger
+        switch (playedCardSuit) {
+            case "C":
+                return "NOT_BIGGER"
+            case "D":
+                if (ontoPlayedCardSuit == "C") return "BIGGER";
+                if (ontoPlayedCardSuit == "D") return "NOT_BIGGER";
+                if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
+                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
+                break
+            case "H" :
+                if (ontoPlayedCardSuit == "C") return "BIGGER";
+                if (ontoPlayedCardSuit == "D") return "BIGGER";
+                if (ontoPlayedCardSuit == "H") return "NOT_BIGGER";
+                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
+                break
+            case "S" :
+                if (ontoPlayedCardSuit == "C") return "BIGGER";
+                if (ontoPlayedCardSuit == "D") return "BIGGER";
+                if (ontoPlayedCardSuit == "H") return "BIGGER";
+                if (ontoPlayedCardSuit == "S") return "NOT_BIGGER";
+                break
+        }
+        return "NOT_BIGGER";
     }
 
 
@@ -654,7 +657,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         const ty3 = y1 + halfWidth * 2 * Math.sin(angle);
         return `${tx1},${ty1} ${tx2},${ty2} ${tx3},${ty3}`
     }
-
 
     setDataForVisualSocketUpdate(ontoCard_x: number, ontoCard_y: number) {
         this.visualUpdate.fromPlayer = this.gameEngineService.currentPlayersTurn
