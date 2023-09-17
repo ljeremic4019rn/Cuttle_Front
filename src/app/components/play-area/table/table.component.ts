@@ -153,7 +153,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         //CENTER
         if (droppedLocationInfo[0] == "center") {
-            if (this.listContainCardCheck(playedCardSplit[0], ["2", "9", "10", "J"])) { //if a target specific card is played as a global just ignore it
+            if (playedCardSplit[0] != "1" && this.listContainCardCheck(playedCardSplit[0], ["2", "9", "10", "J"])) { //if a target specific card is played as a global just ignore it
                 alert("Can't play target specific magic card as global")
                 cardDto.event.source._dragRef.reset()
                 return
@@ -296,8 +296,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
     //checks if the played card is one of the ones in the list
     //aka it checks if the card can be played at that specific spot, and if not "cancel" the play
     listContainCardCheck(cardToMatch: string, listToMatch: string[]): boolean {
-        // console.log(listToMatch)
-        // console.log(cardToMatch)
+        console.log(cardToMatch)
+        console.log(listToMatch)
         for (let i = 0; i < listToMatch.length; i++) {
             console.log(cardToMatch + "   " + listToMatch[i])
             if (listToMatch[i].startsWith(cardToMatch)) {

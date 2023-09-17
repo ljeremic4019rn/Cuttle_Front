@@ -43,14 +43,14 @@ export class GameEngineService {
 
 
     constructor(private roomService: RoomService) {
-        this.playerHands.set(0, ["1_C", "2_C", "4_C", "K_C"])
+        this.playerHands.set(0, ["1_C", "2_C", "4_C", "5_C","6_C", "7_C", "8_C", "9_C","10_C", "J_C", "Q_C", "K_C"])
         this.playerHands.set(1, ["1_C", "2_C", "4_C", "8_C"])
         this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
         this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
         this.playerTables.set(0, ["1_C", "2_C","1_C", "2_C", "K_C", "Q_C"])
-        this.playerTables.set(1, ["1_C", "2_C","1_C", "2_C", "K_C", "Q_C"])
-        this.playerTables.set(2, ["1_C", "2_C","1_C", "2_C", "3_C", "Q_H"])
+        this.playerTables.set(1, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
+        this.playerTables.set(2, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
         this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
 
         // this.counterCards.push("2_H_1","2_C_2","2_D_3","2_S_0")
