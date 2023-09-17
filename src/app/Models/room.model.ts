@@ -20,8 +20,6 @@ export interface GameVisualUpdate {
     cardPlayed: string
     ontoPlayer: number
     ontoCardPlayed: string
-    ontoCardPlayed_x: number
-    ontoCardPlayed_y: number
 }
 
 

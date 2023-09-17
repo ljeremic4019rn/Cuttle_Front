@@ -56,7 +56,7 @@
                        class="player-hand-{{this.cardPositionOnScreen[3]}} hover-cursor">
         </app-card-hand>
 
-        <!--arrows for selecting which player to discard cards with power 4-->
+        <!--ARROW for selecting which player to discard cards with power 4-->
         <div id="center" class="center-drop-area center-border">
             <i *ngIf="gameEngineService.numberOfPlayers >= 3" class="fa fa-long-arrow-right arrow2 hover-cursor"
                [ngStyle]="selectArrowStyle()" aria-hidden="true" (click)="selectPlayerForCardDiscard('top')"></i>
@@ -67,8 +67,14 @@
         </div>
 
         <!--visual helper card for showing actions-->
-<!--        todo stavi rotaciju tako da je okrenuta igracu koji je upravo igrao (koristi mapu za usere ili tako nesto) -->
-        <doc-card *ngIf="gameEngineService.playedCardVisualAid" class="card center-card" [style]="visualUpdateCardsStyle()" [card]='gameEngineService.playedCardVisualAid!' [covered]="false"></doc-card>
+<!--        <doc-card *ngIf="gameEngineService.playedCardVisualAid" class="card center-card" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedCardVisualAid[0]' [covered]="false"></doc-card>-->
+
+        <div *ngFor="let card of this.gameEngineService.playedCardVisualAid" fxFlex="90px">
+            <doc-card class="card center-card-1" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedCardVisualAid[0]' [covered]="false"></doc-card>
+            <i *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="fa center-card-arrow fa-long-arrow-right"></i>
+            <label *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="center-card-text">{{this.gameEngineService.visualLastActionName}}</label>
+            <doc-card *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="card center-card-2" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedOntoCardVisualAid[0]' [covered]="false"></doc-card>
+        </div>
 
             <!--    DISPLAYS 2 COUNTER CARDS DURING A COUNTER EVENT    -->
             <div *ngIf="gameEngineService.counterCards.length != 0" class="counter-card-list">
@@ -77,14 +83,8 @@
                     <doc-card class="card " style="scale: 70%; margin: -0.5rem" [card]='card.split("_")[0] + "_" + card.split("_")[1]' [covered]="false"></doc-card>
                 </div>
             </div>
-
-
     </div>
 
-    <svg *ngIf="gameEngineService.playedCardVisualAid && arrowVisible" id="arrow" height="5000" width="5000" style="z-index: 1;" >
-        <line [attr.x1]="gameEngineService.ontoCardPlayed_x"  [attr.y1]="gameEngineService.ontoCardPlayed_y" [attr.x2]="getScreenCenterX()" [attr.y2]="getScreenCenterY()" style="stroke: red; stroke-width:5; stroke-dasharray: 10,6;" />
-        <polygon [attr.points]="calculateTriangleCoordinates()" style="fill:rgb(255,0,0);" />
-    </svg>
 
     <!-- DECK AND GRAVEYARD   -->
 

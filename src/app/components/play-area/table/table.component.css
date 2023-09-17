@@ -96,9 +96,31 @@
 
 /* CENTER CARD */
 
-.center-card{
+.center-card-1{
     position: absolute;
     bottom: 43%;
+    left: 43%;
+}
+
+.center-card-arrow{
+    position: absolute;
+    bottom: 47%;
+    left: 49.5%;
+    font-size: 50px;
+}
+
+.center-card-text{
+    position: absolute;
+    bottom: 46%;
+    left: 48.5%;
+    font-style: italic;
+    font-size: 20px;
+}
+
+.center-card-2{
+    position: absolute;
+    bottom: 43%;
+    left: 53%;
 }
 
 /* DECK */
