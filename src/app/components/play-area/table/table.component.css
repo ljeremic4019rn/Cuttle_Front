@@ -99,14 +99,14 @@
 .center-card-1{
     position: absolute;
     bottom: 43%;
-    left: 43%;
+    left: 41%;
 }
 
 .center-card-arrow{
     position: absolute;
-    bottom: 47%;
+    bottom: 48%;
     left: 49.5%;
-    font-size: 50px;
+    font-size: 60px;
 }
 
 .center-card-text{
@@ -114,20 +114,20 @@
     bottom: 46%;
     left: 48.5%;
     font-style: italic;
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .center-card-2{
     position: absolute;
     bottom: 43%;
-    left: 53%;
+    right: 40%;
 }
 
 /* DECK */
 
 .deck{
     position: absolute;
-    left: 35%;
+    left: 30%;
     bottom: 43%;
     padding-bottom: 110px;
     padding-top: 10px;
@@ -203,7 +203,7 @@
 
 .graveyard{
     position: absolute;
-    right: 35%;
+    right: 30%;
     bottom: 43%;
     padding-bottom: 115px;
     padding-top: 0;

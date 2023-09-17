@@ -9,7 +9,7 @@ export interface GameAction {
     cardPlayed: string
     ontoPlayer: number
     ontoCardPlayed: string
-    helperCardList: []
+    helperCardList: string[]
 }
 
 export interface GameVisualUpdate {

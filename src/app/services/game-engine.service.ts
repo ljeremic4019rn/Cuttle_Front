@@ -8,10 +8,10 @@ import {GameAction, GameVisualUpdate} from "../Models/room.model";
 export class GameEngineService {
 
     //server data
-    public numberOfPlayers: number = 4 //todo vrati na 0
+    public numberOfPlayers: number = 3 //todo vrati na 0
     public myPlayerNumber: number = -1
     public currentPlayersTurn: number = 0;
-    public endOfRoundTime: number = 10
+    public endOfRoundTime: number = 20
     public totalRoundTime: number = 100
     public timer: number = 0
 
@@ -32,29 +32,19 @@ export class GameEngineService {
 
     //special card interaction data
     public counterCards: string[] = [] //<rank>_<suit>_<playerId> 2_S_3
-    public lastCardPlayed: string = ""
-    public baseCardWasCountered: boolean = false
     public power8InAction: number = 0
     public forced7Card: any = null
 
-    // public cardsTestHand: string[] = ["1_C", "2_C", "3_C", "8_C"]
-    // public cardsTestTable: string[] = ["1_D", "K_D", "Q_D", "4_D", "P_8_D", "J_S_0_J_H_2_J_C_1_J_D_2_10_D"]
-    // public deckTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D"]
-    // public graveYardTest: string[] = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D","1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
-
-
-    constructor(private roomService: RoomService) {
-        this.playerHands.set(0, ["1_C", "2_C", "4_C", "5_C","6_C", "7_C", "8_C", "9_C","10_C", "J_C", "Q_C", "K_C"])
-        this.playerHands.set(1, ["1_C", "2_C", "4_C", "8_C"])
-        this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
+    constructor() {
+        this.playerHands.set(0, ["1_C", "2_C","2_S",])
+        this.playerHands.set(1, ["2_H","2_D"])
+        this.playerHands.set(2, ["2_H","2_D"])
         this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
         this.playerTables.set(0, ["1_C", "2_C","1_C", "1_C"])
         this.playerTables.set(1, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
         this.playerTables.set(2, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
         this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
-
-        // this.counterCards.push("2_H_1","2_C_2","2_D_3","2_S_0")
 
         this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
         this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D"]
@@ -119,24 +109,21 @@ export class GameEngineService {
         this.visualUpdate = gameResponse
         this.timer = this.endOfRoundTime
 
+        if (this.visualUpdate.actionType == "COUNTER") {
+            if (this.counterCards.length == 0 || this.counterCards.length == 2)//if we have 0/2 counter cards in list we kill the base card, else we kill the counter
+                this.gameAction.actionType = "COUNTER"                          //and the base power card goes through
+            else this.gameAction.actionType = "POWER"
+            this.counterCards.push(this.visualUpdate.cardPlayed + "_" + this.visualUpdate.fromPlayer)
+            this.gameAction.helperCardList = this.counterCards
+            return;
+        }
+
+        //if I played an action don't display visual aid for me
         if (this.myPlayerNumber == this.visualUpdate.fromPlayer) return
 
-        if (this.visualUpdate.actionType == "COUNTER") {
-            this.counterCards.push(this.visualUpdate.cardPlayed + "_" + this.visualUpdate.fromPlayer)
-
-            if (this.lastCardPlayed.startsWith("2")){//if 2 counter was already played, we counter the 2 or base based od number of counters played
-            }
-            else {//we counter the base card
-                this.baseCardWasCountered = true
-            }
-        }
-        if (this.visualUpdate.actionType == "NUMBER"){
-
-        }
         this.playedCardVisualAid[0] = this.visualUpdate.cardPlayed
         this.playedOntoCardVisualAid[0] = this.visualUpdate.ontoCardPlayed
         this.visualLastActionName = this.visualUpdate.actionType
-        this.lastCardPlayed = this.visualUpdate.cardPlayed
     }
 
     updateCardData(gameResponse: any) {

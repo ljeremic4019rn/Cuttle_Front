@@ -23,8 +23,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     isConnected: boolean = false;
 
     //game engine
-    testInputAction: string
-    // myPlayerNumber: number = -1
     dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
     filteredDomTreeElements: Element[] = []
     graveyardCardsAreSelectable: boolean = false
@@ -38,15 +36,10 @@ export class TableComponent implements OnInit, AfterViewChecked {
     arrowVisible: boolean = true
     actionPlayed: boolean = false
 
-    test:any = this.gameEngineService.playedCardVisualAid
-
     //timer
-    timerInterval: any;
+    timerInterval: any; //todo ovo se moze kasnije iskoristiti za pause game on unload
 
-    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
-        // this.roomKey = ''
-        this.testInputAction = ''
-
+    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService) {
         this.cardPositionOnScreen[0] = "bottom"
         this.cardPositionOnScreen[1] = "left"
         this.cardPositionOnScreen[2] = "top"
@@ -69,11 +62,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         if (this.gameEngineService.forced7Card) {
             this.highlightCard(this.gameEngineService.forced7Card!)
         }
-
-
     }
-
-    date: any;
 
     ngOnInit(): void {
         this.route.paramMap.subscribe(params => {
@@ -121,13 +110,14 @@ export class TableComponent implements OnInit, AfterViewChecked {
     //this happens when the card is dropped (action played) and determines the action played
     cdkDragStoppedFun(cardDto: CardDto) {
         if (this.gameEngineService.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {//if it's not my turn reset card, unless it's a counter card (2)
-            if (cardDto.card.startsWith("2")){//if played a 2 try to see if counter play is possible and send it
+            if (cardDto.card.startsWith("2"))
                 this.playCounterCard(cardDto.card, cardDto.event)
-            }
-            else {
-                cardDto.event.source._dragRef.reset()
-                return
-            }
+            else cardDto.event.source._dragRef.reset()
+            return
+        }
+        if (cardDto.card.startsWith("2") && this.gameEngineService.gameAction.actionType == "COUNTER"){
+            this.playCounterCard(cardDto.card, cardDto.event)
+            return
         }
 
         const playedCardSplit = cardDto.card.split("_")
@@ -374,6 +364,11 @@ export class TableComponent implements OnInit, AfterViewChecked {
             event.source._dragRef.reset()
             return
         }
+        if(this.gameEngineService.visualLastActionName != "POWER" && this.gameEngineService.visualLastActionName != "COUNTER"){
+            alert("This play can not be countered")
+            event.source._dragRef.reset()
+            return
+        }
         if (this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(this.gameEngineService.currentPlayersTurn)!)) {
             alert("Player has a queen in play")
             event.source._dragRef.reset()
@@ -385,10 +380,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameEngineService.visualUpdate.cardPlayed = counterCard
         this.gameEngineService.visualUpdate.fromPlayer = this.gameEngineService.myPlayerNumber
         this.sendVisualUpdate()
-        this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
-
-
-        //todo gameaction action type = COUNTER
     }
 
     draw() {
@@ -431,20 +422,20 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     sendGameAction() {
-        console.log("SALJEMO NA SERVER")
-        console.log(this.gameEngineService.gameAction)
-        if (this.gameEngineService.gameAction.actionType == "") {
-            alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
-            return
+        if (this.gameEngineService.currentPlayersTurn == this.gameEngineService.myPlayerNumber){
+            if (this.gameEngineService.gameAction.actionType == "") {
+                alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
+                return
+            }
+            console.log("SALJEMO NA SERVER")
+            console.log(this.gameEngineService.gameAction)
+            this.stompClient.send(
+                `/app/playAction`,
+                {},
+                JSON.stringify(this.gameEngineService.gameAction)
+            );
+            this.gameEngineService.gameAction.actionType = ""
         }
-
-        //todo if current player == myPlayerNumber { send } else skip (da me bi 4 igraca odjednom slala podatke)
-        this.stompClient.send(
-            `/app/playAction`,
-            {},
-            JSON.stringify(this.gameEngineService.gameAction)
-        );
-        this.gameEngineService.gameAction.actionType = ""
     }
 
     setGameAction(actionType: string, cardPlayed: string, ontoCardPlayed: string, onToPlayer: number, helperCardList: []) {
