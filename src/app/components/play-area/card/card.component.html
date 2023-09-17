@@ -12,7 +12,7 @@
     </ng-template>
 </mat-card>
 
-<div *ngFor="let jackCard of jacksOnTopOfCard; let i = index">
+<div *ngFor="let jackCard of jacksOnTopOfCard; let i = index" [style]="jackedCardStyle()">
     <mat-card class="card jacked{{i}}">
         <ng-container>
             <div class="suit-image top-left" [ngClass]="this.jacksOnTopOfCardMap.get(i)![1]"></div>

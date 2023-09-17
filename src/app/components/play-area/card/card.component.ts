@@ -78,6 +78,16 @@ export class CardComponent implements OnInit {
         } else this.color = "black"
     }
 
+    jackedCardStyle():object{
+        switch (this.jacksOnTopOfCard.length){
+            case 1:return {'padding-right': '115px'}
+            case 2:return {'padding-right': '147px'}
+            case 3:return {'padding-right': '180px'}
+            case 4:return {'padding-right': '213px'}
+            default: return {}
+        }
+    }
+
     isRotated(): object {
         if (this.rotated)
             return {

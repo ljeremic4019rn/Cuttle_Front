@@ -11,8 +11,9 @@ export class GameEngineService {
     public numberOfPlayers: number = 4 //todo vrati na 0
     public myPlayerNumber: number = -1
     public currentPlayersTurn: number = 0;
-    public endOfRoundTime: number = 5
+    public endOfRoundTime: number = 10
     public totalRoundTime: number = 100
+    public timer: number = 0
 
     //card data
     public deck: string[] = []
@@ -48,7 +49,7 @@ export class GameEngineService {
         this.playerHands.set(2, ["1_C", "2_C", "3_C", "8_C"])
         this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
 
-        this.playerTables.set(0, ["1_C", "2_C","1_C", "2_C", "K_C", "Q_C"])
+        this.playerTables.set(0, ["1_C", "2_C","1_C", "1_C"])
         this.playerTables.set(1, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
         this.playerTables.set(2, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
         this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
@@ -100,6 +101,7 @@ export class GameEngineService {
             this.playerTables.set(i, gameResponse.playerTables[i])
             this.playerScore.set(i, gameResponse.playerScore[i])
         }
+        this.timer = this.totalRoundTime
 
         console.log("nakon settovanja")//todo skloni ovo
         this.printAll()
@@ -115,6 +117,7 @@ export class GameEngineService {
 
     updateVisualsAndCounterPlays(gameResponse: any) {
         this.visualUpdate = gameResponse
+        this.timer = this.endOfRoundTime
 
         if (this.myPlayerNumber == this.visualUpdate.fromPlayer) return
 
@@ -154,6 +157,7 @@ export class GameEngineService {
             let handLength = gameResponse.playerHands[this.currentPlayersTurn].length
             this.forced7Card = gameResponse.playerHands[this.currentPlayersTurn][handLength - 1]
         }
+        this.timer = this.totalRoundTime
 
         console.log("nakon UPDATE")//todo skloni ovo
         this.printAll()

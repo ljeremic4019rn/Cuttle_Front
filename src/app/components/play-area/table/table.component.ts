@@ -8,6 +8,7 @@ import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto} from "../../../Models/card.model";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
+import {LoginComponent} from "../../login/login.component";
 
 @Component({
     selector: 'app-room',
@@ -40,7 +41,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     test:any = this.gameEngineService.playedCardVisualAid
 
     //timer
-    timer = this.gameEngineService.totalRoundTime
     timerInterval: any;
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private roomService: RoomService) {
@@ -91,17 +91,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         this.setTimer()
 
-        // document.addEventListener("visibilitychange", onchange);
-
-        // window.addEventListener('blur', () => {
-        //     // Code to execute when the window loses focus
-        //     console.log('Window lost focus');
-        // });
-        //
-        // window.addEventListener('unload', (event) => {
-        //     console.log('left page');
-        // });
-
         //todo page reload block - VRATI GA KASNIJE
         // window.onbeforeunload = function (e) {
         //     return e.returnValue = 'Are you sure you want to leave this page?';
@@ -114,7 +103,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     HIGH
     -2 counter (change socket)
     -timer (improve)
-    -check visual aid
 
     LOW
     -power 4 - user picks which cards to discard himself
@@ -177,13 +165,20 @@ export class TableComponent implements OnInit, AfterViewChecked {
             //ENEMY TABLE
             else {//play a magic card onto the enemy card
                 let hoveredCard = this.getHoveredCard(cardDto.event.dropPoint.x, cardDto.event.dropPoint.y, enemyTablePositionNum)
-                this.setGameAction("SCUTTLE", cardDto.card, hoveredCard, enemyTablePositionNum, []) //originally set scuttle, but if it's a 2/9/J it will change in the powerCardEventHelper
-                this.targetedPowerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
+                this.setGameAction("SCUTTLE", cardDto.card, hoveredCard, enemyTablePositionNum, [])
 
+                //originally set scuttle, but if it's a 2/9/J it will change in the powerCardEventHelper!!!
+                this.targetedPowerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
                 if (this.gameEngineService.gameAction.actionType == "SCUTTLE") {//if it's still scuttle we need to check if the scuttle is valid
                     let ontoPlayedCardSplit = hoveredCard.split("_")[0]
                     let playedCardValue = parseInt(playedCardSplit[0])
                     let ontoPlayedCardValue = parseInt(ontoPlayedCardSplit[0])
+
+                    if (ontoPlayedCardSplit[0] == "Q" || ontoPlayedCardSplit[0] == "K"){
+                        alert("You cant scuttle a permanent effect card")
+                        cardDto.event.source._dragRef.reset()
+                        return
+                    }
 
                     if (playedCardValue < ontoPlayedCardValue) {
                         alert("You cant scuttle with a lesser value card")
@@ -203,7 +198,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         if (this.actionPlayed){//if card was not set randomly on the table but on a good drop zone
             this.setDataForVisualSocketUpdate()
             this.sendVisualUpdate()
-            this.timer = this.gameEngineService.endOfRoundTime
+            this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
 
             console.log("FINAL")
             console.log(this.gameEngineService.gameAction)
@@ -363,18 +358,18 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     setTimer() {
         this.timerInterval = setInterval(() => {
-            if (this.timer == 0) {
-                //todo vrati send
-                // this.sendGameAction()
+            if (this.gameEngineService.timer == 0) {
+                //todo this.sendGameAction()
                 console.log("SENDING DATA WITH TIMER")
-                this.timer = this.gameEngineService.totalRoundTime
             }
-            else this.timer--
+            else this.gameEngineService.timer--
         }, 1000);
     }
 
     playCounterCard(counterCard: string, event: CdkDragEnd){
-        if (this.timer > this.gameEngineService.endOfRoundTime){//janky way of blocking a "2 counter play" before the opponent has played something
+        console.log("COUNTER COUNTER COUNTER")
+
+        if (this.gameEngineService.timer > this.gameEngineService.endOfRoundTime){//janky way of blocking a "2 counter play" before the opponent has played something
             alert("A play has not been made yet")
             event.source._dragRef.reset()
             return
@@ -390,7 +385,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameEngineService.visualUpdate.cardPlayed = counterCard
         this.gameEngineService.visualUpdate.fromPlayer = this.gameEngineService.myPlayerNumber
         this.sendVisualUpdate()
-        this.timer = this.gameEngineService.endOfRoundTime
+        this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
 
 
         //todo gameaction action type = COUNTER
@@ -403,7 +398,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
         this.setGameAction("DRAW", "", "", -1, [])
         this.sendGameAction()
-        console.log("clicked on the deck")
     }
 
     openGraveyard() {
