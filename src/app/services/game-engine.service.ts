@@ -32,7 +32,7 @@ export class GameEngineService {
 
     //special card interaction data
     public counterCards: string[] = [] //<rank>_<suit>_<playerId> 2_S_3
-    public power8InAction: number = 0
+    public power8InAction: boolean = false
     public forced7Card: any = null
 
     constructor() {
@@ -120,7 +120,6 @@ export class GameEngineService {
 
         //if I played an action don't display visual aid for me
         if (this.myPlayerNumber == this.visualUpdate.fromPlayer) return
-
         this.playedCardVisualAid[0] = this.visualUpdate.cardPlayed
         this.playedOntoCardVisualAid[0] = this.visualUpdate.ontoCardPlayed
         this.visualLastActionName = this.visualUpdate.actionType
@@ -129,15 +128,18 @@ export class GameEngineService {
     updateCardData(gameResponse: any) {
         this.clearVisualHelperCards()
 
-        this.forced7Card = null//todo keep an eye on this just in case
+        this.forced7Card = null
         this.deck = gameResponse.deck
         this.graveyard = gameResponse.graveyard
         this.currentPlayersTurn = parseInt(gameResponse.currentPlayersTurn)
-        console.log("KURAC  " + this.currentPlayersTurn)
         for (let i = 0; i < this.numberOfPlayers; i++) {
             this.playerHands.set(i, gameResponse.playerHands[i])
             this.playerTables.set(i, gameResponse.playerTables[i])
             this.playerScore.set(i, gameResponse.playerScore[i])
+        }
+
+        if (this.power8InAction){
+            if (this.power8WasRemoved()) this.power8InAction = false
         }
 
         if (gameResponse.gameResponseType == "SEVEN") {
@@ -148,6 +150,15 @@ export class GameEngineService {
 
         console.log("nakon UPDATE")//todo skloni ovo
         this.printAll()
+    }
+
+    power8WasRemoved():boolean{
+        for (let i = 0; i < this.playerTables.size; i++) {
+            for (let card of this.playerTables.get(i)!) {
+                if (card.startsWith("P_8")) return false
+            }
+        }
+        return true
     }
 
     clearVisualHelperCards() {
@@ -164,7 +175,6 @@ export class GameEngineService {
         }
         return size
     }
-
 
     printAll() {
         console.log(this.deck)

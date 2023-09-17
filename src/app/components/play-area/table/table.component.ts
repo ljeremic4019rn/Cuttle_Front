@@ -184,7 +184,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
             cardDto.event.source._dragRef.reset()
         }
 
-        //todo postavi timer reset za card countered by 2
         if (this.actionPlayed){//if card was not set randomly on the table but on a good drop zone
             this.setDataForVisualSocketUpdate()
             this.sendVisualUpdate()
@@ -220,7 +219,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 }
                 break
             case "8":
-                this.gameEngineService.power8InAction++
+                this.gameEngineService.power8InAction = true
                 break
         }
     }

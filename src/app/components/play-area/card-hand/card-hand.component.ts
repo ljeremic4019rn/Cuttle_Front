@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2} from '@angular/core';
 import {Card, CardDto} from "../../../Models/card.model";
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
@@ -28,7 +28,7 @@ import {CdkDrag, CdkDragEnd, CdkDragStart, CdkDragMove, CdkDragDrop} from "@angu
 })
 
 
-export class CardHandComponent implements OnInit {
+export class CardHandComponent implements OnInit, AfterViewChecked {
 
     @Output()
     cdkDragStoppedEvent = new EventEmitter<CardDto>();
@@ -37,29 +37,35 @@ export class CardHandComponent implements OnInit {
 
     myPlayerNumber: number = -1
     positionNumber: number = -1
-    covered: boolean = true//todo vrati covered na true
-    dragDisabled = true
+    covered: boolean = true
+    dragDisabled: boolean = true
 
     constructor(public gameEngineService: GameEngineService, private elementRef: ElementRef) {
+    }
+
+    ngAfterViewChecked(): void {
+        if (this.gameEngineService.power8InAction){
+            this.covered = false
+        }
+        else {
+            this.covered = true
+            if (this.positionNumber == this.myPlayerNumber){
+                this.covered = false
+            }
+        }
     }
 
     ngOnInit(): void {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
 
-        //if 8-power card is in action, uncover all enemy cards
-        if (this.gameEngineService.power8InAction != 0){
-            this.covered = false
-        }
-
         if (this.positionNumber == this.myPlayerNumber){
             this.dragDisabled = false
             this.covered = false
         }
-
     }
 
-    cdkDragStartedFun(event: CdkDragStart){
+    cdkDragStartedFun(){
         this.cdkDragStartedEvent.emit();
     }
 
