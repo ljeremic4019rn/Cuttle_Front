@@ -80,10 +80,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         this.setTimer()
 
-        //TODO vrati
-        // window.onbeforeunload = function (e) {
-        //     return e.returnValue = 'Are you sure you want to leave this page?';
-        // };
+        window.onbeforeunload = function (e) {
+            return e.returnValue = 'Are you sure you want to leave this page?';
+        };
     }
 
 
