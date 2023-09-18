@@ -13,6 +13,8 @@
         <h2 style="padding-left: 10px">Time: {{this.gameEngineService.timer}}</h2>
     </div>
 
+    <app-end-screen style="z-index: 1;" *ngIf="gameEngineService.gameOver" (gameOverEmitter)="gameOverFun()"></app-end-screen>
+
 
     <div class="center-container" >
 

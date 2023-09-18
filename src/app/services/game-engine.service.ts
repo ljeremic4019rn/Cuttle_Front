@@ -11,11 +11,11 @@ export class GameEngineService {
     public numberOfPlayers: number = 0
     public myPlayerNumber: number = -1
     public currentPlayersTurn: number = 0;
-    public gameOver:boolean = false
+    public gameOver:boolean = true
     public playerWhoWon: string = ""
 
     //timer
-    public endOfRoundTime: number = 4
+    public endOfRoundTime: number = 3
     public totalRoundTime: number = 60
     public timer: number = 0
 
@@ -129,7 +129,8 @@ export class GameEngineService {
     }
 
     updateCardData(gameResponse: any) {
-        if (gameResponse.actionType == "GAME_OVER_WON") {
+        if (gameResponse.gameResponseType == "GAME_OVER_WON") {
+            console.log("THIS SHIT HIT")
             this.gameOver = true
             this.playerWhoWon = gameResponse.playerWhoWon
         }

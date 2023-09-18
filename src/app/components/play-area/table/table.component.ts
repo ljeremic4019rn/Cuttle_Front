@@ -502,6 +502,11 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameEngineService.updateGameState((JSON.parse(newState.body)))
     }
 
+    gameOverFun(){
+        this.disconnect()
+        this.router.navigate(["setUpRoom"]);
+    }
+
     disconnect() {
         if (this.stompClient != null) {//todo if players == 0 close room and disconnect
             this.stompClient.disconnect();
@@ -509,8 +514,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.isConnected = false;
         console.log("Disconnected");
     }
-
-
 
 
     //VISUALS
