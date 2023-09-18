@@ -31,7 +31,7 @@ export interface GameResponse{
     playerHands: Map<number, []>
     playerTables: Map<number, []>
     playerScore: Map<number, number>
-    playerWhoWon: number
+    playerWhoWon: string
 }
 
 export interface RoomUpdateResponse{

@@ -80,7 +80,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         this.setTimer()
 
-        //todo page reload block - VRATI GA KASNIJE
+        //TODO vrati
         // window.onbeforeunload = function (e) {
         //     return e.returnValue = 'Are you sure you want to leave this page?';
         // };
@@ -188,6 +188,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             this.setDataForVisualSocketUpdate()
             this.sendVisualUpdate()
             this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
+            this.disableCardDrag(cardDto.card)
 
             console.log("FINAL")
             console.log(this.gameEngineService.gameAction)
@@ -348,16 +349,18 @@ export class TableComponent implements OnInit, AfterViewChecked {
     setTimer() {
         this.timerInterval = setInterval(() => {
             if (this.gameEngineService.timer == 0) {
-                //todo this.sendGameAction()
-                console.log("SENDING DATA WITH TIMER")
+                this.sendGameAction()
             }
             else this.gameEngineService.timer--
         }, 1000);
     }
 
-    playCounterCard(counterCard: string, event: CdkDragEnd){
-        console.log("COUNTER COUNTER COUNTER")
+    disableCardDrag(handCard: string){
+        let element = document.querySelector("#card-hand-" + handCard) as HTMLElement
+        if (element) element.style.pointerEvents = "none";
+    }
 
+    playCounterCard(counterCard: string, event: CdkDragEnd){
         if (this.gameEngineService.timer > this.gameEngineService.endOfRoundTime){//janky way of blocking a "2 counter play" before the opponent has played something
             alert("A play has not been made yet")
             event.source._dragRef.reset()
@@ -423,8 +426,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
     sendGameAction() {
         if (this.gameEngineService.currentPlayersTurn == this.gameEngineService.myPlayerNumber){
             if (this.gameEngineService.gameAction.actionType == "") {
-                alert("AN ERROR OCCURRED - ACTION TYPE EMPTY")
-                return
+                this.gameEngineService.gameAction.actionType = "SKIP"
+                // alert("Turn skipped")
             }
             console.log("SALJEMO NA SERVER")
             console.log(this.gameEngineService.gameAction)
@@ -508,6 +511,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
 
+
+
     //VISUALS
 
     highlightCard(card: string) {
@@ -587,6 +592,13 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     break
             }
         }
+    }
+
+    highlightCurrentPlayer(index: number):object{
+        if (this.gameEngineService.currentPlayersTurn == index){
+            return {'border-color': 'yellow'}
+        }
+        else return {}
     }
 
     visualUpdateCardsStyle(): object {

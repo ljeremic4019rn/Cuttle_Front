@@ -8,12 +8,17 @@ import {GameAction, GameVisualUpdate} from "../Models/room.model";
 export class GameEngineService {
 
     //server data
-    public numberOfPlayers: number = 3 //todo vrati na 0
+    public numberOfPlayers: number = 0
     public myPlayerNumber: number = -1
     public currentPlayersTurn: number = 0;
-    public endOfRoundTime: number = 20
-    public totalRoundTime: number = 100
+    public gameOver:boolean = false
+    public playerWhoWon: string = ""
+
+    //timer
+    public endOfRoundTime: number = 4
+    public totalRoundTime: number = 60
     public timer: number = 0
+
 
     //card data
     public deck: string[] = []
@@ -22,7 +27,6 @@ export class GameEngineService {
     public playerTables: Map<number, string[]> = new Map<number, string[]>()
     public playerScore: Map<number, number> = new Map<number, number>()
     public gameAction: GameAction
-
 
     //vars for visual aid
     public visualUpdate: GameVisualUpdate
@@ -36,18 +40,19 @@ export class GameEngineService {
     public forced7Card: any = null
 
     constructor() {
-        this.playerHands.set(0, ["1_C", "2_C","2_S",])
-        this.playerHands.set(1, ["2_H","2_D"])
-        this.playerHands.set(2, ["2_H","2_D"])
-        this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
-
-        this.playerTables.set(0, ["1_C", "2_C","1_C", "1_C"])
-        this.playerTables.set(1, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
-        this.playerTables.set(2, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
-        this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
-
-        this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
-        this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D"]
+        //FOT TESTING
+        // this.playerHands.set(0, ["1_C", "2_C","4_S",])
+        // this.playerHands.set(1, ["2_H","2_D"])
+        // this.playerHands.set(2, ["2_H","2_D"])
+        // this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
+        //
+        // this.playerTables.set(0, ["1_C", "2_C","1_C", "1_C"])
+        // this.playerTables.set(1, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
+        // this.playerTables.set(2, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
+        // this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
+        //
+        // this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
+        // this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D"]
 
         this.gameAction = {
             roomKey: "",
@@ -71,9 +76,7 @@ export class GameEngineService {
     }
 
     setUpGame(gameResponse: any) {
-        // const gameResponse = JSON.parse(newState);
-        // const gameResponse = newState
-        console.log(gameResponse);
+        // console.log(gameResponse);
 
         //just in case we clear the lists
         this.deck = []
@@ -93,8 +96,8 @@ export class GameEngineService {
         }
         this.timer = this.totalRoundTime
 
-        console.log("nakon settovanja")//todo skloni ovo
-        this.printAll()
+        // console.log("nakon settovanja")
+        // this.printAll()
     }
 
 
@@ -126,8 +129,12 @@ export class GameEngineService {
     }
 
     updateCardData(gameResponse: any) {
-        this.clearVisualHelperCards()
+        if (gameResponse.actionType == "GAME_OVER_WON") {
+            this.gameOver = true
+            this.playerWhoWon = gameResponse.playerWhoWon
+        }
 
+        this.clearVisualHelperCards()
         this.forced7Card = null
         this.deck = gameResponse.deck
         this.graveyard = gameResponse.graveyard
@@ -148,8 +155,8 @@ export class GameEngineService {
         }
         this.timer = this.totalRoundTime
 
-        console.log("nakon UPDATE")//todo skloni ovo
-        this.printAll()
+        // console.log("nakon UPDATE")
+        // this.printAll()
     }
 
     power8WasRemoved():boolean{

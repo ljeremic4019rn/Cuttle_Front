@@ -26,6 +26,34 @@
     z-index: -1;
 }
 
+.timer{
+    scale: 130%;
+    color: orange;
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    width: 120px;
+    height: 30px;
+    font-style: italic;
+    border-bottom: 2px orange solid;
+}
+
+.fa-hourglass{
+    animation: hourglass 5s ease-in-out infinite;
+}
+
+
+@keyframes hourglass {
+    0%,
+    100% {
+        transform: translate(0px, 0px) rotate(0deg);
+    }
+    50% {
+        transform: translate(0px, 0px) rotate(360deg);
+    }
+}
+
+
 
 /* HAND CARDS */
 
@@ -270,7 +298,7 @@
 
     z-index: 1;
     position: absolute;
-    top: 30%;
+    top: -5%;
 }
 
 .arrow2 {
@@ -281,7 +309,7 @@
 
     z-index: 1;
     position: absolute;
-    top: 2%;
+    top: 0;
     right: 44%;
 }
 
@@ -293,7 +321,7 @@
 
     z-index: 1;
     position: absolute;
-    top: 30%;
+    top: -5%;
     right: 1%;
 }
 

@@ -45,5 +45,14 @@ export class CardRowComponent implements OnInit {
         this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
     }
 
+    test(card: MouseEvent){
+        console.log(card)
+
+        const clickedElement = event!.target as HTMLElement;
+        console.log(clickedElement)
+        clickedElement.setAttribute("covered", "true");
+
+    }
+
 
 }

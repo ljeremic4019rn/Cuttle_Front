@@ -1,34 +1,37 @@
 <!--<p>THIS IS A ROOM {{gameAction.roomKey}}</p>-->
 
 <div class="full-border">
-    <h3>CURRENT PLAYERS TURN = {{this.gameEngineService.currentPlayersTurn}}</h3 >
 
-    <h2 #seconds>TIMER: {{this.gameEngineService.timer}}</h2>
+<!--    <button (click)="endTurn()">END TURN</button>-->
+    <!--    <h3>Playing: {{this.gameEngineService.currentPlayersTurn}}</h3 >-->
+
+<!--        <button (click)="test()">TEST</button>-->
+
+
+    <div class="timer center-container">
+        <i class="fa fa-hourglass"></i>
+        <h2 style="padding-left: 10px">Time: {{this.gameEngineService.timer}}</h2>
+    </div>
 
 
     <div class="center-container" >
 
-
         <app-card-row id="table-0"
-                      *ngIf="visible[0]"
+                      *ngIf="visible[0]" [style]="highlightCurrentPlayer(0)"
                       class="table-cards-{{this.cardPositionOnScreen[0]}} table-border">
         </app-card-row>
-<!--        <h3 class="table-cards-{{this.cardPositionOnScreen[0]}}" style="z-index: 1">0</h3>-->
         <app-card-row id="table-1"
-                      *ngIf="visible[1]"
+                      *ngIf="visible[1]" [style]="highlightCurrentPlayer(1)"
                       class="table-cards-{{this.cardPositionOnScreen[1]}} table-border">
         </app-card-row>
-<!--        <h3 class="table-cards-{{this.cardPositionOnScreen[1]}}" style="z-index: 1">1</h3>-->
         <app-card-row id="table-2" fxflex="90"
-                      *ngIf="visible[2]"
+                      *ngIf="visible[2]" [style]="highlightCurrentPlayer(2)"
                       class="table-cards-{{this.cardPositionOnScreen[2]}} table-border">
         </app-card-row>
-<!--        <h3 class="table-cards-{{this.cardPositionOnScreen[2]}}" style="z-index: 1">2</h3>-->
         <app-card-row id="table-3"
-                      *ngIf="visible[3]"
+                      *ngIf="visible[3]" [style]="highlightCurrentPlayer(3)"
                       class="table-cards-{{this.cardPositionOnScreen[3]}} table-border">
         </app-card-row>
-<!--        <h3 class="table-cards-{{this.cardPositionOnScreen[3]}}"  style="z-index: 1">3</h3>-->
 
 
         <app-card-hand id="hand-0"
@@ -74,13 +77,13 @@
             <doc-card *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="card center-card-2" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedOntoCardVisualAid[0]' [covered]="false"></doc-card>
         </div>
 
-            <!--    DISPLAYS 2 COUNTER CARDS DURING A COUNTER EVENT    -->
-            <div *ngIf="gameEngineService.counterCards.length != 0" class="counter-card-list">
-                <label class="counter-card-list-label"> Played counter cards: </label>
-                <div *ngFor="let card of this.gameEngineService.counterCards" fxFlex="90px">
-                    <doc-card class="card " style="scale: 70%; margin: -0.5rem" [card]='card.split("_")[0] + "_" + card.split("_")[1]' [covered]="false"></doc-card>
-                </div>
+        <!--    DISPLAYS 2 COUNTER CARDS DURING A COUNTER EVENT    -->
+        <div *ngIf="gameEngineService.counterCards.length != 0" class="counter-card-list">
+            <label class="counter-card-list-label"> Played counter cards: </label>
+            <div *ngFor="let card of this.gameEngineService.counterCards" fxFlex="90px">
+                <doc-card class="card " style="scale: 70%; margin: -0.5rem" [card]='card.split("_")[0] + "_" + card.split("_")[1]' [covered]="false"></doc-card>
             </div>
+        </div>
     </div>
 
 
@@ -100,9 +103,7 @@
         <label class="graveyard-label">graveyard</label>
     </div>
 
-    <button (click)="endTurn()">END TURN</button>
 <!--    <input [(ngModel)]="input" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">-->
-<!--    <button (click)="highlightCard(gameEngineService.forced7Card)">TEST</button>-->
 
 <!--    todo uradi not random discard kasnije (sve podeseno samo da se preko socketa otvori drugom igracu da selektuje) -->
 <!--    <div class="discard-display-center" >-->
