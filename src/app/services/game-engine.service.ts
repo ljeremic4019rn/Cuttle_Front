@@ -11,7 +11,7 @@ export class GameEngineService {
     public numberOfPlayers: number = 0
     public myPlayerNumber: number = -1
     public currentPlayersTurn: number = 0;
-    public gameOver:boolean = true
+    public gameOver:boolean = false
     public playerWhoWon: string = ""
 
     //timer
