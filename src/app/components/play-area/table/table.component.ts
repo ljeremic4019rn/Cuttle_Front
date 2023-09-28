@@ -248,7 +248,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
                 break
             case "J":
-                if (this.listContainCardCheck("J", ["Q"])) {
+                if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
                     return
