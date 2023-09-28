@@ -19,7 +19,6 @@ export class GameEngineService {
     public totalRoundTime: number = 60
     public timer: number = 0
 
-
     //card data
     public deck: string[] = []
     public graveyard: string[] = []
@@ -40,20 +39,6 @@ export class GameEngineService {
     public forced7Card: any = null
 
     constructor() {
-        //FOT TESTING
-        // this.playerHands.set(0, ["1_C", "2_C","4_S",])
-        // this.playerHands.set(1, ["2_H","2_D"])
-        // this.playerHands.set(2, ["2_H","2_D"])
-        // this.playerHands.set(3, ["1_C", "2_C", "3_C", "8_C"])
-        //
-        // this.playerTables.set(0, ["1_C", "2_C","1_C", "1_C"])
-        // this.playerTables.set(1, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
-        // this.playerTables.set(2, ["1_C", "2_C","3_C", "5_C", "8_C", "Q_C"])
-        // this.playerTables.set(3, ["1_C", "2_C","1_C", "2_C", "3_C", "8_C"])
-        //
-        // this.deck = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D", "1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D",]
-        // this.graveyard = ["1_D", "2_D", "3_D", "4_D", "5_D", "4_D", "5_D", "4_D", "5_D", "4_D"]
-
         this.gameAction = {
             roomKey: "",
             actionType: "",
@@ -79,11 +64,7 @@ export class GameEngineService {
         // console.log(gameResponse);
 
         //just in case we clear the lists
-        this.deck = []
-        this.graveyard = []
-        this.playerHands.clear()
-        this.playerTables.clear()
-        this.playerScore.clear()
+        this.clearOldData()
 
         this.numberOfPlayers = this.getMapSize(gameResponse.playerHands)
         this.currentPlayersTurn = gameResponse.currentPlayersTurn
@@ -130,7 +111,6 @@ export class GameEngineService {
 
     updateCardData(gameResponse: any) {
         if (gameResponse.gameResponseType == "GAME_OVER_WON") {
-            console.log("THIS SHIT HIT")
             this.gameOver = true
             this.playerWhoWon = gameResponse.playerWhoWon
         }
@@ -158,6 +138,21 @@ export class GameEngineService {
 
         // console.log("nakon UPDATE")
         // this.printAll()
+    }
+
+    clearOldData(){
+        this.gameOver = false
+        this.playerWhoWon = ""
+
+        this.deck = []
+        this.graveyard = []
+        this.playerHands.clear()
+        this.playerTables.clear()
+        this.playerScore.clear()
+        this.counterCards = []
+        this.power8InAction = false
+        this.forced7Card = null
+
     }
 
     power8WasRemoved():boolean{

@@ -130,23 +130,27 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         //CENTER
         if (droppedLocationInfo[0] == "center") {
+            this.actionPlayed = true
             if (playedCardSplit[0] != "1" && this.listContainCardCheck(playedCardSplit[0], ["2", "9", "10", "J"])) { //if a target specific card is played as a global just ignore it
                 alert("Can't play target specific magic card as global")
                 cardDto.event.source._dragRef.reset()
+                this.actionPlayed = false
                 return
             }
             this.setGameAction("POWER", cardDto.card, "", this.gameEngineService.myPlayerNumber, [])
             this.globalPowerCardEventHelper(playedCardSplit[0], "", cardDto.card, -1) //if its a special card like 4 or 7, do some more magic
-            this.actionPlayed = true
         }
         //TABLE
         else if (droppedLocationInfo[0] == "table") {
             let enemyTablePositionNum = parseInt(droppedLocationInfo[1])//if card on my table set as a point - if cards on enemy table, find hovered card and play magic on that card
+            this.actionPlayed = true
+
             //MY TABLE
             if (enemyTablePositionNum == this.gameEngineService.myPlayerNumber) {//play a point on my field
                 if (this.listContainCardCheck(playedCardSplit[0], ["J", "Q", "K"])) {
                     alert("Can't play power card as point")
                     cardDto.event.source._dragRef.reset()
+                    this.actionPlayed = false
                     return
                 }
                 this.setGameAction("NUMBER", cardDto.card, "", this.gameEngineService.myPlayerNumber, [])
@@ -158,6 +162,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
                 //originally set scuttle, but if it's a 2/9/J it will change in the powerCardEventHelper!!!
                 this.targetedPowerCardEventHelper(playedCardSplit[0], hoveredCard, cardDto.card, enemyTablePositionNum, cardDto.event)
+
                 if (this.gameEngineService.gameAction.actionType == "SCUTTLE") {//if it's still scuttle we need to check if the scuttle is valid
                     let ontoPlayedCardSplit = hoveredCard.split("_")[0]
                     let playedCardValue = parseInt(playedCardSplit[0])
@@ -166,18 +171,28 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     if (ontoPlayedCardSplit[0] == "Q" || ontoPlayedCardSplit[0] == "K"){
                         alert("You cant scuttle a permanent effect card")
                         cardDto.event.source._dragRef.reset()
+                        this.actionPlayed = false
                         return
                     }
 
+                    console.log("KURACCC")
+                    console.log(playedCardValue)
+                    console.log(ontoPlayedCardValue)
+
                     if (playedCardValue < ontoPlayedCardValue) {
                         alert("You cant scuttle with a lesser value card")
+                        cardDto.event.source._dragRef.reset()
+                        this.actionPlayed = false
+                        return
                     }
                     else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
                         alert("You cant scuttle with a lesser or equal suit card")
+                        cardDto.event.source._dragRef.reset()
+                        this.actionPlayed = false
+                        return
                     }
                 }
             }
-            this.actionPlayed = true
         }
         else {
             cardDto.event.source._dragRef.reset()
@@ -202,6 +217,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             case "3":
                 if (this.gameEngineService.graveyard.length == 0){
                     alert("Nothing in graveyard yet")
+                    this.actionPlayed = false
                     return
                 }
                 this.pauseTimer()
@@ -233,16 +249,17 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
+                    this.actionPlayed = false
                     return
                 }
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
-
                 break
             case "9":
                 if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J", "Q", "K", "P"])) return; //if card hovered is not in list, it's not a power play
                 if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
+                    this.actionPlayed = false
                     return
                 }
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
@@ -251,6 +268,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
                     alert("Player has a queen in play")
                     event.source._dragRef.reset()
+                    this.actionPlayed = false
                     return
                 }
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
