@@ -204,7 +204,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     alert("Nothing in graveyard yet")
                     return
                 }
-
+                this.pauseTimer()
                 this.graveyardVisible = true
                 this.graveyardCardsAreSelectable = true
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, enemyTablePositionNum, [])
@@ -261,7 +261,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     selectGraveyardCard(selectedCard: string) {
         if (this.graveyardCardsAreSelectable) {
             this.gameEngineService.gameAction.ontoCardPlayed = selectedCard
-            this.sendGameAction()
+            this.setTimer()
             this.graveyardVisible = false
             this.graveyardCardsAreSelectable = false
         }
@@ -352,6 +352,10 @@ export class TableComponent implements OnInit, AfterViewChecked {
             }
             else this.gameEngineService.timer--
         }, 1000);
+    }
+
+    pauseTimer() {
+        clearInterval(this.timerInterval);
     }
 
     disableCardDrag(handCard: string){
