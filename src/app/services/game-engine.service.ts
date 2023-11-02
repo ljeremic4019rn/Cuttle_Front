@@ -35,6 +35,7 @@ export class GameEngineService {
 
     //special card interaction data
     public counterCards: string[] = [] //<rank>_<suit>_<playerId> 2_S_3
+    public power8Preparation: boolean = false;
     public power8InAction: boolean = false
     public forced7Card: any = null
 
@@ -83,7 +84,7 @@ export class GameEngineService {
 
 
     updateGameState(gameResponse: any) {
-        console.log("new state received from the server: ")
+        console.log("new state received from the server: ")//todo remove prints
         console.log(gameResponse)
         if (gameResponse.visualUpdate) this.updateVisualsAndCounterPlays(gameResponse)
         else this.updateCardData(gameResponse)
@@ -115,8 +116,11 @@ export class GameEngineService {
             this.playerWhoWon = gameResponse.playerWhoWon
         }
 
+        //clear old or helper data
         this.clearVisualHelperCards()
         this.forced7Card = null
+
+        //set new game state
         this.deck = gameResponse.deck
         this.graveyard = gameResponse.graveyard
         this.currentPlayersTurn = parseInt(gameResponse.currentPlayersTurn)
@@ -126,19 +130,30 @@ export class GameEngineService {
             this.playerScore.set(i, gameResponse.playerScore[i])
         }
 
+        //deal with power 8 (un/covering cards)
+        if (this.power8Preparation){
+            this.power8Preparation = false
+            this.power8InAction = true //this throws error but too difficult to fix
+        }
         if (this.power8InAction){
-            if (this.power8WasRemoved()) this.power8InAction = false
+            if (this.power8WasRemoved())
+                this.power8InAction = false
         }
 
+        //deal with 7 power (forcing player to play drawn card)
         if (gameResponse.gameResponseType == "SEVEN") {
             let handLength = gameResponse.playerHands[this.currentPlayersTurn].length
             this.forced7Card = gameResponse.playerHands[this.currentPlayersTurn][handLength - 1]
         }
+
+        //set timer
         this.timer = this.totalRoundTime
 
         // console.log("nakon UPDATE")
         // this.printAll()
     }
+
+
 
     clearOldData(){
         this.gameOver = false
@@ -152,7 +167,6 @@ export class GameEngineService {
         this.counterCards = []
         this.power8InAction = false
         this.forced7Card = null
-
     }
 
     power8WasRemoved():boolean{

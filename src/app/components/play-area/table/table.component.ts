@@ -80,9 +80,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         this.setTimer()
 
-        window.onbeforeunload = function (e) {
-            return e.returnValue = 'Are you sure you want to leave this page?';
-        };
+        // window.onbeforeunload = function (e) {//todo return this warning
+        //     return e.returnValue = 'Are you sure you want to leave this page?';
+        // };
     }
 
 
@@ -175,7 +175,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                         return
                     }
 
-                    console.log("KURACCC")
+                    console.log("KURACCC")//todo remove
                     console.log(playedCardValue)
                     console.log(ontoPlayedCardValue)
 
@@ -209,7 +209,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
     }
 
-
     //just displaced code to make the main fun more compact
     globalPowerCardEventHelper(playedCardSplit0: string, ontoPlayedCard: string, playedCard: string, enemyTablePositionNum: number) {
         switch (playedCardSplit0) {
@@ -235,7 +234,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 }
                 break
             case "8":
-                this.gameEngineService.power8InAction = true
+                this.gameEngineService.power8Preparation = true
                 break
         }
     }
