@@ -386,7 +386,12 @@ export class TableComponent implements OnInit, AfterViewChecked {
             event.source._dragRef.reset()
             return
         }
-        if(this.gameEngineService.visualLastActionName != "POWER" && this.gameEngineService.visualLastActionName != "COUNTER"){
+
+        console.log("SHIT HEAD")
+        console.log(this.gameEngineService.visualLastActionName)
+
+        // if(this.gameEngineService.visualLastActionName != "POWER" && this.gameEngineService.visualLastActionName != "COUNTER"){
+        if(this.actionTypeIsNotPowerOrCounter()){
             alert("This play can not be countered")
             event.source._dragRef.reset()
             return
@@ -411,6 +416,14 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
         this.setGameAction("DRAW", "", "", -1, [])
         this.sendGameAction()
+    }
+
+    actionTypeIsNotPowerOrCounter(): boolean{
+        const actionTypes: string[] = ["NUMBER", "SCUTTLE", "DISCARD_CARD", "DRAW", "SKIP"];
+        for (let type in actionTypes){
+            if (this.gameEngineService.visualLastActionName == type) return true
+        }
+        return false
     }
 
     openGraveyard() {
