@@ -107,14 +107,13 @@
 
 <!--    <input [(ngModel)]="input" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">-->
 
-<!--    todo uradi not random discard kasnije (sve podeseno samo da se preko socketa otvori drugom igracu da selektuje) -->
-<!--    <div class="discard-display-center" >-->
-<!--        <div class="discard-display">-->
-<!--            <div *ngFor="let card of this.gameEngineService.graveyard" fxFlex="90px">-->
-<!--                <doc-card class="card hover-cursor graveyard-hover" style="scale: 70%; margin: -0.5rem" [card]='card' (click)="selectGraveyardCard(card)" [covered]="false"></doc-card>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div *ngIf="gameEngineService.discardSelectionVisible" class="discard-display-center" style="z-index: 5">
+        <div class="discard-display">
+            <div *ngFor="let card of this.gameEngineService.playerHands.get(this.gameEngineService.myPlayerNumber)" fxFlex="90px">
+                <doc-card id="card-discard-{{card}}" class="card hover-cursor" style="scale: 70%; margin: -0.5rem" [card]='card' (click)="selectCardForDiscard(card)" [covered]="false"></doc-card>
+            </div>
+        </div>
+    </div>
 
     <div *ngIf="graveyardVisible" class="graveyard-display-center">
         <div style="height: 200%; width: 100%; position: absolute; z-index: -1"   (click)="closeGraveyard()"></div>

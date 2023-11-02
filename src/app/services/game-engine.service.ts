@@ -32,6 +32,7 @@ export class GameEngineService {
     public playedCardVisualAid:string [] = []
     public playedOntoCardVisualAid:string [] = []
     public visualLastActionName: string = ""
+    public discardSelectionVisible: boolean = false
 
     //special card interaction data
     public counterCards: string[] = [] //<rank>_<suit>_<playerId> 2_S_3
@@ -94,6 +95,20 @@ export class GameEngineService {
     updateVisualsAndCounterPlays(gameResponse: any) {
         this.visualUpdate = gameResponse
         this.timer = this.endOfRoundTime
+
+        if (this.visualUpdate.actionType == "SELECT_TO_DISCARD"){
+            this.timer = this.totalRoundTime
+
+            console.log("OVO SMO DOBILI SVI - KADA SE RADI DISCARD")
+            console.log(this.visualUpdate)
+
+            if(this.visualUpdate.ontoPlayer == this.myPlayerNumber){
+                console.log("JA SAM IGRAC KOJI TREBA DA BACI KARTE")
+                this.discardSelectionVisible = true
+                return;
+            }
+
+        }
 
         if (this.visualUpdate.actionType == "COUNTER") {
             if (this.counterCards.length == 0 || this.counterCards.length == 2)//if we have 0/2 counter cards in list we kill the base card, else we kill the counter

@@ -98,12 +98,4 @@ export class CardComponent implements OnInit {
         return {}
     }
 
-    highlightCard(){
-        this.highlighted = "highlighted"
-    }
-
-    click() {
-        console.log("KLIKNUTO NA " + this.value + "_" + this.suit)
-    }
-
 }

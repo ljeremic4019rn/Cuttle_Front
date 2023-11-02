@@ -189,6 +189,11 @@
     background-size: 100%;
 }
 
+.highlighted{
+    border: #eaea04 5px solid;
+    border-radius: 10px;
+}
+
 .hover-cursor:hover{
     cursor:pointer;
 }
