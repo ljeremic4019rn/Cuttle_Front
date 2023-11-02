@@ -39,17 +39,16 @@
 }
 
 .fa-hourglass{
-    animation: hourglass 5s ease-in-out infinite;
+    animation: hourglass 3s linear infinite;
 }
 
 
 @keyframes hourglass {
-    0%,
-    100% {
-        transform: translate(0px, 0px) rotate(0deg);
+    0% {
+        transform: rotate(0deg);
     }
-    50% {
-        transform: translate(0px, 0px) rotate(360deg);
+    100% {
+        transform: rotate(360deg);
     }
 }
 

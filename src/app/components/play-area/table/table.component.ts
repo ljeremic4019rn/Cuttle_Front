@@ -6,6 +6,7 @@ import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto} from "../../../Models/card.model";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
+import {LoginComponent} from "../../login/login.component";
 
 @Component({
     selector: 'app-room',
@@ -23,7 +24,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     dropZoneCordsMap: Map<string, DOMRect> = new Map<string, DOMRect>()
     filteredDomTreeElements: Element[] = []
     graveyardCardsAreSelectable: boolean = false
-    selectedPlayerToDiscard: number = -1
     selectedCardsForDiscard: string [] = []
 
     //visuals
@@ -179,13 +179,14 @@ export class TableComponent implements OnInit, AfterViewChecked {
             cardDto.event.source._dragRef.reset()
         }
 
-        if (this.actionPlayed){//if card was not set randomly on the table but on a good drop zone
-            this.setDataForVisualSocketUpdate()
-            this.sendVisualUpdate()
-
-            console.log("POSLALI SMO GOVNO")
-
-            this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
+        //if card was not set randomly on the table but on a good drop zone
+        if (this.actionPlayed){
+            //this is the turn doesn't end before player chose cards to discard
+            if (!this.arrowVisible) {
+                this.setDataForVisualSocketUpdate()
+                this.sendVisualUpdate()
+                this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
+            }
             this.disableCardDrag(cardDto.card)
 
             console.log("FINAL")
@@ -210,16 +211,16 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 break
             case "4":
                 this.selectArrowVisible = true
+                this.setGameAction("POWER", playedCard, ontoPlayedCard, this.gameEngineService.myPlayerNumber, [])
 
                 if (this.gameEngineService.numberOfPlayers == 2) {
                     this.gameEngineService.gameAction.ontoPlayer = this.getOppositePlayer()
-                    this.selectedPlayerToDiscard = this.getOppositePlayer()
-                }
+                    this.setGameAction("POWER", playedCard, ontoPlayedCard, this.gameEngineService.gameAction.ontoPlayer, [])
 
-                //if player has <= 2 cards then just discard them else give him the choice to pick which cards to discard (using visual update and socket)
-                if (this.gameEngineService.playerHands.get(this.selectedPlayerToDiscard)!.length <= 2)
-                    this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
-                else this.setGameAction("SELECT_TO_DISCARD", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
+                    //if player has <= 2 cards then just discard them else give him the choice to pick which cards to discard (using visual update and socket)
+                    if (this.gameEngineService.playerHands.get(this.gameEngineService.gameAction.ontoPlayer)!.length > 2)
+                        this.setGameAction("SELECT_TO_DISCARD", playedCard, ontoPlayedCard, this.gameEngineService.gameAction.ontoPlayer, [])
+                }
 
                 break
             case "8":
@@ -294,7 +295,15 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.cardPositionOnScreen.forEach((position, playerNum) => {
             if (selectedPosition == position) {
                 this.gameEngineService.gameAction.ontoPlayer = playerNum
-                this.sendGameAction()
+
+                if (this.gameEngineService.playerHands.get(this.gameEngineService.gameAction.ontoPlayer)!.length > 2) {
+                    this.gameEngineService.gameAction.actionType = "SELECT_TO_DISCARD"
+                    this.setDataForVisualSocketUpdate()
+                    this.sendVisualUpdate()
+                    console.log("SAD SMO OVDE")
+                }
+                else this.sendGameAction()
+
                 this.selectArrowVisible = false
             }
         });
@@ -554,9 +563,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     // }
     highlightCard(cardId: string) {
         const cardToHighlight = document.querySelector(cardId)
-
-        console.log("KUACCCCCC")
-        console.log(cardToHighlight)
         if (cardToHighlight != null) cardToHighlight.classList.add("highlighted")
     }
 
