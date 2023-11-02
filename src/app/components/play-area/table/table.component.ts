@@ -210,20 +210,12 @@ export class TableComponent implements OnInit, AfterViewChecked {
             case "4":
                 this.selectArrowVisible = true
 
-                console.log("ULAZIMO U 4 KURAC")
-                console.log("BROJ IGRACA " + this.gameEngineService.numberOfPlayers)
-
                 if (this.gameEngineService.numberOfPlayers == 2) {
                     this.gameEngineService.gameAction.ontoPlayer = this.getOppositePlayer()
                     this.selectedPlayerToDiscard = this.getOppositePlayer()
                 }
 
-                console.log("onto player " + this.gameEngineService.gameAction.ontoPlayer)
-
                 //todo display selection screen later
-
-                console.log("shit head")
-                console.log(this.gameEngineService.playerHands.get(this.selectedPlayerToDiscard))
 
                 this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
 
