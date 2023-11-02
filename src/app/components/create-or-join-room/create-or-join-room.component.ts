@@ -140,6 +140,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
     }
 
     updatePlayersInRoom(newPlayerList: string[]){
+        //todo remove player from room in click (his bubble) this.clearOldPlayerSlots()
         for (let i = 0; i < newPlayerList.length; i++) {
             if (newPlayerList[i] != ""){
                 this.playersInRoom[i] = newPlayerList[i]

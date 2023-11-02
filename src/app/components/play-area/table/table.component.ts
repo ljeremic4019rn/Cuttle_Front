@@ -86,19 +86,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
 
-
-    /* todo list
-    HIGH
-    -2 counter (change socket)
-    -timer (improve)
-
-    LOW
-    -power 4 - user picks which cards to discard himself
-    -user leaves page pause game - returns on button click unpause for all
-    -hand hover socket? (mozda previse)
-    -animacija za draw
-    */
-
     //POWER CARD FUNCTIONS (AND CARD DRAG FUNCTIONS)
 
     cdkDragStartedFun() {
@@ -175,10 +162,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
                         return
                     }
 
-                    console.log("KURACCC")//todo remove
-                    console.log(playedCardValue)
-                    console.log(ontoPlayedCardValue)
-
                     if (playedCardValue < ontoPlayedCardValue) {
                         alert("You cant scuttle with a lesser value card")
                         cardDto.event.source._dragRef.reset()
@@ -226,12 +209,25 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 break
             case "4":
                 this.selectArrowVisible = true
-                //todo display selection screen later
-                this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
+
+                console.log("ULAZIMO U 4 KURAC")
+                console.log("BROJ IGRACA " + this.gameEngineService.numberOfPlayers)
 
                 if (this.gameEngineService.numberOfPlayers == 2) {
                     this.gameEngineService.gameAction.ontoPlayer = this.getOppositePlayer()
+                    this.selectedPlayerToDiscard = this.getOppositePlayer()
                 }
+
+                console.log("onto player " + this.gameEngineService.gameAction.ontoPlayer)
+
+                //todo display selection screen later
+
+                console.log("shit head")
+                console.log(this.gameEngineService.playerHands.get(this.selectedPlayerToDiscard))
+
+                this.setGameAction("POWER", playedCard, ontoPlayedCard, this.selectedPlayerToDiscard, [])
+
+
                 break
             case "8":
                 this.gameEngineService.power8Preparation = true
@@ -387,10 +383,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
             return
         }
 
-        console.log("SHIT HEAD")
-        console.log(this.gameEngineService.visualLastActionName)
-
-        // if(this.gameEngineService.visualLastActionName != "POWER" && this.gameEngineService.visualLastActionName != "COUNTER"){
         if(this.actionTypeIsNotPowerOrCounter()){
             alert("This play can not be countered")
             event.source._dragRef.reset()

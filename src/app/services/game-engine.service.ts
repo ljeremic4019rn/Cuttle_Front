@@ -86,7 +86,8 @@ export class GameEngineService {
     updateGameState(gameResponse: any) {
         console.log("new state received from the server: ")//todo remove prints
         console.log(gameResponse)
-        if (gameResponse.visualUpdate) this.updateVisualsAndCounterPlays(gameResponse)
+        if (gameResponse.visualUpdate)
+            this.updateVisualsAndCounterPlays(gameResponse)
         else this.updateCardData(gameResponse)
     }
 
