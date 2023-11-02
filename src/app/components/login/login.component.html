@@ -19,14 +19,13 @@
     </div>
 
     <div class="signup">
-        <form [formGroup]="loginForm" (submit)="signup()">
+        <form [formGroup]="signupForm" (submit)="signup()">
             <label for="chk" aria-hidden="true">Sign up</label>
             <input [formControlName]="'username'" id="username-reg" type="text" name="txt" placeholder="User name" required>
             <input class="w-100" [formControlName]="'password'" id="password-reg" type="password" name="pswd" placeholder="Password" required="">
             <button>Sign up</button>
         </form>
     </div>
-
 
 </div>
 </body>

@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Observable, Subject} from "rxjs";
-import {LoginResponse} from "../Models/auth.model";
+import {LoginResponse, SignUpResponse} from "../Models/auth.model";
 import {environment} from "../../environments/environment";
 import {tap} from "rxjs/operators";
 import {HttpClient} from "@angular/common/http";
@@ -29,9 +29,18 @@ export class AuthService {
             )
     }
 
-
-    loginEvent(): Observable<void> {
-        return this.loginSubject.asObservable();
+    signup(username: string, password: string): Observable<any> {
+        return this.httpClient.post<SignUpResponse>(`${environment.cuttleEngineServer}/auth/signup`, {
+            username: username,
+            password: password
+        }, {observe: 'response'})
+            .pipe(
+                tap(response => {
+                    if (response.status === 200) {
+                        this.loginSubject.next();
+                    }
+                })
+            )
     }
 
 }
