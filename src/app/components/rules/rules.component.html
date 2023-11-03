@@ -1,0 +1,47 @@
+<div class="content">
+    <button class="pill-button" (click)="showOverlay()">Game rules</button>
+</div>
+
+
+<div class="overlay" *ngIf="overlayVisible">
+    <button class="close-button" (click)="closeOverlay()">X</button>
+    <div class="overlay-content">
+        <h2 class="heading"> Game Rules</h2>
+
+        <p class="yellow-text"><span class="big-letters" style="font-size: 25px"> Goal - </span> the goal is to be the first to accumulate 21 or more points worth of point cards on your
+            side of the table. The first player to achieve this wins the game.</p>
+
+        <p class="yellow-text"><span class="big-letters " style="font-size: 25px"> Play - </span> On your turn you must perform exactly one of the following actions:</p>
+        <ul>
+            <li>Draw a card from the draw pile and add it to your hand</li>
+            <li>Play a point card from your hand</li>
+            <li>Play a one-off effect card from your hand</li>
+            <li>Play a permanent effect card from your hand</li>
+        </ul>
+
+        <h2>Card types and how to use them</h2>
+        <p class="yellow-text"><span class="big-letters"> 1. Point cards - </span> Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10 can be played as point cards.</p>
+        <p class="yellow-text"><span class="big-letters"> 2. One-off effect cards - </span> Ace, 2, 3, 4, 5, 6, 7, 9 can be played as one-off effect cards.</p>
+        <p class="yellow-text"><span class="big-letters"> 3. Permanent effect cards - </span> 8, Jack, Queen, King can be played as permanent effect cards</p>
+
+        <h2> One-off Effects</h2>
+
+        <p class="yellow-text"><span class="big-letters"> Ace - </span> Scrap all point cards on the table - both yours and your opponents.</p>
+        <p class="yellow-text"><span class="big-letters"> 2 - </span> Play a two in your turn to scrap any permanent effect card on the table OR Play a two to block a one-off effect card played by your opponent. </p>
+        <p class="yellow-text"><span class="big-letters"> 3 - </span> Rummage through the scrap pile and add a card of your choice to your hand. Since the 3 is not scrapped until after its effect has been carried out, you cannot use this effect to take back the 3 you just played.</p>
+        <p class="yellow-text"><span class="big-letters"> 4 - </span> Your opponent must discard two cards of his choice from his hand, showing them to you before placing them on the scrap pile.</p>
+        <p class="yellow-text"><span class="big-letters"> 5 - </span> Draw the top two cards from the draw pile and add them to your hand.</p>
+        <p class="yellow-text"><span class="big-letters"> 6 - </span> Scrap all permanent effect cards on the table - both yours and your opponents.</p>
+        <p class="yellow-text"><span class="big-letters"> 7 - </span> Draw a card and play it immediately however you wish.
+            If you draw a card that cannot be played immediately it is discarded, but if it can be played you must play it, even if it is to your disadvantage. For example a jack might have to be used to give a point card to your opponent.</p>
+        <p class="yellow-text"><span class="big-letters"> 9 - </span> Return any one permanent effect card on the table to its controller’s hand.
+            Note that if you use this to return a jack, the point card that it was stacked on changes sides.</p>
+
+        <h2> Permanent Effects</h2>
+        <p class="yellow-text"><span class="big-letters"> 8 - </span> While you have an 8 on the table as a permanent effect card, your opponent must play with the cards in his hand exposed. The 8 is placed sideways on the table, distinguishing it from point cards and making it look like a pair of glasses.</p>
+        <p class="yellow-text"><span class="big-letters"> Jack -</span> Transfer control of a point card. The jack is placed on top of a point card and both cards are moved across the table, changing the owner. Multiple jacks can be stacked.</p>
+        <p class="yellow-text"><span class="big-letters"> Queen -</span> All your point cards and permanent effect cards on the table other than queens are defended from effects that target single cards. Queens protect against 2, 9 and jack effects.</p>
+        <p class="yellow-text"><span class="big-letters"> King - </span> The number of points you require to win the game is reduced according to the number of kings on your side of the table as follows: 0K-21p | 1K-14p | 2K-10p | 3K-7p | 4K-5p</p>
+
+    </div>
+</div>

@@ -14,11 +14,6 @@ export class GameEngineService {
     public gameOver:boolean = false
     public playerWhoWon: string = ""
 
-    //timer
-    public endOfRoundTime: number = 3
-    public totalRoundTime: number = 60
-    public timer: number = 0
-
     //card data
     public deck: string[] = []
     public graveyard: string[] = []
@@ -40,7 +35,21 @@ export class GameEngineService {
     public power8InAction: boolean = false
     public forced7Card: any = null
 
+    //timer
+    public endOfRoundTime: number = 3
+    public totalRoundTime: number = 60
+    public timer: number = 0
+    public timerInterval: any;
+
     constructor() {
+
+        // this.numberOfPlayers = 4//todo remove
+        // for (let i = 0; i < 4; i++) {
+        //     this.playerHands.set(i, ["1_H","1_H","1_H","1_H","1_H","1_H","1_H"])
+        //     this.playerTables.set(i, ["2_S","2_S","2_S","2_S"])
+        // }
+        //
+
         this.gameAction = {
             roomKey: "",
             actionType: "",
@@ -63,8 +72,6 @@ export class GameEngineService {
     }
 
     setUpGame(gameResponse: any) {
-        // console.log(gameResponse);
-
         //just in case we clear the lists
         this.clearOldData()
 
@@ -78,33 +85,23 @@ export class GameEngineService {
             this.playerScore.set(i, gameResponse.playerScore[i])
         }
         this.timer = this.totalRoundTime
-
-        // console.log("nakon settovanja")
-        // this.printAll()
     }
 
 
+
     updateGameState(gameResponse: any) {
-        console.log("new state received from the server: ")//todo remove prints
-        console.log(gameResponse)
         if (gameResponse.visualUpdate)
             this.updateVisualsAndCounterPlays(gameResponse)
         else this.updateCardData(gameResponse)
     }
 
     updateVisualsAndCounterPlays(gameResponse: any) {
-        console.log("VISUAL UPDATEEEE!")
-
         this.visualUpdate = gameResponse
 
         if (this.visualUpdate.actionType == "SELECT_TO_DISCARD"){
             this.timer = this.totalRoundTime
 
-            console.log("OVO SMO DOBILI SVI - KADA SE RADI DISCARD")
-            console.log(this.visualUpdate)
-
             if(this.visualUpdate.ontoPlayer == this.myPlayerNumber){
-                console.log("JA SAM IGRAC KOJI TREBA DA BACI KARTE")
                 this.discardSelectionVisible = true
             }
             return;
@@ -185,6 +182,8 @@ export class GameEngineService {
         this.counterCards = []
         this.power8InAction = false
         this.forced7Card = null
+
+        // clearInterval(this.timerInterval);
     }
 
     power8WasRemoved():boolean{

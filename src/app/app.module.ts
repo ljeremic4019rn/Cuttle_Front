@@ -15,6 +15,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CardHandComponent} from "./components/play-area/card-hand/card-hand.component";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {EndScreenComponent} from "./end-screen/end-screen.component";
+import { RulesComponent } from './components/rules/rules.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import {EndScreenComponent} from "./end-screen/end-screen.component";
         CardRowComponent,
         CardComponent,
         CardHandComponent,
-        EndScreenComponent
+        EndScreenComponent,
+        RulesComponent
     ],
     imports: [
         HttpClientModule,

@@ -31,11 +31,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
     visible: boolean[] = []
     graveyardVisible: boolean = false
     selectArrowVisible: boolean = false
-    arrowVisible: boolean = true
+    arrowVisible: boolean = false
     actionPlayed: boolean = false
-
-    //timer
-    timerInterval: any; //todo ovo se moze kasnije iskoristiti za pause game on unload
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService) {
         this.cardPositionOnScreen[0] = "bottom"
@@ -182,10 +179,17 @@ export class TableComponent implements OnInit, AfterViewChecked {
         //if card was not set randomly on the table but on a good drop zone
         if (this.actionPlayed){
             //this is the turn doesn't end before player chose cards to discard
+
+            console.log("Strelice?")
+            console.log(this.arrowVisible)
+            this.arrowVisible=false//todo fix this shit the game is brokennn
+
             if (!this.arrowVisible) {
+                console.log("VISUAL SENT")
                 this.setDataForVisualSocketUpdate()
                 this.sendVisualUpdate()
                 this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
+
             }
             this.disableCardDrag(cardDto.card)
 
@@ -378,7 +382,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
     //HELPER GAME ENGINE FUNCTIONS
 
     setTimer() {
-        this.timerInterval = setInterval(() => {
+        this.pauseTimer()
+
+        this.gameEngineService.timerInterval = setInterval(() => {
             if (this.gameEngineService.timer == 0) {
                 this.sendGameAction()
             }
@@ -387,7 +393,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     pauseTimer() {
-        clearInterval(this.timerInterval);
+        clearInterval(this.gameEngineService.timerInterval);
     }
 
     disableCardDrag(handCard: string){

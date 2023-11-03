@@ -1,0 +1,78 @@
+.content {
+    text-align: right;
+    padding: 20px;
+}
+
+.pill-button {
+    font-size: 12px;
+    background-color: transparent;
+    border: 2px solid orange; /* Yellow border */
+    border-radius: 50px; /* Use a large value for pill shape */
+    color: orange;
+    font-weight: bold;
+    padding: 8px 10px;
+    transition: background-color 0.3s;
+}
+
+.pill-button:hover {
+    background-color: yellow; /* Green fill on hover */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px); /* Apply a blur effect to the background */
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+p{
+    margin-bottom: -5px;
+}
+
+.big-letters {
+    font-weight: bold;
+    font-size: 18px; /* Increase the font size to make it 5px larger */
+}
+
+.overlay-content {
+    background-color: rgba(0, 0, 0, 0.7);
+    text-align: left;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: yellow;
+}
+
+.heading{
+    text-align: center;
+    font-size: 30px;
+    margin: 0;
+    text-decoration: underline;
+}
+
+.yellow-text {
+    color: yellow;
+}
+
+.close-button {
+    align-self: end;
+    padding-right: 15px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    right: 60%;
+}
+
+.close-button:hover {
+    color: red;
+}
