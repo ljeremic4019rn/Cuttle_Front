@@ -31,7 +31,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     visible: boolean[] = []
     graveyardVisible: boolean = false
     selectArrowVisible: boolean = false
-    arrowVisible: boolean = false
     actionPlayed: boolean = false
 
     constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService) {
@@ -180,21 +179,13 @@ export class TableComponent implements OnInit, AfterViewChecked {
         if (this.actionPlayed){
             //this is the turn doesn't end before player chose cards to discard
 
-            console.log("Strelice?")
-            console.log(this.arrowVisible)
-            this.arrowVisible=false//todo fix this shit the game is brokennn
-
-            if (!this.arrowVisible) {
-                console.log("VISUAL SENT")
+            if (!this.selectArrowVisible) {//this is here to stop visual send if 4-power is played (so arrows appear, timer not reset, player chose cards to discard)
                 this.setDataForVisualSocketUpdate()
                 this.sendVisualUpdate()
                 this.gameEngineService.timer = this.gameEngineService.endOfRoundTime
 
             }
             this.disableCardDrag(cardDto.card)
-
-            console.log("FINAL")
-            console.log(this.gameEngineService.gameAction)
         }
     }
 
@@ -472,9 +463,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         if (this.gameEngineService.currentPlayersTurn == this.gameEngineService.myPlayerNumber){
             if (this.gameEngineService.gameAction.actionType == "") {
                 this.gameEngineService.gameAction.actionType = "SKIP"
-                // alert("Turn skipped")
             }
-            console.log("SALJEMO NA SERVER")
             console.log(this.gameEngineService.gameAction)
             this.stompClient.send(
                 `/app/playAction`,
@@ -654,7 +643,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     visualUpdateCardsStyle(): object {
-        this.arrowVisible = true
 
         if (this.gameEngineService.visualUpdate.actionType == "NUMBER") {
             switch (this.gameEngineService.currentPlayersTurn) {
