@@ -6,7 +6,6 @@ import {CompatClient, Stomp} from "@stomp/stompjs";
 import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto} from "../../../Models/card.model";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
-import {LoginComponent} from "../../login/login.component";
 import {CustomSnackbarService} from "../../../services/custom-snackbar.service";
 
 @Component({
@@ -51,10 +50,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.dropZoneCordsMap.set("table-2", new DOMRect())
         this.dropZoneCordsMap.set("table-3", new DOMRect())
 
-    }
-
-    showCustomSnackbar(message: string) {
-        this.customSnackbarService.showCustomSnackbar(message);
     }
 
     ngAfterViewChecked(): void {
@@ -111,14 +106,14 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         if (this.gameEngineService.forced7Card != null && cardDto.card != this.gameEngineService.forced7Card) {
             this.highlightCard("#card-hand-" + this.gameEngineService.forced7Card!)
-            alert("You have to play a designated card given by the 7 power card")
+            this.showCustomSnackbar("You have to play a designated card given by the 7 power card")
         }
 
         //CENTER
         if (droppedLocationInfo[0] == "center") {
             this.actionPlayed = true
             if (playedCardSplit[0] != "1" && this.listContainCardCheck(playedCardSplit[0], ["2", "9", "10", "J"])) { //if a target specific card is played as a global just ignore it
-                alert("Can't play target specific magic card as global")
+                this.showCustomSnackbar("Can't play target specific magic card as global")
                 cardDto.event.source._dragRef.reset()
                 this.actionPlayed = false
                 return
@@ -134,7 +129,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             //MY TABLE
             if (enemyTablePositionNum == this.gameEngineService.myPlayerNumber) {//play a point on my field
                 if (this.listContainCardCheck(playedCardSplit[0], ["J", "Q", "K"])) {
-                    alert("Can't play power card as point")
+                    this.showCustomSnackbar("Can't play power card as point")
                     cardDto.event.source._dragRef.reset()
                     this.actionPlayed = false
                     return
@@ -155,20 +150,20 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     let ontoPlayedCardValue = parseInt(ontoPlayedCardSplit[0])
 
                     if (ontoPlayedCardSplit[0] == "Q" || ontoPlayedCardSplit[0] == "K"){
-                        alert("You cant scuttle a permanent effect card")
+                        this.showCustomSnackbar("You cant scuttle a permanent effect card")
                         cardDto.event.source._dragRef.reset()
                         this.actionPlayed = false
                         return
                     }
 
                     if (playedCardValue < ontoPlayedCardValue) {
-                        alert("You cant scuttle with a lesser value card")
+                        this.showCustomSnackbar("You cant scuttle with a lesser value card")
                         cardDto.event.source._dragRef.reset()
                         this.actionPlayed = false
                         return
                     }
                     else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
-                        alert("You cant scuttle with a lesser or equal suit card")
+                        this.showCustomSnackbar("You cant scuttle with a lesser or equal suit card")
                         cardDto.event.source._dragRef.reset()
                         this.actionPlayed = false
                         return
@@ -200,7 +195,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             //GLOBAL POWER CARDS
             case "3":
                 if (this.gameEngineService.graveyard.length == 0) {
-                    alert("Nothing in graveyard yet")
+                    this.showCustomSnackbar("Nothing in graveyard yet")
                     this.actionPlayed = false
                     return
                 }
@@ -236,7 +231,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             case "2":
                 if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J", "Q", "K", "P"])) return; //if card hovered is not in list, it's not a power play
                 if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
-                    alert("Player has a queen in play")
+                    this.showCustomSnackbar("Player has a queen in play")
                     event.source._dragRef.reset()
                     this.actionPlayed = false
                     return
@@ -246,7 +241,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             case "9":
                 if (!this.listContainCardCheck(ontoPlayedCard.split("_")[0], ["J", "Q", "K", "P"])) return; //if card hovered is not in list, it's not a power play
                 if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
-                    alert("Player has a queen in play")
+                    this.showCustomSnackbar("Player has a queen in play")
                     event.source._dragRef.reset()
                     this.actionPlayed = false
                     return
@@ -255,7 +250,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                 break
             case "J":
                 if (ontoPlayedCard.split("_")[0] != "Q" && this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(enemyTablePositionNum)!)) {
-                    alert("Player has a queen in play")
+                    this.showCustomSnackbar("Player has a queen in play")
                     event.source._dragRef.reset()
                     this.actionPlayed = false
                     return
@@ -399,18 +394,18 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     playCounterCard(counterCard: string, event: CdkDragEnd){
         if (this.gameEngineService.timer > this.gameEngineService.endOfRoundTime){//janky way of blocking a "2 counter play" before the opponent has played something
-            alert("A play has not been made yet")
+            this.showCustomSnackbar("A play has not been made yet")
             event.source._dragRef.reset()
             return
         }
 
         if(this.actionTypeIsNotPowerOrCounter()){
-            alert("This play can not be countered")
+            this.showCustomSnackbar("This play can not be countered")
             event.source._dragRef.reset()
             return
         }
         if (this.listContainCardCheck("Q", this.gameEngineService.playerTables.get(this.gameEngineService.currentPlayersTurn)!)) {
-            alert("Player has a queen in play")
+            this.showCustomSnackbar("Player has a queen in play")
             event.source._dragRef.reset()
             return
         }
@@ -424,7 +419,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     draw() {
         if (this.gameEngineService.myPlayerNumber != this.gameEngineService.currentPlayersTurn) {
-            alert("It is not your turn")
+            this.showCustomSnackbar("It is not your turn")
             return
         }
         this.setGameAction("DRAW", "", "", -1, [])
@@ -448,11 +443,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     sendVisualUpdate() {
-        console.log("SALJEMO NA SERVER")
-        console.log(this.gameEngineService.visualUpdate)
-
         if (this.gameEngineService.visualUpdate.actionType == "") {
-            alert("AN ERROR OCCURRED - VISUAL ACTION TYPE EMPTY")
+            this.showCustomSnackbar("AN ERROR OCCURRED - VISUAL ACTION TYPE EMPTY")
             return
         }
 
@@ -557,10 +549,10 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
     //VISUALS
 
-    // highlightCard(cardId: string) {
-    //     const cardToHighlight = document.querySelector("#card-hand-" + cardId)
-    //     if (cardToHighlight != null) cardToHighlight.classList.add("highlighted")
-    // }
+    showCustomSnackbar(message: string) {
+        this.customSnackbarService.showCustomSnackbar(message);
+    }
+
     highlightCard(cardId: string) {
         const cardToHighlight = document.querySelector(cardId)
         if (cardToHighlight != null) cardToHighlight.classList.add("highlighted")
