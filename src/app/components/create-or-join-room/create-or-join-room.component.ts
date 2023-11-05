@@ -39,8 +39,6 @@ export class CreateOrJoinRoomComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    //todo stavi da dugmici nesto rade, mozda inv, mozda kick, mozda oba
-
     joinRoom() {
         if (this.joinRoomKey == ""){
             alert("You must input a join key first")
@@ -141,7 +139,6 @@ export class CreateOrJoinRoomComponent implements OnInit {
     }
 
     updatePlayersInRoom(newPlayerList: string[]){
-        //todo remove player from room in click (his bubble) this.clearOldPlayerSlots()
         for (let i = 0; i < newPlayerList.length; i++) {
             if (newPlayerList[i] != ""){
                 this.playersInRoom[i] = newPlayerList[i]
