@@ -27,6 +27,7 @@
 }
 
 .timer{
+    user-select: none;
     scale: 130%;
     color: orange;
     position: absolute;

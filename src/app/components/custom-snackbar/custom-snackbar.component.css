@@ -1,0 +1,22 @@
+.custom-snackbar {
+    background-color: darkred;
+    border: 3px red solid;
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: absolute;
+    right: -190%;
+
+    max-width: 300px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px; /* Adjust as needed for vertical position */
+    right: 10px; /* Adjust as needed for horizontal position */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px; /* Adjust the font size as desired */
+    color: #fff; /* Adjust the color as needed */
+}

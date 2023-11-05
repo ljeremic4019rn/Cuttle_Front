@@ -7,6 +7,7 @@ import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto} from "../../../Models/card.model";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
 import {LoginComponent} from "../../login/login.component";
+import {CustomSnackbarService} from "../../../services/custom-snackbar.service";
 
 @Component({
     selector: 'app-room',
@@ -33,7 +34,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     selectArrowVisible: boolean = false
     actionPlayed: boolean = false
 
-    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService) {
+    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private customSnackbarService: CustomSnackbarService) {
         this.cardPositionOnScreen[0] = "bottom"
         this.cardPositionOnScreen[1] = "left"
         this.cardPositionOnScreen[2] = "top"
@@ -50,6 +51,10 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.dropZoneCordsMap.set("table-2", new DOMRect())
         this.dropZoneCordsMap.set("table-3", new DOMRect())
 
+    }
+
+    showCustomSnackbar(message: string) {
+        this.customSnackbarService.showCustomSnackbar(message);
     }
 
     ngAfterViewChecked(): void {

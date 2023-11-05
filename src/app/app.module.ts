@@ -16,6 +16,8 @@ import {CardHandComponent} from "./components/play-area/card-hand/card-hand.comp
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {EndScreenComponent} from "./end-screen/end-screen.component";
 import { RulesComponent } from './components/rules/rules.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { CustomSnackbarComponent } from './components/custom-snackbar/custom-snackbar.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +29,8 @@ import { RulesComponent } from './components/rules/rules.component';
         CardComponent,
         CardHandComponent,
         EndScreenComponent,
-        RulesComponent
+        RulesComponent,
+        CustomSnackbarComponent
     ],
     imports: [
         HttpClientModule,
@@ -38,6 +41,8 @@ import { RulesComponent } from './components/rules/rules.component';
         MatCardModule,
         BrowserAnimationsModule,
         DragDropModule,
+        MatSnackBarModule,
+
     ],
     providers: [],
     bootstrap: [AppComponent]
