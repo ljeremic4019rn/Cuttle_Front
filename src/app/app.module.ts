@@ -18,6 +18,7 @@ import {EndScreenComponent} from "./end-screen/end-screen.component";
 import {RulesComponent} from './components/rules/rules.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snackbar.component';
+import {A11yModule} from '@angular/cdk/a11y';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,7 @@ import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snack
         BrowserAnimationsModule,
         DragDropModule,
         MatSnackBarModule,
-
+        A11yModule
     ],
     providers: [],
     bootstrap: [AppComponent]
