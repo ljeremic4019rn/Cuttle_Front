@@ -7,6 +7,7 @@ import {GameEngineService} from "../../../services/game-engine.service";
 import {CardDto} from "../../../Models/card.model";
 import {CdkDragEnd} from "@angular/cdk/drag-drop";
 import {CustomSnackbarService} from "../../../services/custom-snackbar.service";
+import {RoomService} from "../../../services/room.service";
 
 @Component({
     selector: 'app-room',
@@ -33,7 +34,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     selectArrowVisible: boolean = false
     actionPlayed: boolean = false
 
-    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private customSnackbarService: CustomSnackbarService) {
+    constructor(private router: Router, private route: ActivatedRoute, public gameEngineService: GameEngineService, private customSnackbarService: CustomSnackbarService, private roomService: RoomService) {
         this.cardPositionOnScreen[0] = "bottom"
         this.cardPositionOnScreen[1] = "left"
         this.cardPositionOnScreen[2] = "top"
@@ -533,9 +534,22 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameEngineService.updateGameState((JSON.parse(newState.body)))
     }
 
-    gameOverFun(){
+    endGameFun(){
         this.disconnect()
+        this.roomService.stopRoom(this.gameEngineService.gameAction.roomKey)
         this.router.navigate(["setUpRoom"]);
+    }
+
+    restartGameFun(){
+        console.log("restart button isp pressed")
+        this.roomService.restartRoom(this.gameEngineService.gameAction.roomKey).subscribe({
+            next: response => {
+                this.gameEngineService.setUpGame(JSON.parse(response))
+            },
+            error: err => {
+                alert(err.error)
+            }
+        })
     }
 
     disconnect() {

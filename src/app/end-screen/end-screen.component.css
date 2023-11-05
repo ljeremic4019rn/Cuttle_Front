@@ -126,10 +126,16 @@ a:hover {
 
 /* BUTTON */
 
-.btn-position{
-    position: absolute;
-    bottom: 40%;
-    left: 42%;
+.exit-btn-position{
+    /*position: absolute;*/
+    /*bottom: 40%;*/
+    /*left: 32%;*/
+}
+
+.play-again-btn-position{
+    /*position: absolute;*/
+    /*bottom: 40%;*/
+    /*left: 50%;*/
 }
 
 * {
@@ -147,6 +153,7 @@ body {
     display: flex;
     justify-content: center;
     cursor:pointer;
+    padding: 60px;
 }
 
 .cta {

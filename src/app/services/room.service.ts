@@ -22,12 +22,6 @@ export class RoomService {
             .set('Authorization', `Bearer ${this.token}`)
     }
 
-
-    //      , {
-    //         headers: this.headers,
-    //         responseType: 'text' as 'json'
-    //       }
-
     createRoom(): Observable<any> {
         return this.httpClient.post<any>(`${environment.cuttleEngineServer}/room/createRoom`
             ,{}
@@ -41,6 +35,14 @@ export class RoomService {
 
     startRoom(roomKey: string): Observable<any> {
         return this.httpClient.post<any>(`${environment.cuttleEngineServer}/room/startRoom/${roomKey}`
+            ,{}
+            , {headers: this.headers , responseType: 'text' as 'json'}
+        )
+    }
+
+    restartRoom(roomKey: string): Observable<any> {
+        console.log("we in this bitch " + roomKey)
+        return this.httpClient.post<any>(`${environment.cuttleEngineServer}/room/restartRoom/${roomKey}`
             ,{}
             , {headers: this.headers , responseType: 'text' as 'json'}
         )

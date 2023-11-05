@@ -13,14 +13,20 @@ export class EndScreenComponent implements OnInit {
     @Output()
     gameOverEmitter = new EventEmitter<any>();
 
+    @Output()
+    restartEmitter = new EventEmitter<any>();
+
     constructor(public gameEngineService: GameEngineService) {}
 
 
   ngOnInit(): void {
   }
 
-    click(){
+    endGame(){
         this.gameOverEmitter.emit();
     }
 
+    startOver(){
+        this.restartEmitter.emit();
+    }
 }

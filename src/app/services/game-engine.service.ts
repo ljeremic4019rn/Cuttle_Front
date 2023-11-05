@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {RoomService} from "./room.service";
 import {GameAction, GameVisualUpdate} from "../Models/room.model";
 
 @Injectable({
@@ -43,13 +42,6 @@ export class GameEngineService {
 
     constructor() {
 
-        // this.numberOfPlayers = 4//todo remove
-        // for (let i = 0; i < 4; i++) {
-        //     this.playerHands.set(i, ["1_H","1_H","1_H","1_H","1_H","1_H","1_H"])
-        //     this.playerTables.set(i, ["2_S","2_S","2_S","2_S"])
-        // }
-        //
-
         this.gameAction = {
             roomKey: "",
             actionType: "",
@@ -88,11 +80,13 @@ export class GameEngineService {
     }
 
 
-
+    //this game response format is fluid, it encompasses 3 forms
+    //you know which one is based on the ifs
     updateGameState(gameResponse: any) {
-        if (gameResponse.visualUpdate)
-            this.updateVisualsAndCounterPlays(gameResponse)
+        if (gameResponse.visualUpdate) this.updateVisualsAndCounterPlays(gameResponse)
+        else if (gameResponse.roomUpdateType == "RESTART") this.setUpGame(gameResponse.gameResponse)
         else this.updateCardData(gameResponse)
+
     }
 
     updateVisualsAndCounterPlays(gameResponse: any) {
@@ -183,7 +177,6 @@ export class GameEngineService {
         this.power8InAction = false
         this.forced7Card = null
 
-        // clearInterval(this.timerInterval);
     }
 
     power8WasRemoved():boolean{

@@ -12,6 +12,10 @@
     font-weight: bold;
     padding: 8px 10px;
     transition: background-color 0.3s;
+
+    position: absolute;
+    top: 2%;
+    right: 1%;
 }
 
 .pill-button:hover {
@@ -30,7 +34,6 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-
 }
 
 p{

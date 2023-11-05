@@ -1,6 +1,7 @@
 <!--<p>THIS IS A ROOM {{gameAction.roomKey}}</p>-->
 
 <div class="full-border">
+
     <app-rules></app-rules>
 
     <div class="timer center-container">
@@ -8,8 +9,7 @@
         <h2 style="padding-left: 10px">Time: {{this.gameEngineService.timer}}</h2>
     </div>
 
-    <app-end-screen style="z-index: 1;" *ngIf="gameEngineService.gameOver" (gameOverEmitter)="gameOverFun()"></app-end-screen>
-
+    <app-end-screen style="z-index: 1;" *ngIf="gameEngineService.gameOver" (gameOverEmitter)="endGameFun()" (restartEmitter)="restartGameFun()"></app-end-screen>
 
     <div class="center-container" >
 
@@ -67,7 +67,7 @@
         </div>
 
         <!--visual helper card for showing actions-->
-        <div *ngFor="let card of this.gameEngineService.playedCardVisualAid" fxFlex="90px">
+        <div style="z-index: -1" *ngFor="let card of this.gameEngineService.playedCardVisualAid" fxFlex="90px">
             <doc-card class="card center-card-1" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedCardVisualAid[0]' [covered]="false"></doc-card>
             <i *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="fa center-card-arrow fa-long-arrow-right"></i>
             <label *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="center-card-text">{{this.gameEngineService.visualLastActionName}}</label>
@@ -86,14 +86,14 @@
 
     <!-- DECK AND GRAVEYARD   -->
 
-    <div id="deck" class="deck">
+    <div id="deck" class="deck" style="z-index: -1">
         <div *ngFor="let card of this.gameEngineService.deck; let i = index" >
             <mat-card class="deck-card hover-cursor" [ngStyle]="setDeckCardPosition(i)" (click)="draw()"></mat-card>
         </div>
         <label class="deck-label">deck</label>
     </div>
 
-    <div id="graveyard" class="graveyard">
+    <div id="graveyard" class="graveyard" style="z-index: -1">
         <div *ngFor="let card of this.gameEngineService.graveyard; let i = index" >
             <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="openGraveyard()" [card]='card' [covered]="false"></doc-card>
         </div>
