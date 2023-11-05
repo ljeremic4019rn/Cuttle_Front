@@ -10,7 +10,7 @@ export class GameEngineService {
     public numberOfPlayers: number = 0
     public myPlayerNumber: number = -1
     public currentPlayersTurn: number = 0;
-    public gameOver:boolean = false
+    public gameOver: boolean = false
     public playerWhoWon: string = ""
 
     //card data
@@ -23,8 +23,8 @@ export class GameEngineService {
 
     //vars for visual aid
     public visualUpdate: GameVisualUpdate
-    public playedCardVisualAid:string [] = []
-    public playedOntoCardVisualAid:string [] = []
+    public playedCardVisualAid: string [] = []
+    public playedOntoCardVisualAid: string [] = []
     public visualLastActionName: string = ""
     public discardSelectionVisible: boolean = false
 
@@ -92,10 +92,10 @@ export class GameEngineService {
     updateVisualsAndCounterPlays(gameResponse: any) {
         this.visualUpdate = gameResponse
 
-        if (this.visualUpdate.actionType == "SELECT_TO_DISCARD"){
+        if (this.visualUpdate.actionType == "SELECT_TO_DISCARD") {
             this.timer = this.totalRoundTime
 
-            if(this.visualUpdate.ontoPlayer == this.myPlayerNumber){
+            if (this.visualUpdate.ontoPlayer == this.myPlayerNumber) {
                 this.discardSelectionVisible = true
             }
             return;
@@ -140,11 +140,11 @@ export class GameEngineService {
         }
 
         //deal with power 8 (un/covering cards)
-        if (this.power8Preparation){
+        if (this.power8Preparation) {
             this.power8Preparation = false
             this.power8InAction = true //this throws error but too difficult to fix
         }
-        if (this.power8InAction){
+        if (this.power8InAction) {
             if (this.power8WasRemoved())
                 this.power8InAction = false
         }
@@ -163,8 +163,7 @@ export class GameEngineService {
     }
 
 
-
-    clearOldData(){
+    clearOldData() {
         this.gameOver = false
         this.playerWhoWon = ""
 
@@ -179,7 +178,7 @@ export class GameEngineService {
 
     }
 
-    power8WasRemoved():boolean{
+    power8WasRemoved(): boolean {
         for (let i = 0; i < this.playerTables.size; i++) {
             for (let card of this.playerTables.get(i)!) {
                 if (card.startsWith("P_8")) return false

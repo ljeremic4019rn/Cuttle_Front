@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,34 +9,33 @@ body{
     background: linear-gradient(to bottom, #50B26E, #38a44c, #2a7039);
 }
 
-.main{
+.main {
     position: fixed;
     width: 800px;
     height: 700px;
     border-radius: 10px;
     box-shadow: 5px 20px 50px #000;
-    /*background: linear-gradient(to bottom, #ccc8c6, #eee9e6, #fffdfd);*/
     background: #f9f8f5;
 }
 
-#chk{
+#chk {
     display: none;
 }
 
-.login{
+.login {
     position: relative;
-    width:100%;
+    width: 100%;
     height: 100%;
 }
 
-.player-slots-label{
+.player-slots-label {
     color: #414141;
     font-size: 1.7em;
     margin-left: 2%;
     font-weight: bold;
 }
 
-.custom-label{
+.custom-label {
     color: black;
     font-size: 2.3em;
     justify-content: center;
@@ -47,11 +46,11 @@ body{
 
 .divider {
     margin-top: 60px;
-    height: 10px; /* Adjust the height of the divider line */
-    background-color: #ddd; /* Set the background color of the divider */
+    height: 10px;
+    background-color: #ddd;
 }
 
-.player-pills{
+.player-pills {
     width: 100px;
     background-color: #ddd;
     border: 2px solid black;
@@ -61,7 +60,7 @@ body{
     margin-right: 5px;
 }
 
-.player-pills:hover{
+.player-pills:hover {
     background: #b7b7b7;
 }
 
@@ -71,19 +70,19 @@ body{
     align-items: center;
 }
 
-.start-gen-btn{
+.start-gen-btn {
     scale: 120%;
     width: 150px;
 }
 
-.player-slots-div{
+.player-slots-div {
     width: 60.5%;
     background-color: #E0DEDEFF;
     border-radius: 20px;
     padding: 10px;
 }
 
-input{
+input {
     width: 60%;
     height: 20px;
     background: #e0dede;
@@ -97,8 +96,7 @@ input{
 }
 
 
-
-button{
+button {
     width: 60%;
     height: 40px;
     margin: 10px auto;
@@ -116,28 +114,31 @@ button{
     cursor: pointer;
 }
 
-button:hover{
+button:hover {
     background: #6d44b8;
 }
 
-.signup{
+.signup {
     height: 460px;
     background: #eee;
     border-radius: 60% / 10%;
     transform: translateY(-180px);
     transition: .8s ease-in-out;
 }
-.signup label{
+
+.signup label {
     color: #573b8a;
     transform: scale(.6);
 }
 
-#chk:checked ~ .signup{
+#chk:checked ~ .signup {
     transform: translateY(-500px);
 }
-#chk:checked ~ .signup label{
+
+#chk:checked ~ .signup label {
     transform: scale(1);
 }
-#chk:checked ~ .login label{
+
+#chk:checked ~ .login label {
     transform: scale(.6);
 }

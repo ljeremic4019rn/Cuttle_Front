@@ -13,12 +13,12 @@ export enum Suit {
     Spade = 'spade',
 }
 
-export interface CardDto{
+export interface CardDto {
     event: CdkDragEnd;
     card: string;
 }
 
-export interface DropZoneCords{
+export interface DropZoneCords {
     left: number;
     right: number;
     top: number;

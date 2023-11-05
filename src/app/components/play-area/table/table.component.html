@@ -9,9 +9,10 @@
         <h2 style="padding-left: 10px">Time: {{this.gameEngineService.timer}}</h2>
     </div>
 
-    <app-end-screen style="z-index: 1;" *ngIf="gameEngineService.gameOver" (gameOverEmitter)="endGameFun()" (restartEmitter)="restartGameFun()"></app-end-screen>
+    <app-end-screen style="z-index: 1;" *ngIf="gameEngineService.gameOver" (gameOverEmitter)="endGameFun()"
+                    (restartEmitter)="restartGameFun()"></app-end-screen>
 
-    <div class="center-container" >
+    <div class="center-container">
 
         <app-card-row id="table-0"
                       *ngIf="visible[0]" [style]="highlightCurrentPlayer(0)"
@@ -68,17 +69,23 @@
 
         <!--visual helper card for showing actions-->
         <div style="z-index: -1" *ngFor="let card of this.gameEngineService.playedCardVisualAid" fxFlex="90px">
-            <doc-card class="card center-card-1" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedCardVisualAid[0]' [covered]="false"></doc-card>
-            <i *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="fa center-card-arrow fa-long-arrow-right"></i>
-            <label *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="center-card-text">{{this.gameEngineService.visualLastActionName}}</label>
-            <doc-card *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="card center-card-2" [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedOntoCardVisualAid[0]' [covered]="false"></doc-card>
+            <doc-card class="card center-card-1" [style]="visualUpdateCardsStyle()"
+                      [card]='this.gameEngineService.playedCardVisualAid[0]' [covered]="false"></doc-card>
+            <i *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''"
+               class="fa center-card-arrow fa-long-arrow-right"></i>
+            <label *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''"
+                   class="center-card-text">{{this.gameEngineService.visualLastActionName}}</label>
+            <doc-card *ngIf="this.gameEngineService.playedOntoCardVisualAid[0] != ''" class="card center-card-2"
+                      [style]="visualUpdateCardsStyle()" [card]='this.gameEngineService.playedOntoCardVisualAid[0]'
+                      [covered]="false"></doc-card>
         </div>
 
         <!--    DISPLAYS 2 COUNTER CARDS DURING A COUNTER EVENT    -->
         <div *ngIf="gameEngineService.counterCards.length != 0" class="counter-card-list">
             <label class="counter-card-list-label"> Played counter cards: </label>
             <div *ngFor="let card of this.gameEngineService.counterCards" fxFlex="90px">
-                <doc-card class="card " style="scale: 70%; margin: -0.5rem" [card]='card.split("_")[0] + "_" + card.split("_")[1]' [covered]="false"></doc-card>
+                <doc-card class="card " style="scale: 70%; margin: -0.5rem"
+                          [card]='card.split("_")[0] + "_" + card.split("_")[1]' [covered]="false"></doc-card>
             </div>
         </div>
     </div>
@@ -87,34 +94,38 @@
     <!-- DECK AND GRAVEYARD   -->
 
     <div id="deck" class="deck" style="z-index: -1">
-        <div *ngFor="let card of this.gameEngineService.deck; let i = index" >
+        <div *ngFor="let card of this.gameEngineService.deck; let i = index">
             <mat-card class="deck-card hover-cursor" [ngStyle]="setDeckCardPosition(i)" (click)="draw()"></mat-card>
         </div>
         <label class="deck-label">deck</label>
     </div>
 
     <div id="graveyard" class="graveyard" style="z-index: -1">
-        <div *ngFor="let card of this.gameEngineService.graveyard; let i = index" >
-            <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="openGraveyard()" [card]='card' [covered]="false"></doc-card>
+        <div *ngFor="let card of this.gameEngineService.graveyard; let i = index">
+            <doc-card class="graveyard-card" [ngStyle]="setGraveyardCardPosition(i)" (click)="openGraveyard()"
+                      [card]='card' [covered]="false"></doc-card>
         </div>
         <label class="graveyard-label">graveyard</label>
     </div>
 
-<!--    <input [(ngModel)]="input" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">-->
+    <!--    <input [(ngModel)]="input" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">-->
 
     <div *ngIf="gameEngineService.discardSelectionVisible" class="discard-display-center" style="z-index: 5">
         <div class="discard-display">
-            <div *ngFor="let card of this.gameEngineService.playerHands.get(this.gameEngineService.myPlayerNumber)" fxFlex="90px">
-                <doc-card id="card-discard-{{card}}" class="card hover-cursor" style="scale: 70%; margin: -0.5rem" [card]='card' (click)="selectCardForDiscard(card)" [covered]="false"></doc-card>
+            <div *ngFor="let card of this.gameEngineService.playerHands.get(this.gameEngineService.myPlayerNumber)"
+                 fxFlex="90px">
+                <doc-card id="card-discard-{{card}}" class="card hover-cursor" style="scale: 70%; margin: -0.5rem"
+                          [card]='card' (click)="selectCardForDiscard(card)" [covered]="false"></doc-card>
             </div>
         </div>
     </div>
 
     <div *ngIf="graveyardVisible" class="graveyard-display-center">
-        <div style="height: 200%; width: 100%; position: absolute; z-index: -1"   (click)="closeGraveyard()"></div>
+        <div style="height: 200%; width: 100%; position: absolute; z-index: -1" (click)="closeGraveyard()"></div>
         <div class="graveyard-display">
             <div *ngFor="let card of this.gameEngineService.graveyard" fxFlex="90px">
-                <doc-card class="card hover-cursor" style="scale: 70%; margin: -0.5rem" [card]='card' (click)="selectGraveyardCard(card)" [covered]="false"></doc-card>
+                <doc-card class="card hover-cursor" style="scale: 70%; margin: -0.5rem" [card]='card'
+                          (click)="selectGraveyardCard(card)" [covered]="false"></doc-card>
             </div>
         </div>
     </div>

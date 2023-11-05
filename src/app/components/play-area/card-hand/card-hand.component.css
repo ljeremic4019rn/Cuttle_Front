@@ -8,7 +8,7 @@
     align-items: flex-end; /* Align cards to the bottom */
 }
 
-.highlighted{
+.highlighted {
     border: #eaea04 5px solid;
     border-radius: 10px;
 }

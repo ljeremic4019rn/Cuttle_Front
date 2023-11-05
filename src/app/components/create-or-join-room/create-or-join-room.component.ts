@@ -25,7 +25,6 @@ export class CreateOrJoinRoomComponent implements OnInit {
     actualRoomKey: string
     playersInRoom: string[] = []
 
-
     constructor(private formBuilder: FormBuilder, private router: Router, private roomService: RoomService, private gameEngineService: GameEngineService,) {
         this.joinRoomKey = ''
         this.createRoomKey = ''
@@ -40,7 +39,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
     }
 
     joinRoom() {
-        if (this.joinRoomKey == ""){
+        if (this.joinRoomKey == "") {
             alert("You must input a join key first")
             return
         }
@@ -77,7 +76,7 @@ export class CreateOrJoinRoomComponent implements OnInit {
                 this.clearOldPlayerSlots()
 
                 this.createRoomKey = value.roomKey
-                this.actualRoomKey =  value.roomKey
+                this.actualRoomKey = value.roomKey
                 sessionStorage.setItem("myPlayerNumber", "0")
 
                 console.log(sessionStorage.getItem("username")!)
@@ -107,18 +106,17 @@ export class CreateOrJoinRoomComponent implements OnInit {
         })
     }
 
-    startRoomBtnVisible(): object{
-        if(this.createRoomKey != "") return {'visibility': 'visible'}
+    startRoomBtnVisible(): object {
+        if (this.createRoomKey != "") return {'visibility': 'visible'}
         return {'visibility': 'hidden'}
     }
 
     updateRoom(newState: any) {
         let roomUpdateResponse: RoomUpdateResponse = JSON.parse(newState.body)
 
-        if (roomUpdateResponse.roomUpdateType == "JOIN"){
+        if (roomUpdateResponse.roomUpdateType == "JOIN") {
             this.updatePlayersInRoom(roomUpdateResponse.currentPlayersInRoom)
-        }
-        else if (roomUpdateResponse.roomUpdateType == "START"){
+        } else if (roomUpdateResponse.roomUpdateType == "START") {
             console.log(roomUpdateResponse.gameResponse)
             this.gameEngineService.setUpGame(roomUpdateResponse.gameResponse)
             this.disconnect()
@@ -138,15 +136,15 @@ export class CreateOrJoinRoomComponent implements OnInit {
         console.log('Connected: ' + frame);
     }
 
-    updatePlayersInRoom(newPlayerList: string[]){
+    updatePlayersInRoom(newPlayerList: string[]) {
         for (let i = 0; i < newPlayerList.length; i++) {
-            if (newPlayerList[i] != ""){
+            if (newPlayerList[i] != "") {
                 this.playersInRoom[i] = newPlayerList[i]
             }
         }
     }
 
-    clearOldPlayerSlots(){
+    clearOldPlayerSlots() {
         this.playersInRoom[0] = "+"
         this.playersInRoom[1] = "+"
         this.playersInRoom[2] = "+"

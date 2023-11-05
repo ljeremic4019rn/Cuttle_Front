@@ -1,4 +1,3 @@
-
 /* GENERAL */
 
 .full-border {
@@ -17,7 +16,7 @@
     align-items: center;
 }
 
-.center-drop-area{
+.center-drop-area {
     height: calc((100% - 150px) / 3);
     width: calc((150% - 200px) / 3);
     bottom: 50%;
@@ -26,7 +25,7 @@
     z-index: -1;
 }
 
-.timer{
+.timer {
     user-select: none;
     scale: 130%;
     color: orange;
@@ -39,7 +38,7 @@
     border-bottom: 2px orange solid;
 }
 
-.fa-hourglass{
+.fa-hourglass {
     animation: hourglass 3s linear infinite;
 }
 
@@ -54,21 +53,20 @@
 }
 
 
-
 /* HAND CARDS */
 
-.player-hand-bottom{
+.player-hand-bottom {
     position: absolute;
     bottom: -7%;
 }
 
-.player-hand-top{
+.player-hand-top {
     position: absolute;
     top: -7%;
     transform: rotate(180deg);
 }
 
-.player-hand-left{
+.player-hand-left {
     position: absolute;
     bottom: 35%;
     left: 5%;
@@ -76,7 +74,7 @@
     max-width: 120px;
 }
 
-.player-hand-right{
+.player-hand-right {
     position: absolute;
     bottom: 35%;
     right: 5%;
@@ -87,37 +85,37 @@
 
 /* TABLE CARDS */
 
-.table-border{
+.table-border {
     border: 3px solid rgba(178, 178, 178, 0.4);
     border-radius: 15px;
     min-height: 150px;
     min-width: 100px;
 }
 
-.center-border{
+.center-border {
     border: 3px solid rgba(0, 204, 255, 0.4);
     border-radius: 15px;
 }
 
 
-.table-cards-bottom{
+.table-cards-bottom {
     position: absolute;
     bottom: 15%;
 }
 
-.table-cards-top{
+.table-cards-top {
     position: absolute;
     top: 15%;
 }
 
-.table-cards-left{
+.table-cards-left {
     position: absolute;
     bottom: 30%;
     left: 20%;
     transform: translate(-50%, -50%) rotate(90deg);
 }
 
-.table-cards-right{
+.table-cards-right {
     position: absolute;
     bottom: 30%;
     right: 20%;
@@ -126,20 +124,20 @@
 
 /* CENTER CARD */
 
-.center-card-1{
+.center-card-1 {
     position: absolute;
     bottom: 43%;
     left: 41%;
 }
 
-.center-card-arrow{
+.center-card-arrow {
     position: absolute;
     bottom: 48%;
     left: 49.5%;
     font-size: 60px;
 }
 
-.center-card-text{
+.center-card-text {
     position: absolute;
     bottom: 46%;
     left: 48.5%;
@@ -147,7 +145,7 @@
     font-size: 25px;
 }
 
-.center-card-2{
+.center-card-2 {
     position: absolute;
     bottom: 43%;
     right: 40%;
@@ -155,7 +153,7 @@
 
 /* DECK */
 
-.deck{
+.deck {
     position: absolute;
     left: 30%;
     bottom: 43%;
@@ -167,7 +165,7 @@
     border-radius: 15px;
 }
 
-.deck-label{
+.deck-label {
     transform: translate(-50%, -50%);
     position: absolute;
     left: 50%;
@@ -177,7 +175,7 @@
     color: rgba(178, 178, 178, 0.8);
 }
 
-.deck-card{
+.deck-card {
     position: absolute;
     /*transform: translate(-50%, -50%);*/
 
@@ -191,20 +189,19 @@
     background-size: 100%;
 }
 
-.highlighted{
+.highlighted {
     border: #eaea04 5px solid;
     border-radius: 10px;
 }
 
-.hover-cursor:hover{
-    cursor:pointer;
+.hover-cursor:hover {
+    cursor: pointer;
 }
 
 /* COUNTER CARD LIST */
 
 
-
-.counter-card-list{
+.counter-card-list {
     scale: 115%;
     display: flex;
     flex-wrap: wrap;
@@ -221,7 +218,7 @@
     right: 15%;
 }
 
-.counter-card-list-label{
+.counter-card-list-label {
     position: absolute;
     font-size: 20px;
     text-decoration: underline;
@@ -233,12 +230,12 @@
 
 /* GRAVEYARD */
 
-.graveyard-card{
+.graveyard-card {
     position: absolute;
     scale: 95%;
 }
 
-.graveyard{
+.graveyard {
     position: absolute;
     right: 30%;
     bottom: 43%;
@@ -250,13 +247,13 @@
     border-radius: 15px;
 }
 
-.graveyard-display-center{
+.graveyard-display-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.graveyard-display{
+.graveyard-display {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -273,7 +270,7 @@
     padding-top: 30px;
 }
 
-.graveyard-label{
+.graveyard-label {
     transform: translate(-50%, -50%);
     position: absolute;
     left: 50%;
@@ -283,7 +280,7 @@
     color: rgba(178, 178, 178, 0.8);
 }
 
-.graveyard-button{
+.graveyard-button {
     position: absolute;
     bottom: 20%;
     /*left: 10%;*/
@@ -334,15 +331,15 @@
     right: 1%;
 }
 
-.arrow3:hover{
+.arrow3:hover {
     color: #77f877;
 }
 
-.arrow2:hover{
+.arrow2:hover {
     color: #77f877;
 }
 
-.arrow1:hover{
+.arrow1:hover {
     color: #77f877;
 }
 
@@ -394,13 +391,13 @@
 /*    border-radius: 10px;*/
 /*}*/
 
-.discard-display-center{
+.discard-display-center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.discard-display{
+.discard-display {
     scale: 120%;
     display: flex;
     flex-wrap: wrap;

@@ -18,7 +18,6 @@ export class LoginComponent implements OnInit {
     allowedPasswordChars = /^[a-zA-Z0-9!@#$%^&*]+$/;
 
 
-
     constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthService) {
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
@@ -41,7 +40,6 @@ export class LoginComponent implements OnInit {
     ngOnInit(): void {
     }
 
-
     login() {
         this.authService.login(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value).subscribe({
             next: response => {
@@ -59,8 +57,7 @@ export class LoginComponent implements OnInit {
             }
         })
     }
-
-    signup(){
+    signup() {
         //check if pass or username contain illegal character
         if (!this.isUsernameValid(this.signupForm.get('username')?.value) || !this.isPasswordValid(this.signupForm.get('password')?.value)) {
             alert("Username and/or password contain illegal characters.")

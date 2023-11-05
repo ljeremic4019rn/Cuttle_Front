@@ -2,19 +2,17 @@
 <html>
 <head>
     <title>Room setup</title>
-
 </head>
 <body id="all-body" style="margin: 0">
 
 <div class="main">
     <input type="checkbox" id="chk" aria-hidden="true">
 
-
-
     <div>
         <form>
             <label class="custom-label" for="chk" aria-hidden="true">Join room</label>
-            <input [(ngModel)]="joinRoomKey" style="font-weight: bold" id="join" type="text" name="txt" placeholder="Key" required="">
+            <input [(ngModel)]="joinRoomKey" style="font-weight: bold" id="join" type="text" name="txt"
+                   placeholder="Key" required="">
             <button class="start-gen-btn" (click)="joinRoom()">Join</button>
         </form>
     </div>
@@ -22,11 +20,12 @@
     <div class="divider"></div>
 
     <div>
-        <form >
+        <form>
             <label class="custom-label" for="chk" aria-hidden="true">Create room</label>
-            <input  [(ngModel)]="createRoomKey" style="font-weight: bold" readonly="readonly" id="genKey" type="text" name="txt" placeholder="Your room key" required>
+            <input [(ngModel)]="createRoomKey" style="font-weight: bold" readonly="readonly" id="genKey" type="text"
+                   name="txt" placeholder="Your room key" required>
 
-            <div  style="display: flex; justify-content: center; align-items: center;">
+            <div style="display: flex; justify-content: center; align-items: center;">
                 <div class="player-slots-div">
                     <label class="player-slots-label" for="player-slots" aria-hidden="true">Players in room</label>
                     <div id="player-slots" class="player-pill-container">
@@ -39,7 +38,9 @@
             </div>
             <div class="player-pill-container">
                 <button class="start-gen-btn" style="margin-right: 50px" (click)="createRoom()">Create room</button>
-                <button class="start-gen-btn" style="margin-left: 50px" [ngStyle]="startRoomBtnVisible()" (click)="startRoom()">Start room</button>
+                <button class="start-gen-btn" style="margin-left: 50px" [ngStyle]="startRoomBtnVisible()"
+                        (click)="startRoom()">Start room
+                </button>
             </div>
         </form>
     </div>

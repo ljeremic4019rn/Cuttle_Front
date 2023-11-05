@@ -75,9 +75,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
 
         this.setTimer()
 
-        // window.onbeforeunload = function (e) {//todo return this warning
-        //     return e.returnValue = 'Are you sure you want to leave this page?';
-        // };
+        window.onbeforeunload = function (e) {
+            return e.returnValue = 'Are you sure you want to leave this page?';
+        };
     }
 
 
@@ -96,7 +96,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
             else cardDto.event.source._dragRef.reset()
             return
         }
-        if (cardDto.card.startsWith("2") && this.gameEngineService.gameAction.actionType == "COUNTER"){
+        if (cardDto.card.startsWith("2") && this.gameEngineService.gameAction.actionType == "COUNTER") {
             this.playCounterCard(cardDto.card, cardDto.event)
             return
         }
@@ -150,7 +150,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     let playedCardValue = parseInt(playedCardSplit[0])
                     let ontoPlayedCardValue = parseInt(ontoPlayedCardSplit[0])
 
-                    if (ontoPlayedCardSplit[0] == "Q" || ontoPlayedCardSplit[0] == "K"){
+                    if (ontoPlayedCardSplit[0] == "Q" || ontoPlayedCardSplit[0] == "K") {
                         this.showCustomSnackbar("You cant scuttle a permanent effect card")
                         cardDto.event.source._dragRef.reset()
                         this.actionPlayed = false
@@ -162,8 +162,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                         cardDto.event.source._dragRef.reset()
                         this.actionPlayed = false
                         return
-                    }
-                    else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
+                    } else if (playedCardValue == ontoPlayedCardValue && this.cardSuitComparator(playedCardSplit[1], ontoPlayedCardSplit[1]) == "NOT_BIGGER") {
                         this.showCustomSnackbar("You cant scuttle with a lesser or equal suit card")
                         cardDto.event.source._dragRef.reset()
                         this.actionPlayed = false
@@ -171,13 +170,12 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     }
                 }
             }
-        }
-        else {
+        } else {
             cardDto.event.source._dragRef.reset()
         }
 
         //if card was not set randomly on the table but on a good drop zone
-        if (this.actionPlayed){
+        if (this.actionPlayed) {
             //this is the turn doesn't end before player chose cards to discard
 
             if (!this.selectArrowVisible) {//this is here to stop visual send if 4-power is played (so arrows appear, timer not reset, player chose cards to discard)
@@ -297,8 +295,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     this.setDataForVisualSocketUpdate()
                     this.sendVisualUpdate()
                     console.log("SAD SMO OVDE")
-                }
-                else this.sendGameAction()
+                } else this.sendGameAction()
 
                 this.selectArrowVisible = false
             }
@@ -370,7 +367,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
 
-
     //HELPER GAME ENGINE FUNCTIONS
 
     setTimer() {
@@ -379,8 +375,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameEngineService.timerInterval = setInterval(() => {
             if (this.gameEngineService.timer == 0) {
                 this.sendGameAction()
-            }
-            else this.gameEngineService.timer--
+            } else this.gameEngineService.timer--
         }, 1000);
     }
 
@@ -388,19 +383,19 @@ export class TableComponent implements OnInit, AfterViewChecked {
         clearInterval(this.gameEngineService.timerInterval);
     }
 
-    disableCardDrag(handCard: string){
+    disableCardDrag(handCard: string) {
         let element = document.querySelector("#card-hand-" + handCard) as HTMLElement
         if (element) element.style.pointerEvents = "none";
     }
 
-    playCounterCard(counterCard: string, event: CdkDragEnd){
-        if (this.gameEngineService.timer > this.gameEngineService.endOfRoundTime){//janky way of blocking a "2 counter play" before the opponent has played something
+    playCounterCard(counterCard: string, event: CdkDragEnd) {
+        if (this.gameEngineService.timer > this.gameEngineService.endOfRoundTime) {//janky way of blocking a "2 counter play" before the opponent has played something
             this.showCustomSnackbar("A play has not been made yet")
             event.source._dragRef.reset()
             return
         }
 
-        if(this.actionTypeIsNotPowerOrCounter()){
+        if (this.actionTypeIsNotPowerOrCounter()) {
             this.showCustomSnackbar("This play can not be countered")
             event.source._dragRef.reset()
             return
@@ -427,9 +422,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.sendGameAction()
     }
 
-    actionTypeIsNotPowerOrCounter(): boolean{
+    actionTypeIsNotPowerOrCounter(): boolean {
         const actionTypes: string[] = ["NUMBER", "SCUTTLE", "DISCARD_CARD", "DRAW", "SKIP", "SELECT_TO_DISCARD"];
-        for (let type in actionTypes){
+        for (let type in actionTypes) {
             if (this.gameEngineService.visualLastActionName == type) return true
         }
         return false
@@ -458,7 +453,7 @@ export class TableComponent implements OnInit, AfterViewChecked {
     }
 
     sendGameAction() {
-        if (this.gameEngineService.currentPlayersTurn == this.gameEngineService.myPlayerNumber){
+        if (this.gameEngineService.currentPlayersTurn == this.gameEngineService.myPlayerNumber) {
             if (this.gameEngineService.gameAction.actionType == "") {
                 this.gameEngineService.gameAction.actionType = "SKIP"
             }
@@ -534,13 +529,13 @@ export class TableComponent implements OnInit, AfterViewChecked {
         this.gameEngineService.updateGameState((JSON.parse(newState.body)))
     }
 
-    endGameFun(){
+    endGameFun() {
         this.disconnect()
         this.roomService.stopRoom(this.gameEngineService.gameAction.roomKey)
         this.router.navigate(["setUpRoom"]);
     }
 
-    restartGameFun(){
+    restartGameFun() {
         console.log("restart button isp pressed")
         this.roomService.restartRoom(this.gameEngineService.gameAction.roomKey).subscribe({
             next: response => {
@@ -551,7 +546,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
             }
         })
     }
-
     disconnect() {
         if (this.stompClient != null) {//todo if players == 0 close room and disconnect
             this.stompClient.disconnect();
@@ -646,28 +640,31 @@ export class TableComponent implements OnInit, AfterViewChecked {
         }
     }
 
-    highlightCurrentPlayer(index: number):object{
-        if (this.gameEngineService.currentPlayersTurn == index){
+    highlightCurrentPlayer(index: number): object {
+        if (this.gameEngineService.currentPlayersTurn == index) {
             return {'border-color': 'yellow'}
-        }
-        else return {}
+        } else return {}
     }
 
     visualUpdateCardsStyle(): object {
 
         if (this.gameEngineService.visualUpdate.actionType == "NUMBER") {
             switch (this.gameEngineService.currentPlayersTurn) {
-                case 0:return this.getCardPosition(this.cardPositionOnScreen[0])
-                case 1:return this.getCardPosition(this.cardPositionOnScreen[1])
-                case 2:return this.getCardPosition(this.cardPositionOnScreen[2])
-                case 3:return this.getCardPosition(this.cardPositionOnScreen[3])
+                case 0:
+                    return this.getCardPosition(this.cardPositionOnScreen[0])
+                case 1:
+                    return this.getCardPosition(this.cardPositionOnScreen[1])
+                case 2:
+                    return this.getCardPosition(this.cardPositionOnScreen[2])
+                case 3:
+                    return this.getCardPosition(this.cardPositionOnScreen[3])
             }
         }
         return {}
     }
 
-    getCardPosition(position: string): object{
-        switch (position){
+    getCardPosition(position: string): object {
+        switch (position) {
             case "top":
                 return {
                     'position': 'absolute',
@@ -689,7 +686,8 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     'right': '27%',
                     'transform': 'translate(50%, -50%) rotate(-90deg)'
                 }
-            default: return {}
+            default:
+                return {}
         }
     }
 

@@ -1,8 +1,10 @@
 <mat-card *ngIf="visible">
     <mat-card-content>
-        <div style="display: flex;"  fxLayout='row wrap' fxLayoutGap="20px" class='card-layout' [@cardAnimation]="this.gameEngineService.playerTables.get(positionNumber)!.length">
-            <div  *ngFor="let card of this.gameEngineService.playerTables.get(positionNumber)" fxFlex="90px">
-                <doc-card id="card-table-{{positionNumber}}-{{card}}" class="card" [isOnTable] = true [card]='card' [covered]="covered"></doc-card>
+        <div style="display: flex;" fxLayout='row wrap' fxLayoutGap="20px" class='card-layout'
+             [@cardAnimation]="this.gameEngineService.playerTables.get(positionNumber)!.length">
+            <div *ngFor="let card of this.gameEngineService.playerTables.get(positionNumber)" fxFlex="90px">
+                <doc-card id="card-table-{{positionNumber}}-{{card}}" class="card" [isOnTable]=true [card]='card'
+                          [covered]="covered"></doc-card>
             </div>
         </div>
     </mat-card-content>

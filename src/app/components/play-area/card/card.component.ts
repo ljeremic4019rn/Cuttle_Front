@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {GameEngineService} from "../../../services/game-engine.service";
 
 
@@ -39,14 +39,12 @@ export class CardComponent implements OnInit {
             this.suit = this.cardSplit[1];
             if (this.isOnTable && (this.value == "Q" || this.value == "K"))
                 this.rotated = true
-        }
-        else if (this.cardSplit[0] == "P") {
+        } else if (this.cardSplit[0] == "P") {
             //POWER 8 CARD P_8_<suit>
             this.value = this.cardSplit[1];
             this.suit = this.cardSplit[2];
             this.rotated = true
-        }
-        else {
+        } else {
             //JACKED CARDS DIAGRAM
             //0 1  2   3 4     0 1  2   3 4  5   6 7  8   9  10...
             //J_S_<id>_10_C || J_S_<id>_J_C_<id>_J_H_<id>_10_C
@@ -78,13 +76,18 @@ export class CardComponent implements OnInit {
         } else this.color = "black"
     }
 
-    jackedCardStyle():object{
-        switch (this.jacksOnTopOfCard.length){
-            case 1:return {'padding-right': '115px'}
-            case 2:return {'padding-right': '147px'}
-            case 3:return {'padding-right': '180px'}
-            case 4:return {'padding-right': '213px'}
-            default: return {}
+    jackedCardStyle(): object {
+        switch (this.jacksOnTopOfCard.length) {
+            case 1:
+                return {'padding-right': '115px'}
+            case 2:
+                return {'padding-right': '147px'}
+            case 3:
+                return {'padding-right': '180px'}
+            case 4:
+                return {'padding-right': '213px'}
+            default:
+                return {}
         }
     }
 

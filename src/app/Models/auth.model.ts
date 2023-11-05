@@ -8,7 +8,7 @@ export interface SignUpResponse {
     password: string
 }
 
-export interface JoinRoomResponse{
+export interface JoinRoomResponse {
     playerUsername: string
     playerNumber: number
     currentPlayersInRoom: string[]

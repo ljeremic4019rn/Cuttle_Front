@@ -1,8 +1,8 @@
-import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2} from '@angular/core';
-import {Card, CardDto} from "../../../Models/card.model";
+import {AfterViewChecked, Component, ElementRef, EventEmitter, OnInit, Output} from '@angular/core';
+import {CardDto} from "../../../Models/card.model";
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
-import {CdkDrag, CdkDragEnd, CdkDragStart, CdkDragMove, CdkDragDrop} from "@angular/cdk/drag-drop";
+import {CdkDragEnd} from "@angular/cdk/drag-drop";
 
 @Component({
     selector: 'app-card-hand',
@@ -44,12 +44,11 @@ export class CardHandComponent implements OnInit, AfterViewChecked {
     }
 
     ngAfterViewChecked(): void {
-        if (this.gameEngineService.power8InAction){
+        if (this.gameEngineService.power8InAction) {
             this.covered = false
-        }
-        else {
+        } else {
             this.covered = true
-            if (this.positionNumber == this.myPlayerNumber){
+            if (this.positionNumber == this.myPlayerNumber) {
                 this.covered = false
             }
         }
@@ -59,13 +58,13 @@ export class CardHandComponent implements OnInit, AfterViewChecked {
         this.myPlayerNumber = parseInt(sessionStorage.getItem("myPlayerNumber")!)
         this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
 
-        if (this.positionNumber == this.myPlayerNumber){
+        if (this.positionNumber == this.myPlayerNumber) {
             this.dragDisabled = false
             this.covered = false
         }
     }
 
-    cdkDragStartedFun(){
+    cdkDragStartedFun() {
         this.cdkDragStartedEvent.emit();
     }
 

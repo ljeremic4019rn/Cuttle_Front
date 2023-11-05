@@ -23,7 +23,7 @@ export interface GameVisualUpdate {
 }
 
 
-export interface GameResponse{
+export interface GameResponse {
     gameResponseType: string
     currentPlayersTurn: number
     deck: []
@@ -34,7 +34,7 @@ export interface GameResponse{
     playerWhoWon: string
 }
 
-export interface RoomUpdateResponse{
+export interface RoomUpdateResponse {
     roomUpdateType: string
     currentPlayersInRoom: string[]
     gameResponse: GameResponse

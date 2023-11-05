@@ -1,7 +1,6 @@
-import {Component, ElementRef, Input, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {animate, keyframes, query, stagger, style, transition, trigger} from "@angular/animations";
 import {GameEngineService} from "../../../services/game-engine.service";
-import {CdkDragDrop, CdkDragEnd, CdkDropList, CdkDrag, CdkDragMove, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -28,7 +27,6 @@ import {CdkDragDrop, CdkDragEnd, CdkDropList, CdkDrag, CdkDragMove, moveItemInAr
 })
 
 
-
 export class CardRowComponent implements OnInit {
 
     myPlayerNumber: number = -1
@@ -45,7 +43,7 @@ export class CardRowComponent implements OnInit {
         this.positionNumber = parseInt(this.elementRef.nativeElement.id.split("-")[1])
     }
 
-    test(card: MouseEvent){
+    test(card: MouseEvent) {
         console.log(card)
 
         const clickedElement = event!.target as HTMLElement;
