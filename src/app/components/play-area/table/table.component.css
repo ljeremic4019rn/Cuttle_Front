@@ -279,7 +279,7 @@
 
 
 .arrow1 {
-    animation: slide1 1s ease-in-out infinite;
+    /*animation: slide1 1s ease-in-out infinite;*/
     margin-left: 9px;
     font-size: 100px;
     color: #fdee00;
@@ -290,7 +290,7 @@
 }
 
 .arrow2 {
-    animation: slide2 1s ease-in-out infinite;
+    /*animation: slide2 1s ease-in-out infinite;*/
     margin-left: 9px;
     font-size: 100px;
     color: #fdee00;
@@ -302,7 +302,7 @@
 }
 
 .arrow3 {
-    animation: slide3 1s ease-in-out infinite;
+    /*animation: slide3 1s ease-in-out infinite;*/
     margin-left: 9px;
     font-size: 100px;
     color: #fdee00;
@@ -325,40 +325,40 @@
     color: #77f877;
 }
 
-@keyframes slide1 {
-    0%,
-    100% {
-        transform: translate(0, 0) rotate(180deg);
-    }
+/*@keyframes slide1 {*/
+/*    0%,*/
+/*    100% {*/
+/*        transform: translate(0, 0) rotate(180deg);*/
+/*    }*/
 
-    50% {
-        transform: translate(10px, 0) rotate(180deg);
-    }
-}
-
-
-@keyframes slide2 {
-    0%,
-    100% {
-        transform: translate(0, 0) rotate(-90deg);
-    }
-
-    50% {
-        transform: translate(0px, 10px) rotate(-90deg);
-    }
-}
+/*    50% {*/
+/*        transform: translate(10px, 0) rotate(180deg);*/
+/*    }*/
+/*}*/
 
 
-@keyframes slide3 {
-    0%,
-    100% {
-        transform: translate(0, 0);
-    }
+/*@keyframes slide2 {*/
+/*    0%,*/
+/*    100% {*/
+/*        transform: translate(0, 0) rotate(-90deg);*/
+/*    }*/
 
-    50% {
-        transform: translate(-10px, 0);
-    }
-}
+/*    50% {*/
+/*        transform: translate(0px, 10px) rotate(-90deg);*/
+/*    }*/
+/*}*/
+
+
+/*@keyframes slide3 {*/
+/*    0%,*/
+/*    100% {*/
+/*        transform: translate(0, 0);*/
+/*    }*/
+
+/*    50% {*/
+/*        transform: translate(-10px, 0);*/
+/*    }*/
+/*}*/
 
 .discard-display-center {
     display: flex;
