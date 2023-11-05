@@ -94,10 +94,11 @@ export class CreateOrJoinRoomComponent implements OnInit {
     }
 
     startRoom() {
+        if (this.playersInRoom[1] == "+") alert("Starting a room with one player is purely for showcase and not for gameplay")
+
         this.roomService.startRoom(this.actualRoomKey).subscribe({
             next: response => {
                 console.log("we got a response")
-                // const gameResponse = JSON.parse(response);
                 this.gameEngineService.setUpGame(JSON.parse(response))
                 this.disconnect()
                 this.router.navigate(["room/" + this.actualRoomKey])
