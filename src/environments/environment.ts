@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
 
-  cuttleEngineServer: 'http://localhost:8080',
+  cuttleEngineServer: 'https://cuttle-back.onrender.com',
 
 };
 
