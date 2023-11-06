@@ -1,14 +1,11 @@
 {
-  "name": "cuttle_app",
-  "version": "1.0.0",
-    "engines": {
-        "node": ">=14 <15"
-    },
+  "name": "socket-client",
+  "version": "0.0.0",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build",
-        "watch": "ng build --watch --configuration local",
+        "watch": "ng build --watch --configuration development",
         "prod": "ng build --configuration prod",
         "dev": "ng build --configuration dev",
         "test": "ng test"
