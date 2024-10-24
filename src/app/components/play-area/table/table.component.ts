@@ -212,10 +212,9 @@ export class TableComponent implements OnInit, AfterViewChecked {
                     this.setGameAction("POWER", playedCard, ontoPlayedCard, this.gameEngineService.gameAction.ontoPlayer, [])
 
                     //if player has <= 2 cards then just discard them else give him the choice to pick which cards to discard (using visual update and socket)
-                    if (this.gameEngineService.playerHands.get(this.gameEngineService.gameAction.ontoPlayer)!.length > 2)
-                        this.setGameAction("SELECT_TO_DISCARD", playedCard, ontoPlayedCard, this.gameEngineService.gameAction.ontoPlayer, [])
+                    //  if (this.gameEngineService.playerHands.get(this.gameEngineService.gameAction.ontoPlayer)!.length > 2)
+                    //      this.setGameAction("SELECT_TO_DISCARD", playedCard, ontoPlayedCard, this.gameEngineService.gameAction.ontoPlayer, [])
                 }
-
                 break
             case "8":
                 this.gameEngineService.power8Preparation = true
