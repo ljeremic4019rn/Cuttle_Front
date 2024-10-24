@@ -329,6 +329,17 @@ export class TableComponent implements OnInit, AfterViewChecked {
         return "FAIL"
     }
 
+    //find all html elements containing a certain word in id
+    filterDOMElementIds(elements: NodeListOf<Element>, filterWord: string) {
+        const filteredElements = [];
+        for (const element of Array.from(elements)) {
+            if (element.id && element.id.startsWith(filterWord)) {
+                filteredElements.push(element);
+            }
+        }
+        return filteredElements;
+    }
+
     //get in which drop zone the cards has been dropped
     getWhereCardIsDropped(mouse_x: number, mouse_y: number): string {
         //dropZone[0] = key dropZone[1] = values
@@ -352,17 +363,6 @@ export class TableComponent implements OnInit, AfterViewChecked {
     //checks if the card bounds are around the mouse cursor when the card drag is finished
     isHovered(mouse_x: number, mouse_y: number, boundingRect: DOMRect): boolean {
         return boundingRect.left < mouse_x && boundingRect.right > mouse_x && boundingRect.top < mouse_y && boundingRect.bottom > mouse_y;
-    }
-
-    //find all html elements containing a certain word in id
-    filterDOMElementIds(elements: NodeListOf<Element>, filterWord: string) {
-        const filteredElements = [];
-        for (const element of Array.from(elements)) {
-            if (element.id && element.id.startsWith(filterWord)) {
-                filteredElements.push(element);
-            }
-        }
-        return filteredElements;
     }
 
 
